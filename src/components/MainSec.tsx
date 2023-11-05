@@ -10,7 +10,7 @@ interface DataItem {
 function MainSec() {
   const [data, setData] = useState<DataItem[]>([]);
 
-useEffect(() => {
+  const fetchData = () => {
     // Fetch data from Node.js server
     fetch('http://localhost:3000/datadisplay')
       .then((response) => {
@@ -26,6 +26,16 @@ useEffect(() => {
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
+  }
+
+useEffect(() => {
+    fetchData();
+
+    const refreshTimer = setInterval(fetchData, 10000);
+
+    return () => {
+      clearInterval(refreshTimer);
+    }
   }, []);
 
   return (
