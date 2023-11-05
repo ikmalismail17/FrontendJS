@@ -47,7 +47,7 @@ useEffect(() => {
           <Thead>
             <Tr>
               <Th>ID</Th>
-              <Th>Distance in CM</Th>
+              <Th>Distance in CM</Th> 
               <Th>DIstance in Inch</Th>
             </Tr>
           </Thead>
