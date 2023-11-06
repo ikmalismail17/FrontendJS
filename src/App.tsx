@@ -30,12 +30,12 @@ const sections = [
 ];
 
 const mainFeaturedPost = {
-  title: 'Title of a longer featured blog post',
+  title: 'River Depth Monitoring System',
   description:
-    "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
+    "This system will provide people the real time data on the depth of the river that can ensure safety of the people",
   image: 'https://source.unsplash.com/random?wallpapers',
   imageText: 'main image description',
-  linkText: 'Continue reading…',
+  linkText: 'Click For More...',
 };
 
 const featuredPosts = [
