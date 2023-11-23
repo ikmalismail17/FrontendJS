@@ -14,6 +14,8 @@ import FeaturedPost from './components/FeaturedPost';
 import Sidebar from './components/SideBar';
 import Footer from './components/Footer';
 import { useColorMode } from './components/ToggleColorMode';
+import SignInSide from "./components/SignInSide";
+import { useLocation, BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import Main from './components/Main';
 
 const sections = [
@@ -85,11 +87,18 @@ function App() {
   const { toggleColorMode } = useColorMode();
   const theme = useTheme();
 
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+  let mainContent;
+  if(location.pathname == '/signin'){
+    mainContent = (
+      <>
+      <SignInSide></SignInSide>
+      </>
+    )
+  }else{
+    mainContent = (
+      <>
       <Container maxWidth="lg">
-        <Header title="Blog" sections={sections} toggleColorMode={toggleColorMode}/>
+        <Header title="Monitoring System" sections={sections} toggleColorMode={toggleColorMode}/>
         <main>
           <MainFeaturedPost post={mainFeaturedPost} />
           <Grid container spacing={4}>
@@ -112,6 +121,18 @@ function App() {
         title="Footer"
         description="Something here to give the footer a purpose!"
       />
+      </>
+    )
+  }
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+          <Routes>
+          <Route path="/" element={mainContent} />
+          <Route path="/signin" element={mainContent}/>
+          </Routes>
+        </Router>
     </ThemeProvider>
   )
 }

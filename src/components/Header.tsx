@@ -52,9 +52,11 @@ export default function Header(props: HeaderProps) {
         >
           {title}
         </Typography>
+        <Link href="/signin">
         <Button variant="outlined" size="small">
-          Sign up
+          Sign in
         </Button>
+        </Link>
       </Toolbar>
       <Toolbar
         component="nav"

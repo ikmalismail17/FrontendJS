@@ -16,10 +16,13 @@ export const useColorMode = () => {
 };
 
 export function ColorModeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const [mode, setMode] = useState<'light' | 'dark'>(localStorage.getItem('colorMode') === 'dark' ? 'dark' : 'light');
 
   const toggleColorMode = () => {
-    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+    const newMode = mode === 'light' ? 'dark' : 'light';
+    setMode(newMode);
+    localStorage.setItem('colorMode', newMode);
+    // setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
   };
 
   const theme = useMemo(
