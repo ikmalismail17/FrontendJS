@@ -15,7 +15,8 @@ import Sidebar from './components/SideBar';
 import Footer from './components/Footer';
 import { useColorMode } from './components/ToggleColorMode';
 import SignInSide from "./components/SignInSide";
-import { useLocation, BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Dashboard from "./components/Dashboard";
 // import Main from './components/Main';
 
 const sections = [
@@ -94,6 +95,12 @@ function App() {
       <SignInSide></SignInSide>
       </>
     )
+  }else if(location.pathname == '/signadmin'){
+    mainContent = (
+      <>
+      <Dashboard toggleColorMode={toggleColorMode}></Dashboard>
+      </>
+    )
   }else{
     mainContent = (
       <>
@@ -130,6 +137,7 @@ function App() {
       <Router>
           <Routes>
           <Route path="/" element={mainContent} />
+          <Route path="/signadmin" element={mainContent}/>
           <Route path="/signin" element={mainContent}/>
           </Routes>
         </Router>
