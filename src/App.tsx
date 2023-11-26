@@ -17,6 +17,8 @@ import { useColorMode } from './components/ToggleColorMode';
 import SignInSide from "./components/SignInSide";
 import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
+import DashBoardContent from "./components/DashBoardContent";
+import DashBoardReport from "./components/DashBoardReport";
 // import Main from './components/Main';
 
 const sections = [
@@ -84,9 +86,21 @@ const sidebar = {
   ],
 };
 
+
 function App() {
   const { toggleColorMode } = useColorMode();
   const theme = useTheme();
+
+  const AdminDashboard = () => {
+    return (
+      <DashBoardContent />
+    )
+  }
+  const AdminReport = () => {
+    return (
+      <DashBoardReport />
+    )
+  }
 
   let mainContent;
   if(location.pathname == '/signin'){
@@ -95,10 +109,16 @@ function App() {
       <SignInSide></SignInSide>
       </>
     )
-  }else if(location.pathname == '/signadmin'){
+  }else if(location.pathname == '/admindashboard'){
     mainContent = (
       <>
-      <Dashboard toggleColorMode={toggleColorMode}></Dashboard>
+      <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminDashboard} adminTitle="Dashboard"></Dashboard>
+      </>
+    )
+  }else if(location.pathname == '/admindashboard/report'){
+    mainContent = (
+      <>
+      <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminReport} adminTitle="Report"></Dashboard>
       </>
     )
   }else{
@@ -137,10 +157,10 @@ function App() {
       <Router>
           <Routes>
           <Route path="/" element={mainContent} />
-          <Route path="/signadmin" element={mainContent}/>
+          <Route path="/admindashboard/*" element={mainContent}/>
           <Route path="/signin" element={mainContent}/>
           </Routes>
-        </Router>
+      </Router>
     </ThemeProvider>
   )
 }

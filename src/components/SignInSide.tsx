@@ -94,7 +94,7 @@ export default function SignInSide() {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Link href='/signadmin'>
+              <Link href='/admindashboard'>
               <Button
                 // type="submit"
                 fullWidth

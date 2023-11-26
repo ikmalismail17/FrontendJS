@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { styled} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -11,8 +11,8 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 // import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
+// import Grid from '@mui/material/Grid';
+// import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -20,10 +20,11 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { mainListItems, secondaryListItems } from './ListItems';
-import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
+// import Chart from './Chart';
+// import Deposits from './Deposits';
+// import Orders from './Orders';
 import { useTheme} from '@mui/material/styles';
+// import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function Copyright(props: any) {
   return (
@@ -44,9 +45,11 @@ interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
-interface HeaderProps {
+interface DashboardProps {
     toggleColorMode:() => void;
-  }
+    dashboardContent:() => React.ReactNode;
+    adminTitle: string;
+}
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -93,9 +96,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-export default function Dashboard(props: HeaderProps) {
+export default function Dashboard(props: DashboardProps) {
   const [open, setOpen] = React.useState(true);
-  const {toggleColorMode } = props;
+  const {toggleColorMode, dashboardContent, adminTitle} = props;
   const theme = useTheme();
   const toggleDrawer = () => {
     setOpen(!open);
@@ -129,7 +132,7 @@ export default function Dashboard(props: HeaderProps) {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              {adminTitle}
             </Typography>
             <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
@@ -170,40 +173,7 @@ export default function Dashboard(props: HeaderProps) {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Chart />
-                </Paper>
-              </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Orders />
-                </Paper>
-              </Grid>
-            </Grid>
+            {dashboardContent()}
             <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
