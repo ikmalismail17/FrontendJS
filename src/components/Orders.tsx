@@ -1,91 +1,97 @@
-import * as React from 'react';
-import Link from '@mui/material/Link';
+import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+// import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Title from './Title';
+import { useState, useEffect } from 'react';
+// import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import { Title } from '@mui/icons-material';
+import React from 'react';
 
-// Generate Order Data
-function createData(
-  id: number,
-  date: string,
-  name: string,
-  shipTo: string,
-  paymentMethod: string,
-  amount: number,
-) {
-  return { id, date, name, shipTo, paymentMethod, amount };
+interface DataItem {
+  id: number;
+  distanceCm: number;
+  distanceInch: number;
 }
 
-const rows = [
-  createData(
-    0,
-    '16 Mar, 2019',
-    'Elvis Presley',
-    'Tupelo, MS',
-    'VISA ⠀•••• 3719',
-    312.44,
-  ),
-  createData(
-    1,
-    '16 Mar, 2019',
-    'Paul McCartney',
-    'London, UK',
-    'VISA ⠀•••• 2574',
-    866.99,
-  ),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-  createData(
-    3,
-    '16 Mar, 2019',
-    'Michael Jackson',
-    'Gary, IN',
-    'AMEX ⠀•••• 2000',
-    654.39,
-  ),
-  createData(
-    4,
-    '15 Mar, 2019',
-    'Bruce Springsteen',
-    'Long Branch, NJ',
-    'VISA ⠀•••• 5919',
-    212.79,
-  ),
-];
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
-function preventDefault(event: React.MouseEvent) {
-  event.preventDefault();
-}
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 export default function Orders() {
+
+  const [data, setData] = useState<DataItem[]>([]);
+
+  const fetchData = () => {
+    // Fetch data from Node.js server
+    fetch('http://localhost:3000/datadisplay')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Received data:', data); // Log the received data
+        setData(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }
+
+    useEffect(() => {
+        fetchData();
+
+        const refreshTimer = setInterval(fetchData, 10000);
+
+        return () => {
+        clearInterval(refreshTimer);
+        }
+    }, []);
+
+
   return (
     <React.Fragment>
-      <Title>Recent Orders</Title>
+      {/* <Title>Recent Data</Title> */}
       <Table size="small">
         <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Ship To</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
-          </TableRow>
+          <StyledTableRow>
+            <StyledTableCell>ID</StyledTableCell>
+            <StyledTableCell>Distance in CM</StyledTableCell>
+            <StyledTableCell>DIstance in Inch</StyledTableCell>
+          </StyledTableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`$${row.amount}`}</TableCell>
-            </TableRow>
+          {data.map((item) => (
+            <StyledTableRow key={item.id}>
+              <StyledTableCell>{item.id}</StyledTableCell>
+              <StyledTableCell>{item.distanceCm}</StyledTableCell>
+              <StyledTableCell>{item.distanceInch}</StyledTableCell>
+            </StyledTableRow>
           ))}
         </TableBody>
       </Table>
-      <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
+      <Link color="primary" href="/admindashboard/report" sx={{ mt: 3 }}>
         See more orders
       </Link>
     </React.Fragment>

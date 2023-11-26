@@ -70,7 +70,7 @@ export default function DashBoardReport(){
     <>
       <Grid item xs={12} md={8}>
       <TableContainer>
-        <Table>
+        <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               <StyledTableCell>ID</StyledTableCell>
