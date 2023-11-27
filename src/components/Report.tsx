@@ -8,8 +8,9 @@ import TableRow from '@mui/material/TableRow';
 import { useState, useEffect } from 'react';
 // import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
-import { Title } from '@mui/icons-material';
+// import { Title } from '@mui/icons-material';
 import React from 'react';
+import Title from './Title';
 
 interface DataItem {
   id: number;
@@ -69,22 +70,21 @@ export default function Orders() {
         }
     }, []);
 
-
   return (
     <React.Fragment>
-      {/* <Title>Recent Data</Title> */}
+      <Title>Depth Data</Title>
       <Table size="small">
         <TableHead>
           <StyledTableRow>
-            <StyledTableCell>ID</StyledTableCell>
+            <StyledTableCell>No</StyledTableCell>
             <StyledTableCell>Distance in CM</StyledTableCell>
             <StyledTableCell>DIstance in Inch</StyledTableCell>
           </StyledTableRow>
         </TableHead>
         <TableBody>
-          {data.map((item) => (
+          {data.slice(0, 5).map((item, index) => (
             <StyledTableRow key={item.id}>
-              <StyledTableCell>{item.id}</StyledTableCell>
+              <StyledTableCell>{index + 1}</StyledTableCell>
               <StyledTableCell>{item.distanceCm}</StyledTableCell>
               <StyledTableCell>{item.distanceInch}</StyledTableCell>
             </StyledTableRow>
@@ -92,7 +92,7 @@ export default function Orders() {
         </TableBody>
       </Table>
       <Link color="primary" href="/admindashboard/report" sx={{ mt: 3 }}>
-        See more orders
+        See more data
       </Link>
     </React.Fragment>
   );

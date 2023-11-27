@@ -19,11 +19,17 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { mainListItems, secondaryListItems } from './ListItems';
+// import { mainListItems, secondaryListItems } from './ListItems';
+import LogoutIcon from '@mui/icons-material/Logout';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 // import Chart from './Chart';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
 import { useTheme} from '@mui/material/styles';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 // import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function Copyright(props: any) {
@@ -139,7 +145,7 @@ export default function Dashboard(props: DashboardProps) {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Drawer variant="permanent" open={open}>
+        <Drawer variant="permanent" open={open} color="#448aff">
           <Toolbar
             sx={{
               display: 'flex',
@@ -154,9 +160,31 @@ export default function Dashboard(props: DashboardProps) {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
+          <Link href="/admindashboard" underline="none" color="inherit">
+              <ListItemButton>
+              <ListItemIcon>
+                  <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+              </ListItemButton>
+          </Link>
+          <Link href="/admindashboard/report" underline="none" color="inherit">
+          <ListItemButton>
+            <ListItemIcon>
+              <BarChartIcon />
+            </ListItemIcon>
+            <ListItemText primary="Reports" />
+          </ListItemButton>
+          </Link>
             <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
+            <Link href="/" underline="none" color="inherit">
+          <ListItemButton>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Log Out" />
+          </ListItemButton>
+          </Link>
           </List>
         </Drawer>
         <Box

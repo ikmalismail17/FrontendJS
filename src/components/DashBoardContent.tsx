@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Chart from './Chart';
 import Deposits from './Deposits';
-import Orders from './Orders';
+import Report from './Report';
 
 export default function DashBoardContent(){
     return (
@@ -37,7 +37,7 @@ export default function DashBoardContent(){
             {/* Recent Orders */}
             <Grid item xs={12}>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                <Orders />
+                <Report />
             </Paper>
             </Grid>
         </Grid>

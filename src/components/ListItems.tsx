@@ -12,10 +12,11 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import Link from '@mui/material/Link';
 // import AssignmentIcon from '@mui/icons-material/Assignment';
 
+
 export const mainListItems = (
   <React.Fragment>
     <Link href="/admindashboard" underline="none" color="inherit">
-        <ListItemButton>
+        <ListItemButton autoFocus>
         <ListItemIcon>
             <DashboardIcon />
         </ListItemIcon>
@@ -35,11 +36,13 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <React.Fragment>
+    <Link href="/" underline="none" color="inherit">
     <ListItemButton>
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>
       <ListItemText primary="Log Out" />
     </ListItemButton>
+    </Link>
   </React.Fragment>
 );
