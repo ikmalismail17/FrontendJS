@@ -11,6 +11,7 @@ import Link from '@mui/material/Link';
 // import { Title } from '@mui/icons-material';
 import React from 'react';
 import Title from './Title';
+import Alert from '@mui/material/Alert';
 
 interface DataItem {
   id: number;
@@ -51,9 +52,15 @@ export default function Orders() {
         }
         return response.json();
       })
+      
       .then((data) => {
         console.log('Received data:', data); // Log the received data
-        setData(data);
+
+      // Sort data in descending order based on id
+      const sortedData = data.sort((a: DataItem, b: DataItem) => b.id - a.id);
+
+      // Update state with the sorted data
+      setData(sortedData);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -72,13 +79,14 @@ export default function Orders() {
 
   return (
     <React.Fragment>
-      <Title>Depth Data</Title>
+      <Title>Latest Data</Title>
       <Table size="small">
         <TableHead>
           <StyledTableRow>
             <StyledTableCell>No</StyledTableCell>
             <StyledTableCell>Distance in CM</StyledTableCell>
             <StyledTableCell>DIstance in Inch</StyledTableCell>
+            <StyledTableCell align='center'>Alert</StyledTableCell>
           </StyledTableRow>
         </TableHead>
         <TableBody>
@@ -87,6 +95,9 @@ export default function Orders() {
               <StyledTableCell>{index + 1}</StyledTableCell>
               <StyledTableCell>{item.distanceCm}</StyledTableCell>
               <StyledTableCell>{item.distanceInch}</StyledTableCell>
+              <StyledTableCell align='center'>
+                    {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
+                    </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

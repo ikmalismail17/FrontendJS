@@ -22,42 +22,38 @@ import DashBoardReport from "./components/DashBoardReport";
 // import Main from './components/Main';
 
 const sections = [
-  { title: 'Technology', url: '#' },
-  { title: 'Design', url: '#' },
-  { title: 'Culture', url: '#' },
-  { title: 'Business', url: '#' },
-  { title: 'Politics', url: '#' },
-  { title: 'Opinion', url: '#' },
-  { title: 'Science', url: '#' },
-  { title: 'Health', url: '#' },
-  { title: 'Style', url: '#' },
-  { title: 'Travel', url: '#' },
+  { title: 'Main Post', url: '#' },
+  { title: 'About', url: '#' },
+  { title: 'Depth Data', url: '#' }
+
 ];
 
 const mainFeaturedPost = {
   title: 'River Depth Monitoring System',
   description:
     "This system will provide people the real time data on the depth of the river that can ensure safety of the people",
-  image: 'https://source.unsplash.com/random?wallpapers',
+  image: 'https://img.freepik.com/premium-vector/vector-abstract-gradiente-background-blue-wallpaper_901408-861.jpg',
   imageText: 'main image description',
   linkText: 'Click For More...',
 };
 
 const featuredPosts = [
   {
-    title: 'Featured post',
+    title: 'Importance of River',
     date: 'Nov 12',
     description:
-      'This is a wider card with supporting text below as a natural lead-in to additional content.',
-    image: 'https://source.unsplash.com/random?wallpapers',
+      'River depth is crucial for various reasons. It ensures safe navigation...',
+    extend:'River depth matters a lot. It keeps boats safe, helps fish and other water creatures thrive, and prevents floods. Having the right depth is important for water supply, making electricity, and fun activities like swimming and boating. It also stops the land next to the river from washing away. So, keeping an eye on river depth is like taking care of the river and everything around it.',
+    image: 'https://t3.ftcdn.net/jpg/01/90/18/20/360_F_190182089_kVJgPPov9cI0AJ84CdCVqVxx2a57928j.jpg',
     imageLabel: 'Image Text',
   },
   {
-    title: 'Post title',
+    title: 'Significance',
     date: 'Nov 11',
     description:
-      'This is a wider card with supporting text below as a natural lead-in to additional content.',
-    image: 'https://source.unsplash.com/random?wallpapers',
+      'Monitoring river depth is vital for safe navigation, flood prevention, and sustaining aquatic life...',
+    extend:'Monitoring river depth is vital for safe navigation, flood prevention, and sustaining aquatic life. It ensures a stable water supply, supports hydropower, and safeguards riverbanks from erosion. In essence, a river depth monitor is crucial for balancing human activities and preserving the health of river ecosystems.',
+    image: 'https://media.istockphoto.com/id/1180471106/photo/save-us-out-from-the-darkness.jpg?s=612x612&w=0&k=20&c=v4ZOtzXmF6YnYdN3xhHATru9Y0yCQzWyARy_GyNDNQw=',
     imageLabel: 'Image Text',
   },
 ];
@@ -65,7 +61,7 @@ const featuredPosts = [
 const sidebar = {
   title: 'About',
   description:
-    'Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.',
+    'My name is Ikmal Ismail. Last year student in Bachelor of Science Computer. This is my final year project',
   archives: [
     { title: 'March 2020', url: '#' },
     { title: 'February 2020', url: '#' },
@@ -146,7 +142,7 @@ function App() {
       </Container>
       <Footer
         title="Footer"
-        description="Something here to give the footer a purpose!"
+        description="MonitorSystem"
       />
       </>
     )

@@ -65,6 +65,7 @@ export default function Header(props: HeaderProps) {
       >
         {sections.map((section) => (
           <Link
+            underline="hover"
             color="inherit"
             noWrap
             key={section.title}

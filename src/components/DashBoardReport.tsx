@@ -15,6 +15,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Alert from '@mui/material/Alert';
 
 interface DataItem {
     id: number;
@@ -118,6 +119,7 @@ export default function DashBoardReport(){
               <StyledTableCell align='center'>ID</StyledTableCell>
               <StyledTableCell align='center'>Distance in CM</StyledTableCell>
               <StyledTableCell align='center'>DIstance in Inch</StyledTableCell>
+              <StyledTableCell align='center'>Alert</StyledTableCell>
               <StyledTableCell align='center'>Update</StyledTableCell>
             </StyledTableRow>
           </TableHead>
@@ -128,6 +130,9 @@ export default function DashBoardReport(){
                   <StyledTableCell align='center'>{item.id}</StyledTableCell>
                   <StyledTableCell align='center'>{item.distanceCm}</StyledTableCell> 
                   <StyledTableCell align='center'>{item.distanceInch}</StyledTableCell>
+                  <StyledTableCell align='center'>
+                    {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
+                    </StyledTableCell>
                   <StyledTableCell align='center'>
                   <ButtonGroup variant="contained" aria-label="outlined primary button group">
                     <Button href="#text-buttons" color='success'>Edit</Button>

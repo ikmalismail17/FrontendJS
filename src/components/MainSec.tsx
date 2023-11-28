@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
+import Title from './Title';
 
 interface DataItem {
   id: number;
@@ -68,6 +69,7 @@ useEffect(() => {
 
   return (
     <Grid item xs={12} md={8}>
+      <Title>Depth Data</Title>
       <TableContainer>
         <Table>
           <TableHead>
