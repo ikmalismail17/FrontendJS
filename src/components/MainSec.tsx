@@ -1,11 +1,40 @@
-import { Table, TableCaption, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
+// import {Table, TableCaption, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import Title from './Title';
 
 interface DataItem {
   id: number;
   distanceCm: number;
   distanceInch: number;
 }
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 function MainSec() {
   const [data, setData] = useState<DataItem[]>([]);
@@ -39,37 +68,29 @@ useEffect(() => {
   }, []);
 
   return (
-    <div>
-      <h1>Data from Database</h1>
+    <Grid item xs={12} md={8}>
+      <Title>Depth Data</Title>
       <TableContainer>
-        <Table variant='striped' colorScheme='teal' size='md'>
-          <TableCaption>Arduino Data</TableCaption>
-          <Thead>
-            <Tr>
-              <Th>ID</Th>
-              <Th>Distance in CM</Th> 
-              <Th>DIstance in Inch</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>ID</StyledTableCell>
+              <StyledTableCell>Distance in CM</StyledTableCell>
+              <StyledTableCell>DIstance in Inch</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {data.map((item) => (
-              <Tr key={item.id}>
-                  <Td>{item.id}</Td>
-                  <Td>{item.distanceCm}</Td> 
-                  <Td>{item.distanceInch}</Td>
-              </Tr>
+              <StyledTableRow  key={item.id}>
+                  <StyledTableCell>{item.id}</StyledTableCell>
+                  <StyledTableCell>{item.distanceCm}</StyledTableCell> 
+                  <StyledTableCell>{item.distanceInch}</StyledTableCell>
+              </StyledTableRow>
              ))}
-          </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th>ID</Th>
-              <Th>Distance in CM</Th>
-              <Th>DIstance in Inch</Th>
-            </Tr>
-          </Tfoot>
+          </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Grid>
   );
 }
 
