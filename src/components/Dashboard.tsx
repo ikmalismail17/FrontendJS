@@ -30,6 +30,7 @@ import { useTheme} from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 // import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function Copyright(props: any) {
@@ -174,6 +175,14 @@ export default function Dashboard(props: DashboardProps) {
               <BarChartIcon />
             </ListItemIcon>
             <ListItemText primary="Reports" />
+          </ListItemButton>
+          </Link>
+          <Link href="/admindashboard/alarm" underline="none" color="inherit">
+          <ListItemButton>
+            <ListItemIcon>
+              <NotificationsActiveIcon />
+            </ListItemIcon>
+            <ListItemText primary="Alarm" />
           </ListItemButton>
           </Link>
             <Divider sx={{ my: 1 }} />
