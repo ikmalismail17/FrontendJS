@@ -144,6 +144,11 @@ export default function Dashboard(props: DashboardProps) {
             <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
+            <Link href="/" underline="none" color="inherit">
+            <IconButton sx={{ ml: 1 }} color="inherit">
+             <LogoutIcon></LogoutIcon>
+            </IconButton>
+            </Link>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open} color="#448aff">
@@ -186,14 +191,14 @@ export default function Dashboard(props: DashboardProps) {
           </ListItemButton>
           </Link>
             <Divider sx={{ my: 1 }} />
-            <Link href="/" underline="none" color="inherit">
+          {/* <Link href="/" underline="none" color="inherit">
           <ListItemButton>
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>
             <ListItemText primary="Log Out" />
           </ListItemButton>
-          </Link>
+          </Link> */}
           </List>
         </Drawer>
         <Box

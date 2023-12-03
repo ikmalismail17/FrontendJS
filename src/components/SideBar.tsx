@@ -23,7 +23,7 @@ export default function Sidebar(props: SidebarProps) {
 
   return (
     <Grid item xs={12} md={4}>
-      <Paper elevation={0} sx={{ p: 2, backgroundImage: 'url(https://img.freepik.com/premium-vector/vector-abstract-gradiente-background-blue-wallpaper_901408-861.jpg)' }}>
+      <Paper id="about" elevation={0} sx={{ p: 2, backgroundImage: 'url(https://img.freepik.com/premium-vector/vector-abstract-gradiente-background-blue-wallpaper_901408-861.jpg)' }}>
         <Typography variant="h6" gutterBottom>
           {title}
         </Typography>

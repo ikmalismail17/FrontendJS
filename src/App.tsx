@@ -19,12 +19,13 @@ import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import DashBoardContent from "./components/DashBoardContent";
 import DashBoardReport from "./components/DashBoardReport";
+import DashboardAlarm from "./components/DashboardAlarm";
 // import Main from './components/Main';
 
 const sections = [
-  { title: 'Main Post', url: '#' },
-  { title: 'About', url: '#' },
-  { title: 'Depth Data', url: '#' }
+  { title: 'Main Post', url: '#mainpost' },
+  { title: 'About', url: '#about' },
+  { title: 'Depth Data', url: '#tabledataoutside' }
 
 ];
 
@@ -97,6 +98,11 @@ function App() {
       <DashBoardReport />
     )
   }
+  const AdminAlarm = () => {
+    return (
+      <DashboardAlarm />
+    )
+  }
 
   let mainContent;
   if(location.pathname == '/signin'){
@@ -115,6 +121,12 @@ function App() {
     mainContent = (
       <>
       <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminReport} adminTitle="Report"></Dashboard>
+      </>
+    )
+  }else if(location.pathname == '/admindashboard/alarm'){
+    mainContent = (
+      <>
+      <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminAlarm} adminTitle="Alarm"></Dashboard>
       </>
     )
   }else{

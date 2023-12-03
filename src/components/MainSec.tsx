@@ -71,7 +71,7 @@ useEffect(() => {
     <Grid item xs={12} md={8}>
       <Title>Depth Data</Title>
       <TableContainer>
-        <Table>
+        <Table id="tabledataoutside">
           <TableHead>
             <TableRow>
               <StyledTableCell>ID</StyledTableCell>
