@@ -96,6 +96,7 @@ export default function Checkout() {
               </Typography>
             </React.Fragment>
         </Paper> */}
+        
     </React.Fragment>
   );
 }
