@@ -42,7 +42,7 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
     return (
       <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Shipping address
+        Details Information
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -68,31 +68,6 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
             autoComplete="family-name"
             variant="standard"
             value={formData.lastName}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            required
-            id="address1"
-            name="address1"
-            label="Address line 1"
-            fullWidth
-            autoComplete="shipping address-line1"
-            variant="standard"
-            value={formData.address1}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="address2"
-            name="address2"
-            label="Address line 2"
-            fullWidth
-            autoComplete="shipping address-line2"
-            variant="standard"
-            value={formData.address2}
             onChange={handleInputChange}
           />
         </Grid>

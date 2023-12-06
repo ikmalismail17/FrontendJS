@@ -38,7 +38,7 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Payment method
+        Depth Data
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>

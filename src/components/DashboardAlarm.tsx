@@ -11,12 +11,12 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 // import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import AddressForm from './AddressForm';
-import PaymentForm from './PaymentForm';
+import AddressForm from './AlarmInfo';
+import PaymentForm from './DataInfo';
 import Review from './Review';
 import Grid from '@mui/material/Grid';
 
-const steps = ['Shipping address', 'Payment details', 'Review your order'];
+const steps = ['Alarm Information', 'Data Information', 'Reviewing'];
 
 export default function Checkout() {
     const [activeStep, setActiveStep] = React.useState(0);
@@ -45,7 +45,7 @@ export default function Checkout() {
         <Grid item xs={12}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
             <Typography component="h1" variant="h4" align="center">
-                Checkout
+                Progress
             </Typography>
             <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
                 {steps.map((label) => (
