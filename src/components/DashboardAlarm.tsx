@@ -16,14 +16,42 @@ import PaymentForm from './DataInfo';
 import Review from './Review';
 import Grid from '@mui/material/Grid';
 
-const steps = ['Alarm Information', 'Data Information', 'Reviewing'];
+const steps = ['Details Information', 'Depth Data', 'Reviewing'];
+
+interface FormAlarm {
+  firstName: string,
+  lastName: string,
+  adminID: string,
+  email: string,
+}
+
+interface FormData {
+  dataID: string,
+  dataCM: string,
+  dataInch: string,
+  date: string,
+}
 
 export default function Checkout() {
     const [activeStep, setActiveStep] = React.useState(0);
-    const [isAddressFormFilled, setIsAddressFormFilled] = React.useState(false)
+    const [isAddressFormFilled, setIsAddressFormFilled] = React.useState(false);
+    const [alarmInfo, setAlarmInfo] = React.useState({
+      firstName: '',
+      lastName: '',
+      adminID: '',
+      email: ''
+    })
 
-    const handleAddressFormFilled = () => {
+    const [dataInfo, setDataInfo] = React.useState({
+      dataID: '',
+      dataCM: '',
+      dataInch: '',
+      date: '',
+    })
+
+    const handleAddressFormFilled = (formData: FormAlarm) => {
       // Advance to the next step when AddressForm is filled
+      setAlarmInfo(formData)
       setIsAddressFormFilled(true);
       setActiveStep(1);
     };
@@ -34,8 +62,9 @@ export default function Checkout() {
       setActiveStep(0);
     };
 
-    const handlePaymentFormFilled = () => {
+    const handlePaymentFormFilled = (formData: FormData) => {
       // Advance to the next step when PaymentForm is filled
+      setDataInfo(formData)
       setActiveStep(2);
     };
 
@@ -68,7 +97,7 @@ export default function Checkout() {
         </Grid>
         <Grid item xs={6}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
-                <Review></Review>
+                <Review alarmInfo={alarmInfo} dataInfo={dataInfo}></Review>
             </Paper>
             <Grid xs={12}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>

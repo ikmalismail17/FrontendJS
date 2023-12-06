@@ -5,8 +5,15 @@ import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+interface MyFormData {
+  firstName: string,
+  lastName: string,
+  adminID: string,
+  email: string,
+}
+
 interface AddressFormProps {
-  onFormFilled: () => void;
+  onFormFilled: (formData: MyFormData) => void;
   onFormUnfilled: () => void;
 }
 
@@ -14,12 +21,8 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    address1: '',
-    address2: '',
-    city: '',
-    state: '',
-    zip: '',
-    country: '',
+    adminID: '',
+    email: '',
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +36,7 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
   useEffect(() => {
     const isFormFilled = Object.values(formData).every(Boolean);
     if (isFormFilled) {
-      onFormFilled();
+      onFormFilled(formData);
     }else{
       onFormUnfilled();
     }
@@ -45,6 +48,29 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
         Details Information
       </Typography>
       <Grid container spacing={3}>
+      <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="adminID"
+            name="adminID"
+            label="Admin ID"
+            fullWidth
+            variant="standard"
+            value={formData.adminID}
+            onChange={handleInputChange}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            id="email"
+            name="email"
+            label="Admin Email"
+            fullWidth
+            variant="standard"
+            value={formData.email}
+            onChange={handleInputChange}
+          />
+        </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
@@ -74,50 +100,24 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="city"
-            name="city"
-            label="City"
-            fullWidth
-            autoComplete="shipping address-level2"
-            variant="standard"
-            value={formData.city}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            id="state"
-            name="state"
-            label="State/Province/Region"
+            id="date"
+            name="date"
+            label="Date"
             fullWidth
             variant="standard"
-            value={formData.state}
+            value={Date().substring(4, 15)}
             onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="zip"
-            name="zip"
-            label="Zip / Postal code"
+            id="time"
+            name="time"
+            label="Time"
             fullWidth
-            autoComplete="shipping postal-code"
             variant="standard"
-            value={formData.zip}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="country"
-            name="country"
-            label="Country"
-            fullWidth
-            autoComplete="shipping country"
-            variant="standard"
-            value={formData.country}
+            value={Date().substring(15,21)}
             onChange={handleInputChange}
           />
         </Grid>

@@ -6,18 +6,25 @@ import TextField from '@mui/material/TextField';
 // import Checkbox from '@mui/material/Checkbox';
 import { useEffect, useState } from 'react';
 
+interface MyFormData {
+  dataID: string,
+  dataCM: string,
+  dataInch: string,
+  date: string,
+}
+
 interface PaymentFormProps{
-    onFormFilled: () => void;
+    onFormFilled: (formData: MyFormData) => void;
     onDisabled: number;
     isAddressFormFilled: boolean;
 }
 
 export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFilled}: PaymentFormProps) {
     const [formData, setFormData] = useState({
-        cardName: '',
-        cardNumber: '',
-        expDate: '',
-        cvv: '',
+        dataID: '',
+        dataCM: '',
+        dataInch: '',
+        date: '',
       });
 
       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +38,7 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
     useEffect(() => {
       const isFormFilled = Object.values(formData).every(Boolean);
       if (isFormFilled && isAddressFormFilled) {
-        onFormFilled();
+        onFormFilled(formData);
       }
     }, [formData, onFormFilled, isAddressFormFilled]);
 
@@ -44,13 +51,12 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="cardName"
-            name= "cardName"
-            label="Name on card"
+            id="dataID"
+            name= "dataID"
+            label="Data ID"
             fullWidth
-            autoComplete="cc-name"
             variant="standard"
-            value={formData.cardName}
+            value={formData.dataID}
             onChange={handleInputChange}
             disabled={onDisabled === 0 || !isAddressFormFilled}
           />
@@ -58,13 +64,13 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="cardNumber"
-            name="cardNumber"
-            label="Card number"
+            id="dataCM"
+            name="dataCM"
+            label="Data in CM"
             fullWidth
             autoComplete="cc-number"
             variant="standard"
-            value={formData.cardNumber}
+            value={formData.dataCM}
             onChange={handleInputChange}
             disabled={onDisabled === 0 || !isAddressFormFilled}
           />
@@ -72,13 +78,13 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="expDate"
-            name="expDate"
-            label="Expiry date"
+            id="dataInch"
+            name="dataInch"
+            label="Data in Inch"
             fullWidth
             autoComplete="cc-exp"
             variant="standard"
-            value={formData.expDate}
+            value={formData.dataInch}
             onChange={handleInputChange}
             disabled={onDisabled === 0 || !isAddressFormFilled}
           />
@@ -86,14 +92,13 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
         <Grid item xs={12} md={6}>
           <TextField
             required
-            id="cvv"
-            name="cvv"
-            label="CVV"
-            helperText="Last three digits on signature strip"
+            id="date"
+            name="date"
+            label="Date"
             fullWidth
             autoComplete="cc-csc"
             variant="standard"
-            value={formData.cvv}
+            value={formData.date}
             onChange={handleInputChange}
             disabled={onDisabled === 0 || !isAddressFormFilled}
           />
