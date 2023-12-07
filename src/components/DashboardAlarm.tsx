@@ -23,6 +23,7 @@ interface FormAlarm {
   lastName: string,
   adminID: string,
   email: string,
+  message: string
 }
 
 interface FormData {
@@ -39,7 +40,8 @@ export default function Checkout() {
       firstName: '',
       lastName: '',
       adminID: '',
-      email: ''
+      email: '',
+      message: ''
     })
 
     const [dataInfo, setDataInfo] = React.useState({
@@ -74,7 +76,7 @@ export default function Checkout() {
         <Grid item xs={12}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
             <Typography component="h1" variant="h4" align="center">
-                Progress
+                Notifications Progress
             </Typography>
             <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
                 {steps.map((label) => (

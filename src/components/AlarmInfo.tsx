@@ -4,12 +4,20 @@ import React, { useEffect, useState } from 'react';
 // import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import { AccountCircle } from '@mui/icons-material';
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import EmailIcon from '@mui/icons-material/Email';
+import BadgeIcon from '@mui/icons-material/Badge';
+import MessageIcon from '@mui/icons-material/Message';
 
 interface MyFormData {
   firstName: string,
   lastName: string,
   adminID: string,
   email: string,
+  message: string
 }
 
 interface AddressFormProps {
@@ -23,6 +31,7 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
     lastName: '',
     adminID: '',
     email: '',
+    message: ''
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,6 +58,8 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
       </Typography>
       <Grid container spacing={3}>
       <Grid item xs={12} sm={6}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <AccountCircle sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
             required
             id="adminID"
@@ -59,8 +70,11 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
             value={formData.adminID}
             onChange={handleInputChange}
           />
+        </Box>
         </Grid>
         <Grid item xs={12} sm={6}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <EmailIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
             id="email"
             name="email"
@@ -70,8 +84,11 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
             value={formData.email}
             onChange={handleInputChange}
           />
+        </Box>
         </Grid>
         <Grid item xs={12} sm={6}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <BadgeIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
             required
             id="firstName"
@@ -83,8 +100,11 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
             value={formData.firstName}
             onChange={handleInputChange}
           />
+        </Box>
         </Grid>
         <Grid item xs={12} sm={6}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <BadgeIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
             required
             id="lastName"
@@ -96,8 +116,11 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
             value={formData.lastName}
             onChange={handleInputChange}
           />
+        </Box>
         </Grid>
         <Grid item xs={12} sm={6}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <CalendarMonthIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
             required
             id="date"
@@ -108,8 +131,11 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
             value={Date().substring(4, 15)}
             onChange={handleInputChange}
           />
+        </Box>
         </Grid>
         <Grid item xs={12} sm={6}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <AccessTimeFilledIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
             required
             id="time"
@@ -120,8 +146,24 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
             value={Date().substring(15,21)}
             onChange={handleInputChange}
           />
+        </Box>
         </Grid>
         <Grid item xs={12}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <MessageIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+          <TextField
+            required
+            id="msg"
+            name="message"
+            label="Message"
+            multiline
+            fullWidth
+            maxRows={4}
+            variant="standard"
+            value={formData.message}
+            onChange={handleInputChange}
+          />
+        </Box>
         </Grid>
       </Grid>
     </React.Fragment>

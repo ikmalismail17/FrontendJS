@@ -11,6 +11,7 @@ interface FormData {
     lastName: string,
     adminID: string,
     email: string,
+    message: string
   };
   dataInfo: {
     dataID: string,
@@ -41,6 +42,9 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
         </ListItem>
         <ListItem>
           <ListItemText primary="Time" secondary={Date().substring(15,21)} />
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Message" secondary={alarmInfo.message} />
         </ListItem>
       </List>
       <Grid container spacing={2}>

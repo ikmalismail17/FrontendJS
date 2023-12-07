@@ -5,6 +5,10 @@ import TextField from '@mui/material/TextField';
 // import FormControlLabel from '@mui/material/FormControlLabel';
 // import Checkbox from '@mui/material/Checkbox';
 import { useEffect, useState } from 'react';
+import StraightenIcon from '@mui/icons-material/Straighten';
+import Box from '@mui/material/Box';
+import Grid3x3Icon from '@mui/icons-material/Grid3x3';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 interface MyFormData {
   dataID: string,
@@ -49,6 +53,8 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <Grid3x3Icon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
             required
             id="dataID"
@@ -60,8 +66,11 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
             onChange={handleInputChange}
             disabled={onDisabled === 0 || !isAddressFormFilled}
           />
+        </Box>
         </Grid>
         <Grid item xs={12} md={6}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <StraightenIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
             required
             id="dataCM"
@@ -74,8 +83,11 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
             onChange={handleInputChange}
             disabled={onDisabled === 0 || !isAddressFormFilled}
           />
+        </Box>
         </Grid>
         <Grid item xs={12} md={6}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <StraightenIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
             required
             id="dataInch"
@@ -88,8 +100,11 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
             onChange={handleInputChange}
             disabled={onDisabled === 0 || !isAddressFormFilled}
           />
+        </Box>
         </Grid>
         <Grid item xs={12} md={6}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <CalendarMonthIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
             required
             id="date"
@@ -102,6 +117,7 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
             onChange={handleInputChange}
             disabled={onDisabled === 0 || !isAddressFormFilled}
           />
+        </Box>
         </Grid>
       </Grid>
     </React.Fragment>
