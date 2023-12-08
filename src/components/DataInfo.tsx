@@ -9,6 +9,7 @@ import StraightenIcon from '@mui/icons-material/Straighten';
 import Box from '@mui/material/Box';
 import Grid3x3Icon from '@mui/icons-material/Grid3x3';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import InputAdornment from '@mui/material/InputAdornment';
 
 interface MyFormData {
   dataID: string,
@@ -79,6 +80,11 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
             fullWidth
             autoComplete="cc-number"
             variant="standard"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">cm</InputAdornment>
+              ),
+            }}
             value={formData.dataCM}
             onChange={handleInputChange}
             disabled={onDisabled === 0 || !isAddressFormFilled}
@@ -96,6 +102,11 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
             fullWidth
             autoComplete="cc-exp"
             variant="standard"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">inch</InputAdornment>
+              ),
+            }}
             value={formData.dataInch}
             onChange={handleInputChange}
             disabled={onDisabled === 0 || !isAddressFormFilled}
