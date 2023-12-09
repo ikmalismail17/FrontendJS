@@ -16,11 +16,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
+import Paper from '@mui/material/Paper';
 
 interface DataItem {
-    id: number;
-    distanceCm: number;
-    distanceInch: number;
+  _id: number;
+  distanceCm: number;
+  distanceInch: number;
+  date: string;
+  time: string;
   }
   
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -119,31 +122,33 @@ export default function DashBoardReport(){
               <StyledTableCell align='center'>ID</StyledTableCell>
               <StyledTableCell align='center'>Distance in CM</StyledTableCell>
               <StyledTableCell align='center'>DIstance in Inch</StyledTableCell>
+              <StyledTableCell align='center'>Date</StyledTableCell>
+              <StyledTableCell align='center'>Time</StyledTableCell>
               <StyledTableCell align='center'>Alert</StyledTableCell>
               <StyledTableCell align='center'>Update</StyledTableCell>
             </StyledTableRow>
           </TableHead>
           <TableBody>
             {data.map((item, index) => (
-              <StyledTableRow  key={item.id}>
+              <StyledTableRow  key={item._id}>
                   <StyledTableCell align='center'>{index + 1}</StyledTableCell>
-                  <StyledTableCell align='center'>{item.id}</StyledTableCell>
+                  <StyledTableCell align='center'>{item._id}</StyledTableCell>
                   <StyledTableCell align='center'>{item.distanceCm}</StyledTableCell> 
                   <StyledTableCell align='center'>{item.distanceInch}</StyledTableCell>
+                  <StyledTableCell align='center'>{item.date}</StyledTableCell>
+                  <StyledTableCell align='center'>{item.time}</StyledTableCell>
                   <StyledTableCell align='center'>
                     {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
                     </StyledTableCell>
                   <StyledTableCell align='center'>
                   <ButtonGroup variant="contained" aria-label="outlined primary button group">
                     <Button href="#text-buttons" color='success'>Edit</Button>
-                    <Button href="#text-buttons" color='error' onClick={() => handleClickOpen(item.id)}>Delete</Button>
-                    {/* <Button href="#text-buttons" color='error' onClick={() => handleDelete(item.id)}>Delete</Button> */}
+                    <Button href="#text-buttons" color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
                     <Dialog
-                      open={open && selectedItemId === item.id}
+                      open={open && selectedItemId === item._id}
                       onClose={handleClose}
                       aria-labelledby="alert-dialog-title"
                       aria-describedby="alert-dialog-description"
-                      
                     >
                       <DialogTitle id="alert-dialog-title">
                         {"Are you sure want to delete?"}
@@ -151,11 +156,33 @@ export default function DashBoardReport(){
                       <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                           Warning: This data is important and you need to take consideration to delete this
+                          <TableContainer component={Paper}>
+                            <Table aria-label="simple table">
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell align="center">Data ID</TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {data.map((item) => {
+                                  if (item._id === selectedItemId) {
+                                    return (
+                                      <TableRow
+                                      >
+                                        <TableCell align='center'>{item._id}</TableCell>
+                                      </TableRow>
+                                    );
+                                  }
+                                  return null;
+                                })}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleClose}>Disagree</Button>
-                        <Button onClick={async() => { await handleDelete(item.id); handleClose();}} autoFocus>
+                        <Button onClick={async() => { await handleDelete(item._id); handleClose();}} autoFocus>
                           Agree
                         </Button>
                       </DialogActions>

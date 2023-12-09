@@ -14,9 +14,11 @@ import Title from './Title';
 import Alert from '@mui/material/Alert';
 
 interface DataItem {
-  id: number;
+  _id: number;
   distanceCm: number;
   distanceInch: number;
+  date: string;
+  time: string;
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -57,7 +59,7 @@ export default function Orders() {
         console.log('Received data:', data); // Log the received data
 
       // Sort data in descending order based on id
-      const sortedData = data.sort((a: DataItem, b: DataItem) => b.id - a.id);
+      const sortedData = data.sort((a: DataItem, b: DataItem) => b._id - a._id);
 
       // Update state with the sorted data
       setData(sortedData);
@@ -86,15 +88,19 @@ export default function Orders() {
             <StyledTableCell>No</StyledTableCell>
             <StyledTableCell>Distance in CM</StyledTableCell>
             <StyledTableCell>DIstance in Inch</StyledTableCell>
+            <StyledTableCell>Date</StyledTableCell>
+            <StyledTableCell>Time</StyledTableCell>
             <StyledTableCell align='center'>Alert</StyledTableCell>
           </StyledTableRow>
         </TableHead>
         <TableBody>
           {data.slice(0, 5).map((item, index) => (
-            <StyledTableRow key={item.id}>
+            <StyledTableRow key={item._id}>
               <StyledTableCell>{index + 1}</StyledTableCell>
               <StyledTableCell>{item.distanceCm}</StyledTableCell>
               <StyledTableCell>{item.distanceInch}</StyledTableCell>
+              <StyledTableCell>{item.date}</StyledTableCell>
+              <StyledTableCell>{item.time}</StyledTableCell>
               <StyledTableCell align='center'>
                     {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
                     </StyledTableCell>

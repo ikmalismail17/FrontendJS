@@ -11,9 +11,11 @@ import Grid from '@mui/material/Grid';
 import Title from './Title';
 
 interface DataItem {
-  id: number;
+  _id: number;
   distanceCm: number;
   distanceInch: number;
+  date: string;
+  time: string;
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -77,14 +79,18 @@ useEffect(() => {
               <StyledTableCell>ID</StyledTableCell>
               <StyledTableCell>Distance in CM</StyledTableCell>
               <StyledTableCell>DIstance in Inch</StyledTableCell>
+              <StyledTableCell>Date</StyledTableCell>
+              <StyledTableCell>Time</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((item) => (
-              <StyledTableRow  key={item.id}>
-                  <StyledTableCell>{item.id}</StyledTableCell>
+            {data.map((item, index) => (
+              <StyledTableRow  key={item._id}>
+                  <StyledTableCell>{index + 1}</StyledTableCell>
                   <StyledTableCell>{item.distanceCm}</StyledTableCell> 
                   <StyledTableCell>{item.distanceInch}</StyledTableCell>
+                  <StyledTableCell>{item.date}</StyledTableCell>
+                  <StyledTableCell>{item.time}</StyledTableCell>
               </StyledTableRow>
              ))}
           </TableBody>
