@@ -15,11 +15,12 @@ import Sidebar from './components/SideBar';
 import Footer from './components/Footer';
 import { useColorMode } from './components/ToggleColorMode';
 import SignInSide from "./components/SignInSide";
-import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import DashBoardContent from "./components/DashBoardContent";
 import DashBoardReport from "./components/DashBoardReport";
 import DashboardAlarm from "./components/DashboardAlarm";
+import { useAuth } from "./AuthContext";
 // import Main from './components/Main';
 
 const sections = [
@@ -87,6 +88,13 @@ const sidebar = {
 function App() {
   const { toggleColorMode } = useColorMode();
   const theme = useTheme();
+  const { token } = useAuth();
+
+  if(!token){
+    console.log('No token: ', token);
+  }else{
+    console.log('Token: ', token);
+  }
 
   const AdminDashboard = () => {
     return (
@@ -111,19 +119,19 @@ function App() {
       <SignInSide></SignInSide>
       </>
     )
-  }else if(location.pathname == '/admindashboard'){
+  }else if(location.pathname == '/admindashboard' && token){
     mainContent = (
       <>
       <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminDashboard} adminTitle="Dashboard"></Dashboard>
       </>
     )
-  }else if(location.pathname == '/admindashboard/report'){
+  }else if(location.pathname == '/admindashboard/report' && token){
     mainContent = (
       <>
       <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminReport} adminTitle="Report"></Dashboard>
       </>
     )
-  }else if(location.pathname == '/admindashboard/alarm'){
+  }else if(location.pathname == '/admindashboard/alarm' && token){
     mainContent = (
       <>
       <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminAlarm} adminTitle="Alarm"></Dashboard>
@@ -165,7 +173,7 @@ function App() {
       <Router>
           <Routes>
           <Route path="/" element={mainContent} />
-          <Route path="/admindashboard/*" element={mainContent}/>
+            <Route path="/admindashboard/*" element={mainContent}/>
           <Route path="/signin" element={mainContent}/>
           </Routes>
       </Router>

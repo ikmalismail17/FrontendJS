@@ -15,7 +15,7 @@ export default function Deposits() {
         153.32cm
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
-        on {Date()}
+        LOL
       </Typography>
       <div>
         <Link color="primary" href="#" onClick={preventDefault}>

@@ -11,13 +11,14 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import EmailIcon from '@mui/icons-material/Email';
 import BadgeIcon from '@mui/icons-material/Badge';
 import MessageIcon from '@mui/icons-material/Message';
+import { useAuth } from '../AuthContext';
 
 interface MyFormData {
-  firstName: string,
-  lastName: string,
-  adminID: string,
-  email: string,
-  message: string
+  firstName: string | null,
+  lastName: string | null,
+  adminID: string | null,
+  email: string | null,
+  message: string | null
 }
 
 interface AddressFormProps {
@@ -26,10 +27,29 @@ interface AddressFormProps {
 }
 
 export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFormProps){
+  const { id } = useAuth();
+  const [admindata, setAdminData] = useState<MyFormData | null>(null);
+
+  // Fetch data from Node.js server
+    fetch('http://localhost:3000/admininfo/'+id)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((admindata) => {
+      console.log('Received data:', admindata); // Log the received data
+      setAdminData(admindata);
+    })
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+    });
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    adminID: '',
+    adminID: id,
     email: '',
     message: ''
   });

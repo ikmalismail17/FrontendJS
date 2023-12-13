@@ -9,9 +9,13 @@ import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import axios from 'axios';
+import { useState } from 'react';
+import { useAuth } from '../AuthContext';
+import { useNavigate } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 
 function Copyright(props: any) {
   return (
@@ -28,6 +32,38 @@ function Copyright(props: any) {
 
 
 export default function SignInSide() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { setToken, setId } = useAuth(); // Use useAuth to access setToken
+  const navigate = useNavigate();
+  const { token } = useAuth();
+  
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/login', { email, password });
+      const { resToken, userId } = response.data;
+      setToken(resToken);
+      setId(userId);
+      console.log('Token: ', resToken);
+      console.log('ID: ', userId);
+      console.log('Email: ', email);
+      console.log('Password: ', password);
+      console.log('Login successful: ', response);
+
+      // Manually navigate to /admindashboard
+      navigate('/admindashboard');
+      // window.location.href = '/admindashboard';
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
+  };
+
+  React.useEffect(() => {
+    if (token) {
+      navigate('/admindashboard');
+    }
+  }, [token, navigate]);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -79,6 +115,7 @@ export default function SignInSide() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={(e) => setEmail(e.target.value)}
                 autoFocus
               />
               <TextField
@@ -89,22 +126,18 @@ export default function SignInSide() {
                 label="Password"
                 type="password"
                 id="password"
+                onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Link href='/admindashboard'>
               <Button
-                // type="submit"
                 fullWidth
+                type='submit'
+                onClick={handleLogin}
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
                 Sign In
               </Button>
-              </Link>
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>

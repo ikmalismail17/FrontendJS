@@ -31,6 +31,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 // import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function Copyright(props: any) {
@@ -107,10 +109,22 @@ export default function Dashboard(props: DashboardProps) {
   const [open, setOpen] = React.useState(true);
   const {toggleColorMode, dashboardContent, adminTitle} = props;
   const theme = useTheme();
+  const { logout } = useAuth(); // Include the logout function
+  const navigate = useNavigate();
+  const { token, id } = useAuth();
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
+  const handleLogout = () => {
+    // Call the logout function from your authentication context
+    logout();
+    // Redirect to the login page
+    navigate('/');
+  };
+
+  console.log('Token: ', token);
+  console.log('UserID: ', id);
   return (
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
@@ -144,11 +158,9 @@ export default function Dashboard(props: DashboardProps) {
             <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
-            <Link href="/" underline="none" color="inherit">
-            <IconButton sx={{ ml: 1 }} color="inherit">
+            <IconButton sx={{ ml: 1 }} color="inherit" onClick={handleLogout}>
              <LogoutIcon></LogoutIcon>
             </IconButton>
-            </Link>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open} color="#448aff">
@@ -190,15 +202,6 @@ export default function Dashboard(props: DashboardProps) {
             <ListItemText primary="Alarm" />
           </ListItemButton>
           </Link>
-            <Divider sx={{ my: 1 }} />
-          {/* <Link href="/" underline="none" color="inherit">
-          <ListItemButton>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary="Log Out" />
-          </ListItemButton>
-          </Link> */}
           </List>
         </Drawer>
         <Box
