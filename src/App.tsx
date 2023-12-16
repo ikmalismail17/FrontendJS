@@ -26,7 +26,7 @@ import { useAuth } from "./AuthContext";
 const sections = [
   { title: 'Main Post', url: '#mainpost' },
   { title: 'About', url: '#about' },
-  { title: 'Depth Data', url: '#tabledataoutside' }
+  { title: 'Visualization', url: '#tabledataoutside' }
 
 ];
 
