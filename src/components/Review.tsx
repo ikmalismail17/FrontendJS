@@ -4,13 +4,16 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
+import { useAuth } from '../AuthContext';
+import { useState } from 'react';
+import Divider from '@mui/material/Divider';
 
 interface FormData {
   alarmInfo: {
-    firstName: string,
-    lastName: string,
-    adminID: string,
-    email: string,
+    // firstName: string,
+    // lastName: string,
+    // adminID: string,
+    // email: string,
     message: string
   };
   dataInfo: {
@@ -22,20 +25,43 @@ interface FormData {
 }
 
 export default function Review({alarmInfo, dataInfo}: FormData) {
+  const { id } = useAuth();
+  const [admindata, setAdminData] = useState({
+    email: '',
+    firstname: '',
+    lastname: '',
+  });
+
+  // Fetch data from Node.js server
+  fetch('http://localhost:3000/admininfo/'+id)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then((admindata) => {
+    setAdminData(admindata);
+  })
+  .catch((error) => {
+    console.error('Error fetching data:', error);
+  });
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Review summary
       </Typography>
+      <Divider />
       <List disablePadding>
         <ListItem>
-          <ListItemText primary="Admin ID" secondary={`${alarmInfo.adminID}`} />
+          <ListItemText primary="Admin ID" secondary={`${id}`} />
         </ListItem>
         <ListItem>
-          <ListItemText primary="Full Name" secondary={`${alarmInfo.firstName} ${alarmInfo.lastName}`} />
+          <ListItemText primary="Full Name" secondary={`${admindata.firstname} ${admindata.lastname}`} />
         </ListItem>
         <ListItem>
-          <ListItemText primary="Email" secondary={alarmInfo.email} />
+          <ListItemText primary="Email" secondary={admindata.email} />
         </ListItem>
         <ListItem>
           <ListItemText primary="Date" secondary={Date().substring(4, 15)} />
@@ -47,6 +73,7 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
           <ListItemText primary="Message" secondary={alarmInfo.message} />
         </ListItem>
       </List>
+      <Divider />
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>

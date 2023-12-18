@@ -14,11 +14,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import { useAuth } from '../AuthContext';
 
 interface MyFormData {
-  firstName: string | null,
-  lastName: string | null,
-  adminID: string | null,
-  email: string | null,
-  message: string | null
+  message: string
 }
 
 interface AddressFormProps {
@@ -28,7 +24,11 @@ interface AddressFormProps {
 
 export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFormProps){
   const { id } = useAuth();
-  const [admindata, setAdminData] = useState<MyFormData | null>(null);
+  const [admindata, setAdminData] = useState({
+    email: '',
+    firstname: '',
+    lastname: '',
+  });
 
   // Fetch data from Node.js server
     fetch('http://localhost:3000/admininfo/'+id)
@@ -39,7 +39,6 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
       return response.json();
     })
     .then((admindata) => {
-      console.log('Received data:', admindata); // Log the received data
       setAdminData(admindata);
     })
     .catch((error) => {
@@ -48,19 +47,17 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
 
      
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    adminID: id,
-    email: '',
     message: ''
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    if (e.target.name === 'message') {
+      setFormData({
+        message: e.target.value,
+      });
+    }
   };
+  
 
   // Notify parent component when the form is filled
   useEffect(() => {
@@ -82,14 +79,12 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <AccountCircle sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
-            required
-            id="adminID"
-            name="adminID"
+            disabled
+            id="adminID outlined-required"
             label="Admin ID"
             fullWidth
             variant="standard"
-            value={formData.adminID}
-            onChange={handleInputChange}
+            value={id}
           />
         </Box>
         </Grid>
@@ -97,13 +92,12 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <EmailIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
-            id="email"
-            name="email"
+            disabled
+            id="email outlined-required"
             label="Admin Email"
             fullWidth
             variant="standard"
-            value={formData.email}
-            onChange={handleInputChange}
+            value={admindata.email}
           />
         </Box>
         </Grid>
@@ -111,15 +105,12 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <BadgeIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
-            required
-            id="firstName"
-            name="firstName"
+            disabled
+            id="firstName outlined-required"
             label="First name"
             fullWidth
-            autoComplete="given-name"
             variant="standard"
-            value={formData.firstName}
-            onChange={handleInputChange}
+            value={admindata.firstname}
           />
         </Box>
         </Grid>
@@ -127,15 +118,12 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <BadgeIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
-            required
-            id="lastName"
-            name="lastName"
+            disabled
+            id="lastName outlined-required"
             label="Last name"
             fullWidth
-            autoComplete="family-name"
             variant="standard"
-            value={formData.lastName}
-            onChange={handleInputChange}
+            value={admindata.lastname}
           />
         </Box>
         </Grid>
@@ -143,14 +131,12 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <CalendarMonthIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
-            required
-            id="date"
-            name="date"
+            disabled
+            id="date outlined-required"
             label="Date"
             fullWidth
             variant="standard"
             value={Date().substring(4, 15)}
-            onChange={handleInputChange}
           />
         </Box>
         </Grid>
@@ -158,14 +144,12 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <AccessTimeFilledIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
-            required
-            id="time"
-            name="time"
+            disabled
+            id="time outlined-required"
             label="Time"
             fullWidth
             variant="standard"
             value={Date().substring(15,21)}
-            onChange={handleInputChange}
           />
         </Box>
         </Grid>
@@ -174,7 +158,7 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
           <MessageIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
           <TextField
             required
-            id="msg"
+            id="msg outlined-required"
             name="message"
             label="Message"
             multiline

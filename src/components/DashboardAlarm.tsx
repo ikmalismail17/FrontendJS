@@ -19,10 +19,10 @@ import Grid from '@mui/material/Grid';
 const steps = ['Details Information', 'Depth Data', 'Reviewing'];
 
 interface FormAlarm {
-  firstName: string,
-  lastName: string,
-  adminID: string,
-  email: string,
+  // firstName: string,
+  // lastName: string,
+  // adminID: string,
+  // email: string,
   message: string
 }
 
@@ -37,10 +37,10 @@ export default function Checkout() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [isAddressFormFilled, setIsAddressFormFilled] = React.useState(false);
     const [alarmInfo, setAlarmInfo] = React.useState({
-      firstName: '',
-      lastName: '',
-      adminID: '',
-      email: '',
+      // firstName: '',
+      // lastName: '',
+      // adminID: '',
+      // email: '',
       message: ''
     })
 

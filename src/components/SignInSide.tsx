@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -15,6 +13,9 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import { AxiosError } from 'axios';
 // import { useHistory } from 'react-router-dom';
 
 function Copyright(props: any) {
@@ -30,6 +31,17 @@ function Copyright(props: any) {
   );
 }
 
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+interface State extends SnackbarOrigin {
+  openSnack: boolean;
+}
+
 
 export default function SignInSide() {
   const [email, setEmail] = useState('');
@@ -37,6 +49,24 @@ export default function SignInSide() {
   const { setToken, setId } = useAuth(); // Use useAuth to access setToken
   const navigate = useNavigate();
   const { token } = useAuth();
+
+   //Snackbar
+   const [state, setState] = React.useState<State>({
+    openSnack: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+  const { vertical, horizontal, openSnack } = state;
+
+  const handleOpenSnack = (newState: SnackbarOrigin) => () => {
+    console.log('Snackbar opened:', newState); // Add this log statement
+    setState({ ...newState, openSnack: true});
+  };
+
+  const handleCloseSnack = () => {
+    console.log('Snackbar closed'); // Add this log statement
+    setState({ ...state, openSnack: false });
+  };
   
   const handleLogin = async () => {
     try {
@@ -44,17 +74,36 @@ export default function SignInSide() {
       const { resToken, userId } = response.data;
       setToken(resToken);
       setId(userId);
-      console.log('Token: ', resToken);
-      console.log('ID: ', userId);
-      console.log('Email: ', email);
-      console.log('Password: ', password);
-      console.log('Login successful: ', response);
+      // console.log('Token: ', resToken);
+      // console.log('ID: ', userId);
+      // console.log('Email: ', email);
+      // console.log('Password: ', password);
+      // console.log('Login successful: ', response);
 
       // Manually navigate to /admindashboard
       navigate('/admindashboard');
-      // window.location.href = '/admindashboard';
     } catch (error) {
-      console.error('Error logging in:', error);
+
+    // Use type assertion to inform TypeScript about the type of 'error'
+    const axiosError = error as AxiosError;
+
+    if (axiosError.response && axiosError.response.status === 401) {
+      // Unauthorized (401) response
+      console.log('Unauthorized request. Displaying snackbar.');
+
+      // Call handleOpenSnack function here with appropriate parameters
+      handleOpenSnack({ vertical: 'top', horizontal: 'center'});
+
+      return;
+    } else if (axiosError.response) {
+      // The request was made and the server responded with a status code
+      // other than 401.
+      console.log('Server responded with:', axiosError.response.data);
+      console.log('Status code:', axiosError.response.status);
+    } else {
+      // Handle other types of errors
+      console.error('Non-Axios error occurred:', axiosError.message);
+    }
     }
   };
 
@@ -76,6 +125,17 @@ export default function SignInSide() {
   return (
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
+        <Snackbar 
+          open={openSnack} 
+          autoHideDuration={5000} 
+          onClose={handleCloseSnack}
+          anchorOrigin={{ vertical, horizontal }}
+          key={vertical + horizontal}
+        >
+          <Alert onClose={handleCloseSnack} severity="error" sx={{ width: '100%' }}>
+            User not found!!
+          </Alert>
+        </Snackbar>
         <Grid
           item
           xs={false}

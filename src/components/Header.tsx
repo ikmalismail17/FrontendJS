@@ -4,10 +4,12 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { useTheme} from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
+import LinkMUI from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+
 
 interface HeaderProps {
   sections: ReadonlyArray<{
@@ -52,10 +54,10 @@ export default function Header(props: HeaderProps) {
         >
           {title}
         </Typography>
-        <Link href="/signin">
-        <Button variant="outlined" size="small">
-          Sign in
-        </Button>
+        <Link to="/signin">
+          <Button variant="outlined" size="small">
+            Sign in
+          </Button>
         </Link>
       </Toolbar>
       <Toolbar
@@ -64,7 +66,7 @@ export default function Header(props: HeaderProps) {
         sx={{ justifyContent: 'space-between', overflowX: 'auto' }}
       >
         {sections.map((section) => (
-          <Link
+          <LinkMUI
             underline="hover"
             color="inherit"
             noWrap
@@ -74,7 +76,7 @@ export default function Header(props: HeaderProps) {
             sx={{ p: 1, flexShrink: 0 }}
           >
             {section.title}
-          </Link>
+          </LinkMUI>
         ))}
       </Toolbar>
     </React.Fragment>
