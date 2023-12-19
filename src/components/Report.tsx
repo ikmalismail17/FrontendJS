@@ -7,11 +7,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useState, useEffect } from 'react';
 // import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
 // import { Title } from '@mui/icons-material';
 import React from 'react';
 import Title from './Title';
 import Alert from '@mui/material/Alert';
+import TableContainer from '@mui/material/TableContainer';
 
 interface DataItem {
   _id: number;
@@ -82,34 +83,36 @@ export default function Orders() {
   return (
     <React.Fragment>
       <Title>Latest Data</Title>
-      <Table size="small">
-        <TableHead>
-          <StyledTableRow>
-            <StyledTableCell>No</StyledTableCell>
-            <StyledTableCell>Distance in CM</StyledTableCell>
-            <StyledTableCell>DIstance in Inch</StyledTableCell>
-            <StyledTableCell>Date</StyledTableCell>
-            <StyledTableCell>Time</StyledTableCell>
-            <StyledTableCell align='center'>Alert</StyledTableCell>
-          </StyledTableRow>
-        </TableHead>
-        <TableBody>
-          {data.slice(0, 5).map((item, index) => (
-            <StyledTableRow key={item._id}>
-              <StyledTableCell>{index + 1}</StyledTableCell>
-              <StyledTableCell>{item.distanceCm}</StyledTableCell>
-              <StyledTableCell>{item.distanceInch}</StyledTableCell>
-              <StyledTableCell>{item.date}</StyledTableCell>
-              <StyledTableCell>{item.time}</StyledTableCell>
-              <StyledTableCell align='center'>
-                    {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
-                    </StyledTableCell>
+      <TableContainer>
+        <Table size="small">
+          <TableHead>
+            <StyledTableRow>
+              <StyledTableCell>No</StyledTableCell>
+              <StyledTableCell>Distance in CM</StyledTableCell>
+              <StyledTableCell>DIstance in Inch</StyledTableCell>
+              <StyledTableCell>Date</StyledTableCell>
+              <StyledTableCell>Time</StyledTableCell>
+              <StyledTableCell align='center'>Alert</StyledTableCell>
             </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Link color="primary" href="/admindashboard/report" sx={{ mt: 3 }}>
-        See more data
+          </TableHead>
+          <TableBody>
+            {data.slice(0, 5).map((item, index) => (
+              <StyledTableRow key={item._id}>
+                <StyledTableCell>{index + 1}</StyledTableCell>
+                <StyledTableCell>{item.distanceCm}</StyledTableCell>
+                <StyledTableCell>{item.distanceInch}</StyledTableCell>
+                <StyledTableCell>{item.date}</StyledTableCell>
+                <StyledTableCell>{item.time}</StyledTableCell>
+                <StyledTableCell align='center'>
+                  {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Link to="/admindashboard/report" style={{ color:"inherit" }}>
+        See more data...
       </Link>
     </React.Fragment>
   );

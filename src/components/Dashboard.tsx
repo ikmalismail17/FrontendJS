@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { styled} from '@mui/material/styles';
+import {emphasize, styled} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -47,6 +47,11 @@ import Button from '@mui/material/Button';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 // import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Chip from '@mui/material/Chip';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Paper from '@mui/material/Paper';
+import companyLogo from '../assets/logo 2.svg'
 
 function Copyright(props: any) {
   return (
@@ -128,15 +133,31 @@ interface State extends SnackbarOrigin {
   openSnack: boolean;
 }
 
+//breadcrumbs
+const StyledBreadcrumb = styled(Chip)(({ theme }) => {
+  const backgroundColor =
+    theme.palette.mode === 'light'
+      ? theme.palette.grey[100]
+      : theme.palette.grey[800];
+  return {
+    backgroundColor,
+    height: theme.spacing(3),
+    color: theme.palette.text.primary,
+    fontWeight: theme.typography.fontWeightRegular,
+    '&:hover, &:focus': {
+      backgroundColor: emphasize(backgroundColor, 0.06),
+    },
+    '&:active': {
+      boxShadow: theme.shadows[1],
+      backgroundColor: emphasize(backgroundColor, 0.12),
+    },
+  };
+}) as typeof Chip;
+
 export default function Dashboard(props: DashboardProps) {
   const [open, setOpen] = React.useState(true);
   const {toggleColorMode, dashboardContent, adminTitle} = props;
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [adminData, setAdminData] = React.useState({
-    email: '',
-    firstname: '',
-    lastname: '',
-  });
   const theme = useTheme();
   const { logout } = useAuth(); // Include the logout function
   const navigate = useNavigate();
@@ -144,6 +165,11 @@ export default function Dashboard(props: DashboardProps) {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const [adminData, setAdminData] = React.useState({
+    email: '',
+    firstname: '',
+    lastname: '',
+  });
 
   //handle list focus when click
   const handleListItemClick = (
@@ -230,6 +256,43 @@ export default function Dashboard(props: DashboardProps) {
     localStorage.removeItem('snackbarState');
   };
 
+  //breadcrumb
+  let breadcrumbContent;
+  if(adminTitle == 'Report'){
+    breadcrumbContent = (
+      <>
+        <StyledBreadcrumb
+          label="Report"
+          icon={<BarChartIcon fontSize="small" />}
+        />
+      </>
+    )
+  }else if(adminTitle == 'Alarm'){
+    breadcrumbContent = (
+      <>
+        <StyledBreadcrumb
+          label="Alarm"
+          icon={<NotificationsActiveIcon fontSize="small" />}
+        />
+      </>
+    )
+  }
+
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+  //     // Trigger the handleLogout function when the window or web page is closed
+  //     handleLogout();
+  //     // Customize the confirmation message if needed
+  //     event.returnValue = 'Are you sure you want to leave this page?';
+  //   };
+
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, []);
+
   return (
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
@@ -262,44 +325,51 @@ export default function Dashboard(props: DashboardProps) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              {adminTitle}
-            </Typography>
+              <Box component="img" src={companyLogo} alt={`web logo`} style={{ width: '1.5em', height: '1.5em'}} sx={{ display: { xs: 'none', md: 'flex' }, mr: 2 }} />
+              <Typography
+                variant="h6"
+                noWrap
+                sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'monospace',
+                  fontWeight: 700,
+                  letterSpacing: '.3rem',
+                  color: 'inherit',
+                  flexGrow: 1,
+                }}
+              >
+                RivDepMon
+              </Typography>
             <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
             <IconButton sx={{ ml: 1 }} color="inherit" onClick={handleClickOpen}>
              <LogoutIcon></LogoutIcon>
             </IconButton>
-            <Dialog
-              open={openDialog}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"LOGOUT"}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Are you sure want to logout?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Close</Button>
-                <Button onClick={handleLogout} autoFocus>
-                  Yes
-                </Button>
-              </DialogActions>
-            </Dialog>
           </Toolbar>
         </AppBar>
+        <Dialog
+          open={openDialog}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"LOGOUT"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure want to logout?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Close</Button>
+            <Button onClick={handleLogout} autoFocus>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Drawer variant="permanent" open={open} color="#448aff">
           <Toolbar
             sx={{
@@ -315,51 +385,51 @@ export default function Dashboard(props: DashboardProps) {
           </Toolbar>
           <Divider />
           <List component="nav">
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar>
-                <AccountBoxRoundedIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={adminData.firstname+' '+adminData.lastname} secondary="Admin 1" />
-          </ListItem>
-          <Divider />
-          <Link to="/admindashboard" style={{ textDecoration: 'none', color:"inherit" }}>
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar>
+                  <AccountBoxRoundedIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={adminData.firstname+' '+adminData.lastname} secondary="Admin 1" />
+            </ListItem>
+            <Divider />
+            <Link to="/admindashboard" style={{ textDecoration: 'none', color:"inherit" }}>
+              <ListItemButton
+              selected={selectedIndex === 0}
+              onClick={(event) => handleListItemClick(event, 0)}
+              >
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+              </ListItemButton>
+            </Link>
+            <Divider />
+            <Link to="/admindashboard/report" style={{ textDecoration: 'none', color:"inherit" }} >
             <ListItemButton
-            selected={selectedIndex === 0}
-            onClick={(event) => handleListItemClick(event, 0)}
+            selected={selectedIndex === 1}
+            onClick={(event) => handleListItemClick(event, 1)}
             >
               <ListItemIcon>
-                <DashboardIcon />
+                <BarChartIcon />
               </ListItemIcon>
-              <ListItemText primary="Dashboard" />
+              <ListItemText primary="Reports" />
             </ListItemButton>
-          </Link>
-          <Divider />
-          <Link to="/admindashboard/report" style={{ textDecoration: 'none', color:"inherit" }} >
-          <ListItemButton
-          selected={selectedIndex === 1}
-          onClick={(event) => handleListItemClick(event, 1)}
-          >
-            <ListItemIcon>
-              <BarChartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Reports" />
-          </ListItemButton>
-          </Link>
-          <Divider />
-          <Link to="/admindashboard/alarm" style={{ textDecoration: 'none', color:"inherit" }}>
-          <ListItemButton
-          selected={selectedIndex === 2}
-          onClick={(event) => handleListItemClick(event, 2)}
-          >
-            <ListItemIcon>
-              <NotificationsActiveIcon />
-            </ListItemIcon>
-            <ListItemText primary="Alarm" />
-          </ListItemButton>
-          </Link>
-          <Divider />
+            </Link>
+            <Divider />
+            <Link to="/admindashboard/alarm" style={{ textDecoration: 'none', color:"inherit" }}>
+            <ListItemButton
+            selected={selectedIndex === 2}
+            onClick={(event) => handleListItemClick(event, 2)}
+            >
+              <ListItemIcon>
+                <NotificationsActiveIcon />
+              </ListItemIcon>
+              <ListItemText primary="Alarm" />
+            </ListItemButton>
+            </Link>
+            <Divider />
           </List>
         </Drawer>
         <Box
@@ -376,7 +446,19 @@ export default function Dashboard(props: DashboardProps) {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            {dashboardContent()}
+              <Breadcrumbs 
+                aria-label="breadcrumb"
+                separator={<NavigateNextIcon fontSize="small" />}
+              >
+                <StyledBreadcrumb
+                  label="Dashboard"
+                  icon={<DashboardIcon fontSize="small" />}
+                />
+                {breadcrumbContent}
+              </Breadcrumbs>
+              <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
+                {dashboardContent()}
+              </Paper>
             <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>

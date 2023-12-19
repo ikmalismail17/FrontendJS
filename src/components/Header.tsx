@@ -9,6 +9,7 @@ import LinkMUI from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import companyLogo from '../assets/logo 2.svg'
 
 
 interface HeaderProps {
@@ -26,34 +27,37 @@ export default function Header(props: HeaderProps) {
 
   return (
     <React.Fragment>
-      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
-      <Box
-      sx={{
-        display: 'flex',
-        width: '10%',
-        alignItems: 'center',
-        justifyContent: 'left',
-        bgcolor: 'background.default',
-        color: 'text.primary',
-        borderRadius: 1,
-        p: 3,
-      }}
-    >
-      <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
-        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-      </IconButton>
-      {/* {theme.palette.mode} mode */}
-    </Box>
-        <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          noWrap
-          sx={{ flex: 1 }}
+      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            bgcolor: 'background.default',
+            color: 'text.primary',
+            borderRadius: 1,
+            p: 3,
+          }}
         >
-          {title}
-        </Typography>
+          <IconButton sx={{ mr: 1 }} onClick={toggleColorMode} color="inherit">
+            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+          {/* {theme.palette.mode} mode */}
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box component="img" src={companyLogo} alt={`web logo`} style={{ width: '1.5em', height: '1.5em', marginRight: '0.5em' }} />
+          <Typography
+            variant="h6"
+            noWrap
+            sx={{
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+            }}
+          >
+            RivDepMon
+          </Typography>
+        </Box>
         <Link to="/signin">
           <Button variant="outlined" size="small">
             Sign in

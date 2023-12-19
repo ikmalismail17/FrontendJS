@@ -17,6 +17,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
+import MuiDatePicker from './DatePicker';
+import Box from '@mui/material/Box';
+import dayjs from 'dayjs';
 
 interface DataItem {
   _id: number;
@@ -24,7 +27,8 @@ interface DataItem {
   distanceInch: number;
   date: string;
   time: string;
-  }
+}
+
   
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -51,6 +55,7 @@ export default function DashBoardReport(){
   const [data, setData] = useState<DataItem[]>([]);
   const [open, setOpen] = React.useState(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [dateUI, setDateUI] = useState<Date | null>(null);
 
   const handleClickOpen = (id: number) => {
     setSelectedItemId(id);
@@ -110,10 +115,17 @@ export default function DashBoardReport(){
       }
     };
     
+    const handleDatePicker = (date: Date | null) => {
+      setDateUI(date);
+      console.log(dayjs(date).format('DD/MM/YYYY'));
+    }
 
     return (
     <>
-      <Grid item xs={12} md={8}>
+      <Grid item xs={12} md={12}>
+      <Box sx={{ my: { xs: 3, md: 2 }}}>
+        <MuiDatePicker onDateChange={handleDatePicker} />
+      </Box>
       <TableContainer>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -129,7 +141,50 @@ export default function DashBoardReport(){
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {data.map((item, index) => (
+            {dateUI ? 
+            data.filter((item) => dayjs(item.date).isSame(dayjs(dateUI).format('DD/MM/YYYY'), 'day')).length === 0 ? (
+              <StyledTableRow>
+                <StyledTableCell colSpan={8} align='center'>No data found</StyledTableCell>
+              </StyledTableRow>
+            ) : (
+              data.filter((item) => dayjs(item.date).isSame(dayjs(dateUI).format('DD/MM/YYYY'), 'day')).map((item, index) => (
+                <StyledTableRow key={item._id}>
+                  <StyledTableCell align='center'>{index + 1}</StyledTableCell>
+                  <StyledTableCell align='center'>{item._id}</StyledTableCell>
+                  <StyledTableCell align='center'>{item.distanceCm}</StyledTableCell> 
+                  <StyledTableCell align='center'>{item.distanceInch}</StyledTableCell>
+                  <StyledTableCell align='center'>{item.date}</StyledTableCell>
+                  <StyledTableCell align='center'>{item.time}</StyledTableCell>
+                  <StyledTableCell align='center'>
+                    {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
+                  </StyledTableCell>
+                  <StyledTableCell align='center'>
+                    <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                      <Button href="#text-buttons" color='success'>Edit</Button>
+                      <Button href="#text-buttons" color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
+                      <Dialog
+                        open={open && selectedItemId === item._id}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                          {"Are you sure want to delete?"}
+                        </DialogTitle>
+                        {/* Dialog content */}
+                      </Dialog>
+                    </ButtonGroup>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))
+            )
+            : 
+            data.filter((item => (item._id))).length === 0 ? (
+              <StyledTableRow>
+                <StyledTableCell colSpan={8} align='center'>No data found</StyledTableCell>
+              </StyledTableRow>
+            ) : (   
+            data.map((item, index) => (
               <StyledTableRow  key={item._id}>
                   <StyledTableCell align='center'>{index + 1}</StyledTableCell>
                   <StyledTableCell align='center'>{item._id}</StyledTableCell>
@@ -190,7 +245,8 @@ export default function DashBoardReport(){
                   </ButtonGroup>
                   </StyledTableCell>
               </StyledTableRow>
-             ))}
+             ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>

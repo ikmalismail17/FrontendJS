@@ -39,6 +39,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         localStorage.removeItem('id');
     }
   };
+  
   const logout = () => {
     // Clear the token from state or storage
     setToken(null);

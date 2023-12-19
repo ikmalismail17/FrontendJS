@@ -19,10 +19,6 @@ import Grid from '@mui/material/Grid';
 const steps = ['Details Information', 'Depth Data', 'Reviewing'];
 
 interface FormAlarm {
-  // firstName: string,
-  // lastName: string,
-  // adminID: string,
-  // email: string,
   message: string
 }
 
@@ -87,7 +83,7 @@ export default function Checkout() {
             </Stepper>
             </Paper>
         </Grid>
-        <Grid item xs={6} spacing={2}>
+        <Grid item xs={12} md={6} lg={6} spacing={2}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
               <AddressForm onFormFilled={handleAddressFormFilled} onFormUnfilled={resAddressFormFilled}></AddressForm>
             </Paper>
@@ -97,7 +93,7 @@ export default function Checkout() {
             </Paper>
             </Grid>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6} lg={6}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
                 <Review alarmInfo={alarmInfo} dataInfo={dataInfo}></Review>
             </Paper>
