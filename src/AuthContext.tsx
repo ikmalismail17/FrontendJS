@@ -1,6 +1,5 @@
 import React from 'react';
 import { createContext, useContext, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
   token: string | null;

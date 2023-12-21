@@ -20,6 +20,9 @@ import Paper from '@mui/material/Paper';
 import MuiDatePicker from './DatePicker';
 import Box from '@mui/material/Box';
 import dayjs from 'dayjs';
+import axios, { AxiosError } from 'axios';
+import { TextField } from '@mui/material';
+import { useAuth } from '../AuthContext';
 
 interface DataItem {
   _id: number;
@@ -56,6 +59,8 @@ export default function DashBoardReport(){
   const [open, setOpen] = React.useState(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const [dateUI, setDateUI] = useState<Date | null>(null);
+  const [password, setPassword] = useState('');
+  const { token, id } = useAuth();
 
   const handleClickOpen = (id: number) => {
     setSelectedItemId(id);
@@ -94,26 +99,49 @@ export default function DashBoardReport(){
         }
     }, []);
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (dataId: number) => {
       try {
-        // Send a delete request to the server
-        const response = await fetch(`http://localhost:3000/datadelete/${id}`, {
-          method: 'DELETE',
+        console.log('Before Axios DELETE request');
+        const response = await axios.delete(`http://localhost:3000/datadelete/${dataId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          data: { id, password },
         });
     
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.status}`);
-        }
+        console.log('Delete successful:', response);
+        console.log('Admin ID:', id);
+        console.log('Data ID:', dataId);
+        console.log('Token:', token);
+        console.log('Password:', password);
     
-        const result = await response.json();
-        console.log(result); // Log the result from the server
+        // If you want to perform any action after successful deletion, you can do it here
     
-        // Optionally, you can fetch the updated data after deletion
-        fetchData();
       } catch (error) {
-        console.error('Error deleting data:', error);
+        const errorAxios = error as AxiosError;
+    
+        console.log('Inside catch block');
+        console.error('Delete failed:', error);
+    
+        // Check if the error is due to unauthorized access (wrong password)
+        if (errorAxios.response && errorAxios.response.status === 401) {
+          console.log('Token not provided');
+        }else if (errorAxios.response && errorAxios.response.status === 501) {
+          console.log('Invalid Token');
+        }else if (errorAxios.response && errorAxios.response.status === 601) {
+          console.log('Password doesnt match');
+        }else if (errorAxios.response && errorAxios.response.status === 701) {
+          console.log('Eror at verify admin');  
+        }else if (errorAxios.response && errorAxios.response.status === 801) {
+          console.log('No data found');  
+        }else if (errorAxios.response && errorAxios.response.status === 901) {
+          console.log('Eror at deleteData');  
+        }
       }
     };
+    
+    
+    
     
     const handleDatePicker = (date: Date | null) => {
       setDateUI(date);
@@ -233,11 +261,25 @@ export default function DashBoardReport(){
                               </TableBody>
                             </Table>
                           </TableContainer>
+                          <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="current-password"
+                          />
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleClose}>Disagree</Button>
-                        <Button onClick={async() => { await handleDelete(item._id); handleClose();}} autoFocus>
+                        <Button onClick={async () => {
+                          await handleDelete(item._id);
+                          handleClose();
+                        }} autoFocus>
                           Agree
                         </Button>
                       </DialogActions>
