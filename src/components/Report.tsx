@@ -57,7 +57,6 @@ export default function Orders() {
       })
       
       .then((data) => {
-        console.log('Received data:', data); // Log the received data
 
       // Sort data in descending order based on id
       const sortedData = data.sort((a: DataItem, b: DataItem) => b._id - a._id);

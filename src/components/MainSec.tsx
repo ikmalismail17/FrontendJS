@@ -51,7 +51,6 @@ function MainSec() {
         return response.json();
       })
       .then((data) => {
-        console.log('Received data:', data); // Log the received data
         setData(data);
       })
       .catch((error) => {

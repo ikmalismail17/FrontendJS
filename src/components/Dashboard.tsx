@@ -191,12 +191,10 @@ export default function Dashboard(props: DashboardProps) {
   };
 
   //Snackbar
-  const [stateSnack, setStateSnack] = React.useState<State>(() => {
-    // Check if there is a saved Snackbar state in local storage
-    const savedSnackbarState = localStorage.getItem('snackbarState');
-    return savedSnackbarState
-      ? { ...JSON.parse(savedSnackbarState), openSnack: true }
-      : { openSnack: false, vertical: 'top', horizontal: 'center' };
+  const [stateSnack, setStateSnack] = React.useState<State>({
+    openSnack: false,
+    vertical: 'top',
+    horizontal: 'center',
   });
 
   const { vertical, horizontal, openSnack } = stateSnack;
@@ -204,48 +202,51 @@ export default function Dashboard(props: DashboardProps) {
   const handleOpenSnack = (newState: SnackbarOrigin) => () => {
     // Update the state to open the Snackbar
   setStateSnack({ ...newState, openSnack: true });
-
-  // Save the Snackbar state in local storage
-  localStorage.setItem('snackbarState', JSON.stringify(newState));
   };
 
   const handleCloseSnack = () => {
     // Update the state to close the Snackbar
   setStateSnack({ ...stateSnack, openSnack: false });
+
+  // Clear the success message from local storage
+  localStorage.removeItem('loginSuccessMessage');
   };
 
   useEffect(() => {
+
     // Fetch data from Node.js server
     const fetchData = async () => {
       try {
         const response = await fetch('http://localhost:3000/admininfo/' + id);
-  
+
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
         }
-  
+
         const admindata = await response.json();
-  
+
+        // Check for the success message in local storage only once when the component mounts
+        const loginSuccessMessage = localStorage.getItem('loginSuccessMessage');
+        console.log('loginSuccessMessage:', loginSuccessMessage); // Add this log statement
+
+        if (loginSuccessMessage === null) {
+          console.log('No success message found in local storage'); // Add this log statement
+        }else{  
+          // Parse the message and open the Snackbar
+          handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
+
+          // Clear the success message from local storage
+         localStorage.removeItem('loginSuccessMessage');
+        }
+
         setAdminData(admindata);
-        
       } catch (error) {
         console.error('Error fetching data:', error);
-      }finally{ 
-       // Check if there is a saved Snackbar state in local storage
-      const savedSnackbarState = localStorage.getItem('snackbarState');
-      if (savedSnackbarState) {
-        // Parse the saved state and open the Snackbar
-        handleOpenSnack(JSON.parse(savedSnackbarState))();
-      } else {
-        // If there is no saved state, you can open the Snackbar with some default values
-        handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
-      }
       }
     };
 
     fetchData();
-  
-  }, []);
+  }, [id]); // Include 'id' in the dependency array if it's used in the useEffect
 
   const handleLogout = () => {
     // Call the logout function from your authentication context
@@ -305,7 +306,7 @@ export default function Dashboard(props: DashboardProps) {
             key={vertical + horizontal}
           >
             <Alert onClose={handleCloseSnack} severity="success" sx={{ width: '100%' }}>
-              Successfully Login!!
+              {'Successfully Log in, Welcome '+adminData.firstname+' '+adminData.lastname}
             </Alert>
           </Snackbar>
           <Toolbar

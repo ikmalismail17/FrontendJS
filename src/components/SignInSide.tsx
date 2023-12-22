@@ -74,13 +74,10 @@ export default function SignInSide() {
       const { resToken, userId } = response.data;
       setToken(resToken);
       setId(userId);
-      // console.log('Token: ', resToken);
-      // console.log('ID: ', userId);
-      // console.log('Email: ', email);
-      // console.log('Password: ', password);
-      // console.log('Login successful: ', response);
 
-      // Manually navigate to /admindashboard
+      // Set success message in local storage
+      localStorage.setItem('loginSuccessMessage', 'Successfully logged in!');
+
       navigate('/admindashboard');
     } catch (error) {
 
