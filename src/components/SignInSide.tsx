@@ -16,6 +16,8 @@ import { useNavigate } from 'react-router-dom';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 import { AxiosError } from 'axios';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 // import { useHistory } from 'react-router-dom';
 
 function Copyright(props: any) {
@@ -48,7 +50,7 @@ export default function SignInSide() {
   const [password, setPassword] = useState('');
   const { setToken, setId } = useAuth(); // Use useAuth to access setToken
   const navigate = useNavigate();
-  const { token } = useAuth();
+  const [typePassword, setTypePassword] = useState(false);
 
    //Snackbar
    const [state, setState] = React.useState<State>({
@@ -57,16 +59,6 @@ export default function SignInSide() {
     horizontal: 'center',
   });
   const { vertical, horizontal, openSnack } = state;
-
-  const handleOpenSnack = (newState: SnackbarOrigin) => () => {
-    console.log('Snackbar opened:', newState); // Add this log statement
-    setState({ ...newState, openSnack: true});
-  };
-
-  const handleCloseSnack = () => {
-    console.log('Snackbar closed'); // Add this log statement
-    setState({ ...state, openSnack: false });
-  };
   
   const handleLogin = async () => {
     try {
@@ -81,34 +73,22 @@ export default function SignInSide() {
       navigate('/admindashboard');
     } catch (error) {
 
-    // Use type assertion to inform TypeScript about the type of 'error'
-    const axiosError = error as AxiosError;
+      // Use type assertion to inform TypeScript about the type of 'error'
+      const axiosError = error as AxiosError;
 
-    if (axiosError.response && axiosError.response.status === 401) {
-      // Unauthorized (401) response
-      console.log('Unauthorized request. Displaying snackbar.');
+      if (axiosError.response && axiosError.response.status === 401) {
 
-      // Call handleOpenSnack function here with appropriate parameters
-      handleOpenSnack({ vertical: 'top', horizontal: 'center'});
+        setState({ vertical: 'top', horizontal: 'center', openSnack: true });
+        console.log('Status code:', axiosError.response.status);
+        console.log(axiosError.response.data);
 
-      return;
-    } else if (axiosError.response) {
-      // The request was made and the server responded with a status code
-      // other than 401.
-      console.log('Server responded with:', axiosError.response.data);
-      console.log('Status code:', axiosError.response.status);
-    } else {
-      // Handle other types of errors
-      console.error('Non-Axios error occurred:', axiosError.message);
-    }
+        return;
+      }else if(axiosError.response){
+        console.log('Status code:', axiosError.response.status);
+        console.log('Response: ', axiosError.response.data);
+      }
     }
   };
-
-  React.useEffect(() => {
-    if (token) {
-      navigate('/admindashboard');
-    }
-  }, [token, navigate]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -119,18 +99,22 @@ export default function SignInSide() {
     });
   };
 
+  const handleShowPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTypePassword(event.target.checked)
+  }
+
   return (
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Snackbar 
           open={openSnack} 
-          autoHideDuration={5000} 
-          onClose={handleCloseSnack}
+          autoHideDuration={6000} 
+          onClose={() => setState({ ...state, openSnack: false })}
           anchorOrigin={{ vertical, horizontal }}
           key={vertical + horizontal}
         >
-          <Alert onClose={handleCloseSnack} severity="error" sx={{ width: '100%' }}>
-            User not found!!
+          <Alert onClose={() => setState({ ...state, openSnack: false })} severity="error" sx={{ width: '100%' }}>
+            User not found!! Check your email and password.
           </Alert>
         </Snackbar>
         <Grid
@@ -181,11 +165,12 @@ export default function SignInSide() {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={typePassword ? 'text' : 'password'}
                 id="password"
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
               />
+              <FormControlLabel control={<Checkbox onChange={handleShowPassword}/>} label="Show password" />
               <Button
                 fullWidth
                 type='submit'

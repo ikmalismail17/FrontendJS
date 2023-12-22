@@ -15,7 +15,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Alert from '@mui/material/Alert';
+import Alert, { AlertColor } from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
 import MuiDatePicker from './DatePicker';
 import Box from '@mui/material/Box';
@@ -23,6 +23,8 @@ import dayjs from 'dayjs';
 import axios, { AxiosError } from 'axios';
 import { TextField } from '@mui/material';
 import { useAuth } from '../AuthContext';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 
 interface DataItem {
   _id: number;
@@ -32,6 +34,16 @@ interface DataItem {
   time: string;
 }
 
+const AlertSnack = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+interface State extends SnackbarOrigin {
+  openSnack: boolean;
+}
   
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -71,6 +83,27 @@ export default function DashBoardReport(){
     setOpen(false);
   };
 
+  //Snackbar
+  const [snackMessage, setSnackMessage] = React.useState('' as string);
+  const [snackSeverity, setSnackSeverity] = React.useState<AlertColor>('error');
+  const [stateSnack, setStateSnack] = React.useState<State>({
+    openSnack: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+
+  const { vertical, horizontal, openSnack } = stateSnack;
+  
+  const handleOpenSnack = (newState: SnackbarOrigin) => () => {
+    // Update the state to open the Snackbar
+  setStateSnack({ ...newState, openSnack: true });
+  };
+
+  const handleCloseSnack = () => {
+    // Update the state to close the Snackbar
+  setStateSnack({ ...stateSnack, openSnack: false });
+  };
+
   const fetchData = () => {
     // Fetch data from Node.js server
     fetch('http://localhost:3000/datadisplay')
@@ -92,7 +125,7 @@ export default function DashBoardReport(){
     useEffect(() => {
         fetchData();
 
-        const refreshTimer = setInterval(fetchData, 10000);
+        const refreshTimer = setInterval(fetchData, 1000);
 
         return () => {
         clearInterval(refreshTimer);
@@ -108,6 +141,10 @@ export default function DashBoardReport(){
           },
           data: { id, password },
         });
+
+        setSnackSeverity('success');
+        setSnackMessage("Delete successful");
+        handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
     
         console.log('Delete successful:', response);
         console.log('Admin ID:', id);
@@ -126,16 +163,34 @@ export default function DashBoardReport(){
         // Check if the error is due to unauthorized access (wrong password)
         if (errorAxios.response && errorAxios.response.status === 401) {
           console.log('Token not provided');
+          setSnackSeverity('error');
+          setSnackMessage("Token not provided");
+          handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
+
         }else if (errorAxios.response && errorAxios.response.status === 501) {
           console.log('Invalid Token');
+          setSnackSeverity('error');
+          setSnackMessage("Invalid Token");
+          handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
+
         }else if (errorAxios.response && errorAxios.response.status === 601) {
           console.log('Password doesnt match');
+          setSnackSeverity('error');
+          setSnackMessage("Password doesn't match");
+          handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
+          
         }else if (errorAxios.response && errorAxios.response.status === 701) {
-          console.log('Eror at verify admin');  
+          console.log('Eror at verify admin');
+
         }else if (errorAxios.response && errorAxios.response.status === 801) {
-          console.log('No data found');  
+          console.log('No data found');
+          setSnackSeverity('error');
+          setSnackMessage("No data found");
+          handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
+
         }else if (errorAxios.response && errorAxios.response.status === 901) {
-          console.log('Eror at deleteData');  
+          console.log('Eror at deleteData');
+
         }
       }
     };
@@ -151,6 +206,17 @@ export default function DashBoardReport(){
     return (
     <>
       <Grid item xs={12} md={12}>
+      <Snackbar 
+        open={openSnack} 
+        autoHideDuration={5000} 
+        onClose={handleCloseSnack}
+        anchorOrigin={{ vertical, horizontal }}
+        key={vertical + horizontal}
+      >
+        <AlertSnack onClose={handleCloseSnack} severity={snackSeverity} sx={{ width: '100%' }}>
+          {snackMessage}
+        </AlertSnack>
+      </Snackbar>
       <Box sx={{ my: { xs: 3, md: 2 }}}>
         <MuiDatePicker onDateChange={handleDatePicker} />
       </Box>
