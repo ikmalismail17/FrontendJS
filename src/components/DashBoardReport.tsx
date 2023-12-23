@@ -327,8 +327,8 @@ export default function DashBoardReport(){
                         </StyledTableCell>
                         <StyledTableCell align='center'>
                           <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                            <Button href="#text-buttons" color='success'>Edit</Button>
-                            <Button href="#text-buttons" color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
+                            <Button color='success'>Edit</Button>
+                            <Button color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
                           </ButtonGroup>
                         </StyledTableCell>
                         <Dialog

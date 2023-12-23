@@ -302,7 +302,7 @@ export default function Dashboard(props: DashboardProps) {
   return (
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
+        <AppBar position="absolute" open={open} enableColorOnDark>
           <Snackbar 
             open={openSnack} 
             autoHideDuration={5000} 
@@ -462,9 +462,9 @@ export default function Dashboard(props: DashboardProps) {
                 />
                 {breadcrumbContent}
               </Breadcrumbs>
-              <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
-                {dashboardContent()}
-              </Paper>
+                <Paper variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }, bgcolor: 'primary' }} elevation={3}>
+                  {dashboardContent()}
+                </Paper>
             <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>

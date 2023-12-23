@@ -22,7 +22,6 @@ import DashBoardReport from "./components/DashBoardReport";
 import DashboardAlarm from "./components/DashboardAlarm";
 import { useAuth } from "./AuthContext";
 import React from "react";
-import companyLogo from './assets/logo 2.svg';
 
 const sections = [
   { title: 'Main Post', url: '#mainpost' },
