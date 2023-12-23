@@ -12,6 +12,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import BadgeIcon from '@mui/icons-material/Badge';
 import MessageIcon from '@mui/icons-material/Message';
 import { useAuth } from '../AuthContext';
+import Skeleton from '@mui/material/Skeleton';
 
 interface MyFormData {
   message: string
@@ -24,6 +25,7 @@ interface AddressFormProps {
 
 export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFormProps){
   const { id } = useAuth();
+  const [loading, setLoading] = useState(true); // Add loading state
   const [admindata, setAdminData] = useState({
     email: '',
     firstname: '',
@@ -57,8 +59,18 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
       });
     }
   };
-  
 
+  //skeleton loading
+  useEffect(() => {
+    // Simulate loading by setting a timeout
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    // Clear the timeout when the component unmounts or when loading is complete
+    return () => clearTimeout(timer);
+  }, []);
+  
   // Notify parent component when the form is filled
   useEffect(() => {
     const isFormFilled = Object.values(formData).every(Boolean);
@@ -68,110 +80,157 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
       onFormUnfilled();
     }
   }, [formData, onFormFilled, onFormUnfilled]);
-  
+
     return (
       <React.Fragment>
-      <Typography variant="h6" gutterBottom>
-        Details Information
-      </Typography>
-      <Grid container spacing={3}>
-      <Grid item xs={12} sm={6}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <AccountCircle sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
-          <TextField
-            disabled
-            id="adminID outlined-required"
-            label="Admin ID"
-            fullWidth
-            variant="standard"
-            value={id}
-          />
-        </Box>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <EmailIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
-          <TextField
-            disabled
-            id="email outlined-required"
-            label="Admin Email"
-            fullWidth
-            variant="standard"
-            value={admindata.email}
-          />
-        </Box>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <BadgeIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
-          <TextField
-            disabled
-            id="firstName outlined-required"
-            label="First name"
-            fullWidth
-            variant="standard"
-            value={admindata.firstname}
-          />
-        </Box>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <BadgeIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
-          <TextField
-            disabled
-            id="lastName outlined-required"
-            label="Last name"
-            fullWidth
-            variant="standard"
-            value={admindata.lastname}
-          />
-        </Box>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <CalendarMonthIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
-          <TextField
-            disabled
-            id="date outlined-required"
-            label="Date"
-            fullWidth
-            variant="standard"
-            value={Date().substring(4, 15)}
-          />
-        </Box>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <AccessTimeFilledIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
-          <TextField
-            disabled
-            id="time outlined-required"
-            label="Time"
-            fullWidth
-            variant="standard"
-            value={Date().substring(15,21)}
-          />
-        </Box>
-        </Grid>
-        <Grid item xs={12}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <MessageIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
-          <TextField
-            required
-            id="msg outlined-required"
-            name="message"
-            label="Message"
-            multiline
-            fullWidth
-            maxRows={4}
-            variant="standard"
-            value={formData.message}
-            onChange={handleInputChange}
-          />
-        </Box>
-        </Grid>
-      </Grid>
+        {loading ? (
+          <Skeleton sx={{ fontSize: '2rem' }} width="40%" animation="wave" />
+        ) : (
+          <>
+          <Typography variant="h6" gutterBottom>
+            Details Information
+          </Typography>
+          </>
+        )}
+          <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 4}} animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <AccountCircle sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  disabled
+                  id="adminID outlined-required"
+                  label="Admin ID"
+                  fullWidth
+                  variant="standard"
+                  value={id}
+                />
+              </Box>
+              </>
+            )}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <EmailIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  disabled
+                  id="email outlined-required"
+                  label="Admin Email"
+                  fullWidth
+                  variant="standard"
+                  value={admindata.email}
+                />
+              </Box>
+              </>
+            )}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+            ) : (
+            <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <BadgeIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  disabled
+                  id="firstName outlined-required"
+                  label="First name"
+                  fullWidth
+                  variant="standard"
+                  value={admindata.firstname}
+                />
+              </Box>
+            </>
+            )}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <BadgeIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  disabled
+                  id="lastName outlined-required"
+                  label="Last name"
+                  fullWidth
+                  variant="standard"
+                  value={admindata.lastname}
+                />
+              </Box>
+              </>
+            )}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <CalendarMonthIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  disabled
+                  id="date outlined-required"
+                  label="Date"
+                  fullWidth
+                  variant="standard"
+                  value={Date().substring(4, 15)}
+                />
+              </Box>
+              </>
+            )}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <AccessTimeFilledIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  disabled
+                  id="time outlined-required"
+                  label="Time"
+                  fullWidth
+                  variant="standard"
+                  value={Date().substring(15,21)}
+                />
+              </Box>
+              </>
+            )}
+            </Grid>
+            <Grid item xs={12}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <MessageIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  required
+                  id="msg outlined-required"
+                  name="message"
+                  label="Message"
+                  multiline
+                  fullWidth
+                  maxRows={4}
+                  variant="standard"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                />
+              </Box>
+              </>
+            )}
+            </Grid>
+          </Grid>
     </React.Fragment>
-
     )
 }

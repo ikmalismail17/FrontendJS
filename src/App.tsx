@@ -21,7 +21,8 @@ import DashBoardContent from "./components/DashBoardContent";
 import DashBoardReport from "./components/DashBoardReport";
 import DashboardAlarm from "./components/DashboardAlarm";
 import { useAuth } from "./AuthContext";
-// import Main from './components/Main';
+import React from "react";
+import companyLogo from './assets/logo 2.svg';
 
 const sections = [
   { title: 'Main Post', url: '#mainpost' },
@@ -99,12 +100,25 @@ function AppContent() {
   const { token } = useAuth();
   const route = useLocation();
 
-  if(!token){
-    console.log('No token: ', token);
-  }else{
-    console.log('Token: ', token);
-  }
+  //web title
+  React.useEffect(() => {
+    let newTitle = 'Monitoring System'; // Default title
 
+    if (route.pathname === '/admindashboard' && token) {
+      newTitle = 'Dashboard';
+    } else if (route.pathname === '/admindashboard/report' && token) {
+      newTitle = 'Report';
+    } else if (route.pathname === '/admindashboard/alarm' && token) {
+      newTitle = 'Alarm';
+    } else if (route.pathname === '/signin') {
+      newTitle = 'Sign In';
+    } else{
+      newTitle = 'Monitoring System';
+    }
+
+  }, [route.pathname, token]);
+
+  //component
   const AdminDashboard = () => {
     return (
       <DashBoardContent />
@@ -121,6 +135,7 @@ function AppContent() {
     )
   }
 
+  //main content
   let mainContent;
   if(route.pathname == '/signin'){
     mainContent = (
@@ -176,6 +191,7 @@ function AppContent() {
       </>
     )
   }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

@@ -279,20 +279,25 @@ export default function Dashboard(props: DashboardProps) {
     )
   }
 
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-  //     // Trigger the handleLogout function when the window or web page is closed
+  // const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+  //   const confirmationMessage = 'Are you sure you want to leave this page?';
+
+  //   // Check if the event's properties have been modified (indicating a refresh)
+  //   if (event.defaultPrevented || event.returnValue === confirmationMessage) {
+  //     // Page is being closed or browser is being closed
   //     handleLogout();
-  //     // Customize the confirmation message if needed
-  //     event.returnValue = 'Are you sure you want to leave this page?';
-  //   };
+  //   } else {
+  //     // Page is being refreshed, so prevent logout
+  //     event.preventDefault();
+  //   }
+  // };
 
-  //   window.addEventListener('beforeunload', handleBeforeUnload);
+  // window.addEventListener('beforeunload', handleBeforeUnload);
 
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleBeforeUnload);
-  //   };
-  // }, []);
+  // return () => {
+  //   window.removeEventListener('beforeunload', handleBeforeUnload);
+  // };
+  
 
   return (
       <Box sx={{ display: 'flex' }}>

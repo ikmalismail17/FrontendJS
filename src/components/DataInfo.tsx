@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import Grid3x3Icon from '@mui/icons-material/Grid3x3';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import InputAdornment from '@mui/material/InputAdornment';
+import Skeleton from '@mui/material/Skeleton';
 
 interface MyFormData {
   dataID: string,
@@ -25,6 +26,7 @@ interface PaymentFormProps{
 }
 
 export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFilled}: PaymentFormProps) {
+    const [loading, setLoading] = useState(true); // Add loading state
     const [formData, setFormData] = useState({
         dataID: '',
         dataCM: '',
@@ -47,90 +49,131 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
       }
     }, [formData, onFormFilled, isAddressFormFilled]);
 
+    //skeleton loading
+  React.useEffect(() => {
+    // Simulate loading by setting a timeout
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    // Clear the timeout when the component unmounts or when loading is complete
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom>
-        Depth Data
-      </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <Grid3x3Icon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
-          <TextField
-            required
-            id="dataID"
-            name= "dataID"
-            label="Data ID"
-            fullWidth
-            variant="standard"
-            value={formData.dataID}
-            onChange={handleInputChange}
-            disabled={onDisabled === 0 || !isAddressFormFilled}
-          />
-        </Box>
-        </Grid>
-        <Grid item xs={12} md={6}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <StraightenIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
-          <TextField
-            required
-            id="dataCM"
-            name="dataCM"
-            label="Data in CM"
-            fullWidth
-            autoComplete="cc-number"
-            variant="standard"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">cm</InputAdornment>
-              ),
-            }}
-            value={formData.dataCM}
-            onChange={handleInputChange}
-            disabled={onDisabled === 0 || !isAddressFormFilled}
-          />
-        </Box>
-        </Grid>
-        <Grid item xs={12} md={6}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <StraightenIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
-          <TextField
-            required
-            id="dataInch"
-            name="dataInch"
-            label="Data in Inch"
-            fullWidth
-            autoComplete="cc-exp"
-            variant="standard"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">inch</InputAdornment>
-              ),
-            }}
-            value={formData.dataInch}
-            onChange={handleInputChange}
-            disabled={onDisabled === 0 || !isAddressFormFilled}
-          />
-        </Box>
-        </Grid>
-        <Grid item xs={12} md={6}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <CalendarMonthIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
-          <TextField
-            required
-            id="date"
-            name="date"
-            label="Date"
-            fullWidth
-            autoComplete="cc-csc"
-            variant="standard"
-            value={formData.date}
-            onChange={handleInputChange}
-            disabled={onDisabled === 0 || !isAddressFormFilled}
-          />
-        </Box>
-        </Grid>
-      </Grid>
+      {loading ? (
+        <Skeleton sx={{ fontSize: '2rem' }} width="40%" animation="wave" />
+      ) : (
+        <>
+        <Typography variant="h6" gutterBottom>
+            Depth Data
+        </Typography>
+        </>
+      )}
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <Grid3x3Icon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  required
+                  id="dataID"
+                  name= "dataID"
+                  label="Data ID"
+                  fullWidth
+                  variant="standard"
+                  value={formData.dataID}
+                  onChange={handleInputChange}
+                  disabled={onDisabled === 0 || !isAddressFormFilled}
+                />
+              </Box>
+              </>
+            )}
+            </Grid>
+            <Grid item xs={12} md={6}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <StraightenIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  required
+                  id="dataCM"
+                  name="dataCM"
+                  label="Data in CM"
+                  fullWidth
+                  autoComplete="cc-number"
+                  variant="standard"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">cm</InputAdornment>
+                    ),
+                  }}
+                  value={formData.dataCM}
+                  onChange={handleInputChange}
+                  disabled={onDisabled === 0 || !isAddressFormFilled}
+                />
+              </Box>
+              </>
+            )}
+            </Grid>
+            <Grid item xs={12} md={6}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <StraightenIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  required
+                  id="dataInch"
+                  name="dataInch"
+                  label="Data in Inch"
+                  fullWidth
+                  autoComplete="cc-exp"
+                  variant="standard"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">inch</InputAdornment>
+                    ),
+                  }}
+                  value={formData.dataInch}
+                  onChange={handleInputChange}
+                  disabled={onDisabled === 0 || !isAddressFormFilled}
+                />
+              </Box>
+              </>
+            )}
+            </Grid>
+            <Grid item xs={12} md={6}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <CalendarMonthIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  required
+                  id="date"
+                  name="date"
+                  label="Date"
+                  fullWidth
+                  autoComplete="cc-csc"
+                  variant="standard"
+                  value={formData.date}
+                  onChange={handleInputChange}
+                  disabled={onDisabled === 0 || !isAddressFormFilled}
+                />
+              </Box>
+              </>
+            )}
+            </Grid>
+          </Grid>
     </React.Fragment>
   );
 }

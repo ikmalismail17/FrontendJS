@@ -15,6 +15,7 @@ import AddressForm from './AlarmInfo';
 import PaymentForm from './DataInfo';
 import Review from './Review';
 import Grid from '@mui/material/Grid';
+import Skeleton from '@mui/material/Skeleton';
 
 const steps = ['Details Information', 'Depth Data', 'Reviewing'];
 
@@ -31,6 +32,7 @@ interface FormData {
 
 export default function Checkout() {
     const [activeStep, setActiveStep] = React.useState(0);
+    const [loading, setLoading] = React.useState(true); // Add loading state
     const [isAddressFormFilled, setIsAddressFormFilled] = React.useState(false);
     const [alarmInfo, setAlarmInfo] = React.useState({
       // firstName: '',
@@ -66,25 +68,55 @@ export default function Checkout() {
       setActiveStep(2);
     };
 
+    //skeleton loading
+  React.useEffect(() => {
+    // Simulate loading by setting a timeout
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    // Clear the timeout when the component unmounts or when loading is complete
+    return () => clearTimeout(timer);
+  }, []);
+
+  // {loading ? (
+  //   <Skeleton sx={{ fontSize: '2rem' }} animation="wave" />
+  // ) : (
+  //   <>
+  //   </>
+  // )}
+
   return (
     <React.Fragment>
         <Grid container spacing={2}>
         <Grid item xs={12}>
-            <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
-            <Typography component="h1" variant="h4" align="center">
+          <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
+            {loading ? (
+            <Skeleton sx={{ fontSize: '2.5rem', margin: 'auto' }} width="50%" animation="wave" />
+            ) : (
+              <> 
+              <Typography component="h1" variant="h4" align="center">
                 Notifications Progress
-            </Typography>
-            <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+              </Typography>
+              </>
+            )}
+            {loading ? (
+            <Skeleton sx={{ fontSize: '2.5rem' }} animation="wave" />
+            ) : (
+              <>
+              <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
                 {steps.map((label) => (
                 <Step key={label}>
                     <StepLabel>{label}</StepLabel>
                 </Step>
                 ))}
-            </Stepper>
-            </Paper>
+              </Stepper>
+              </>
+            )}
+          </Paper>
         </Grid>
         <Grid item xs={12} md={6} lg={6} spacing={2}>
-            <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
+            <Paper variant="outlined" sx={{ my: { xs: 3, md: 1 }, p: { xs: 2, md: 3 } }}>
               <AddressForm onFormFilled={handleAddressFormFilled} onFormUnfilled={resAddressFormFilled}></AddressForm>
             </Paper>
             <Grid xs={12}>
@@ -94,21 +126,27 @@ export default function Checkout() {
             </Grid>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-            <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
+              <Paper variant="outlined" sx={{ my: { xs: 3, md: 1 }, p: { xs: 2, md: 3 } }}>
                 <Review alarmInfo={alarmInfo} dataInfo={dataInfo}></Review>
-            </Paper>
-            <Grid xs={12}>
-            <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Button
-                  variant="contained"
-                  sx={{ mt: 3, ml: 1 }}
-                >
-                  SUBMIT
-                </Button>
-                </Box>
-            </Paper>
-            </Grid>
+              </Paper>
+              <Grid xs={12}>
+              <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
+                {loading ? (
+                  <Skeleton sx={{ fontSize: '2rem', display: 'flex', justifyContent: 'flex-end' }} animation="wave" />
+                ) : (
+                  <>
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button
+                    variant="contained"
+                    sx={{ mt: 0.5, ml: 1 }}
+                  >
+                    SUBMIT
+                  </Button>
+                  </Box>
+                  </>
+                )}
+              </Paper>
+              </Grid>
         </Grid>
         </Grid>
         {/* <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
