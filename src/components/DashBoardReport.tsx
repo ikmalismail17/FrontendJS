@@ -25,6 +25,7 @@ import { TextField } from '@mui/material';
 import { useAuth } from '../AuthContext';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import Skeleton from '@mui/material/Skeleton';
 
 interface DataItem {
   _id: number;
@@ -86,6 +87,7 @@ export default function DashBoardReport(){
   //Snackbar
   const [snackMessage, setSnackMessage] = React.useState('' as string);
   const [snackSeverity, setSnackSeverity] = React.useState<AlertColor>('error');
+  const [loading, setLoading] = useState(true); // Add loading state
   const [stateSnack, setStateSnack] = React.useState<State>({
     openSnack: false,
     vertical: 'top',
@@ -145,12 +147,7 @@ export default function DashBoardReport(){
         setSnackSeverity('success');
         setSnackMessage("Delete successful");
         handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
-    
         console.log('Delete successful:', response);
-        console.log('Admin ID:', id);
-        console.log('Data ID:', dataId);
-        console.log('Token:', token);
-        console.log('Password:', password);
     
         // If you want to perform any action after successful deletion, you can do it here
     
@@ -203,6 +200,24 @@ export default function DashBoardReport(){
       console.log(dayjs(date).format('DD/MM/YYYY'));
     }
 
+    //skeleton loading
+  React.useEffect(() => {
+    // Simulate loading by setting a timeout
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    // Clear the timeout when the component unmounts or when loading is complete
+    return () => clearTimeout(timer);
+  }, []);
+
+    {loading ? (
+      <Skeleton sx={{ fontSize: '2rem' }} animation="wave" />
+    ) : (
+      <>
+      </>
+    )}
+
     return (
     <>
       <Grid item xs={12} md={12}>
@@ -218,142 +233,165 @@ export default function DashBoardReport(){
         </AlertSnack>
       </Snackbar>
       <Box sx={{ my: { xs: 3, md: 2 }}}>
-        <MuiDatePicker onDateChange={handleDatePicker} />
+        {loading ? (
+          <Skeleton variant='rounded' width="30%" sx={{ p: 3 }} animation="wave" />
+        ) : (
+          <>
+          <MuiDatePicker onDateChange={handleDatePicker} />
+          </>
+        )}
       </Box>
       <TableContainer>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <StyledTableRow>
-              <StyledTableCell align='center'>No</StyledTableCell>
-              <StyledTableCell align='center'>ID</StyledTableCell>
-              <StyledTableCell align='center'>Distance in CM</StyledTableCell>
-              <StyledTableCell align='center'>DIstance in Inch</StyledTableCell>
-              <StyledTableCell align='center'>Date</StyledTableCell>
-              <StyledTableCell align='center'>Time</StyledTableCell>
-              <StyledTableCell align='center'>Alert</StyledTableCell>
-              <StyledTableCell align='center'>Update</StyledTableCell>
+              <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("No")}</StyledTableCell>
+              <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("ID")}</StyledTableCell>
+              <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Distance in CM")}</StyledTableCell>
+              <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Distance in Inch")}</StyledTableCell>
+              <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Date")}</StyledTableCell>
+              <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Time")}</StyledTableCell>
+              <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Alert")}</StyledTableCell>
+              <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Update")}</StyledTableCell>
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {dateUI ? 
-            data.filter((item) => dayjs(item.date).isSame(dayjs(dateUI).format('DD/MM/YYYY'), 'day')).length === 0 ? (
+            {loading ? (
               <StyledTableRow>
-                <StyledTableCell colSpan={8} align='center'>No data found</StyledTableCell>
+                <StyledTableCell colSpan={8} align='center'>
+                  <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
+                  <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
+                  <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
+                  <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
+                  <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
+                  <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
+                  <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
+                  <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
+                </StyledTableCell>
               </StyledTableRow>
             ) : (
-              data.filter((item) => dayjs(item.date).isSame(dayjs(dateUI).format('DD/MM/YYYY'), 'day')).map((item, index) => (
-                <StyledTableRow key={item._id}>
-                  <StyledTableCell align='center'>{index + 1}</StyledTableCell>
-                  <StyledTableCell align='center'>{item._id}</StyledTableCell>
-                  <StyledTableCell align='center'>{item.distanceCm}</StyledTableCell> 
-                  <StyledTableCell align='center'>{item.distanceInch}</StyledTableCell>
-                  <StyledTableCell align='center'>{item.date}</StyledTableCell>
-                  <StyledTableCell align='center'>{item.time}</StyledTableCell>
-                  <StyledTableCell align='center'>
-                    {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
-                  </StyledTableCell>
-                  <StyledTableCell align='center'>
-                    <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                      <Button href="#text-buttons" color='success'>Edit</Button>
-                      <Button href="#text-buttons" color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
-                      <Dialog
-                        open={open && selectedItemId === item._id}
-                        onClose={handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                      >
-                        <DialogTitle id="alert-dialog-title">
-                          {"Are you sure want to delete?"}
-                        </DialogTitle>
-                        {/* Dialog content */}
-                      </Dialog>
-                    </ButtonGroup>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))
-            )
-            : 
-            data.filter((item => (item._id))).length === 0 ? (
-              <StyledTableRow>
-                <StyledTableCell colSpan={8} align='center'>No data found</StyledTableCell>
-              </StyledTableRow>
-            ) : (   
-            data.map((item, index) => (
-              <StyledTableRow  key={item._id}>
-                  <StyledTableCell align='center'>{index + 1}</StyledTableCell>
-                  <StyledTableCell align='center'>{item._id}</StyledTableCell>
-                  <StyledTableCell align='center'>{item.distanceCm}</StyledTableCell> 
-                  <StyledTableCell align='center'>{item.distanceInch}</StyledTableCell>
-                  <StyledTableCell align='center'>{item.date}</StyledTableCell>
-                  <StyledTableCell align='center'>{item.time}</StyledTableCell>
-                  <StyledTableCell align='center'>
-                    {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
-                    </StyledTableCell>
-                  <StyledTableCell align='center'>
-                  <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                    <Button href="#text-buttons" color='success'>Edit</Button>
-                    <Button href="#text-buttons" color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
-                    <Dialog
-                      open={open && selectedItemId === item._id}
-                      onClose={handleClose}
-                      aria-labelledby="alert-dialog-title"
-                      aria-describedby="alert-dialog-description"
-                    >
-                      <DialogTitle id="alert-dialog-title">
-                        {"Are you sure want to delete?"}
-                      </DialogTitle>
-                      <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                          Warning: This data is important and you need to take consideration to delete this
-                          <TableContainer component={Paper}>
-                            <Table aria-label="simple table">
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell align="center">Data ID</TableCell>
-                                </TableRow>
-                              </TableHead>
-                              <TableBody>
-                                {data.map((item) => {
-                                  if (item._id === selectedItemId) {
-                                    return (
-                                      <TableRow
-                                      >
-                                        <TableCell align='center'>{item._id}</TableCell>
-                                      </TableRow>
-                                    );
-                                  }
-                                  return null;
-                                })}
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                          <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            onChange={(e) => setPassword(e.target.value)}
-                            autoComplete="current-password"
-                          />
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleClose}>Disagree</Button>
-                        <Button onClick={async () => {
-                          await handleDelete(item._id);
-                          handleClose();
-                        }} autoFocus>
-                          Agree
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                  </ButtonGroup>
-                  </StyledTableCell>
-              </StyledTableRow>
-             ))
+              <>
+                {dateUI ? (
+                  data.filter((item) => dayjs(item.date).isSame(dayjs(dateUI).format('DD/MM/YYYY'), 'day')).length === 0 ? (
+                    <StyledTableRow>
+                      <StyledTableCell colSpan={8} align='center'>No data found</StyledTableCell>
+                    </StyledTableRow>
+                  ) : (
+                    data.filter((item) => dayjs(item.date).isSame(dayjs(dateUI).format('DD/MM/YYYY'), 'day')).map((item, index) => (
+                      <StyledTableRow key={item._id}>
+                        <StyledTableCell align='center'>{index + 1}</StyledTableCell>
+                        <StyledTableCell align='center'>{item._id}</StyledTableCell>
+                        <StyledTableCell align='center'>{item.distanceCm}</StyledTableCell> 
+                        <StyledTableCell align='center'>{item.distanceInch}</StyledTableCell>
+                        <StyledTableCell align='center'>{item.date}</StyledTableCell>
+                        <StyledTableCell align='center'>{item.time}</StyledTableCell>
+                        <StyledTableCell align='center'>
+                          {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
+                        </StyledTableCell>
+                        <StyledTableCell align='center'>
+                          <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                            <Button href="#text-buttons" color='success'>Edit</Button>
+                            <Button href="#text-buttons" color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
+                            <Dialog
+                              open={open && selectedItemId === item._id}
+                              onClose={handleClose}
+                              aria-labelledby="alert-dialog-title"
+                              aria-describedby="alert-dialog-description"
+                            >
+                              <DialogTitle id="alert-dialog-title">
+                                {"Are you sure want to delete?"}
+                              </DialogTitle>
+                              {/* Dialog content */}
+                            </Dialog>
+                          </ButtonGroup>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))
+                  )
+                ) : (
+                  data.filter((item => (item._id))).length === 0 ? (
+                    <StyledTableRow>
+                      <StyledTableCell colSpan={8} align='center'>No data found</StyledTableCell>
+                    </StyledTableRow>
+                  ) : (   
+                    data.map((item, index) => (
+                      <StyledTableRow  key={item._id}>
+                        <StyledTableCell align='center'>{index + 1}</StyledTableCell>
+                        <StyledTableCell align='center'>{item._id}</StyledTableCell>
+                        <StyledTableCell align='center'>{item.distanceCm}</StyledTableCell> 
+                        <StyledTableCell align='center'>{item.distanceInch}</StyledTableCell>
+                        <StyledTableCell align='center'>{item.date}</StyledTableCell>
+                        <StyledTableCell align='center'>{item.time}</StyledTableCell>
+                        <StyledTableCell align='center'>
+                          {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
+                        </StyledTableCell>
+                        <StyledTableCell align='center'>
+                          <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                            <Button href="#text-buttons" color='success'>Edit</Button>
+                            <Button href="#text-buttons" color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
+                          </ButtonGroup>
+                        </StyledTableCell>
+                        <Dialog
+                          open={open && selectedItemId === item._id}
+                          onClose={handleClose}
+                          aria-labelledby="alert-dialog-title"
+                          aria-describedby="alert-dialog-description"
+                        >
+                          <DialogTitle id="alert-dialog-title">
+                            {"Are you sure want to delete?"}
+                          </DialogTitle>
+                          <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                              Warning: This data is important and you need to take consideration to delete this
+                              <TableContainer component={Paper}>
+                                <Table aria-label="simple table">
+                                  <TableHead>
+                                    <TableRow>
+                                      <TableCell align="center">Data ID</TableCell>
+                                    </TableRow>
+                                  </TableHead>
+                                  <TableBody>
+                                    {data.map((item) => {
+                                      if (item._id === selectedItemId) {
+                                        return (
+                                          <TableRow>
+                                            <TableCell align='center'>{item._id}</TableCell>
+                                          </TableRow>
+                                        );
+                                      }
+                                      return null;
+                                    })}
+                                  </TableBody>
+                                </Table>
+                              </TableContainer>
+                              <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Password"
+                                type="password"
+                                id="password"
+                                onChange={(e) => setPassword(e.target.value)}
+                                autoComplete="current-password"
+                              />
+                            </DialogContentText>
+                          </DialogContent>
+                          <DialogActions>
+                            <Button onClick={handleClose}>Disagree</Button>
+                            <Button onClick={async () => {
+                              await handleDelete(item._id);
+                              handleClose();
+                            }} autoFocus>
+                              Agree
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
+                      </StyledTableRow>
+                    ))
+                  )
+                )}
+              </>
             )}
           </TableBody>
         </Table>

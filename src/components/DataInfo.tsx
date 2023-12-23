@@ -63,7 +63,7 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
   return (
     <React.Fragment>
       {loading ? (
-        <Skeleton sx={{ fontSize: '2rem' }} width="40%" animation="wave" />
+        <Skeleton sx={{ fontSize: '2rem', mb: 1 }} width="40%" animation="wave" />
       ) : (
         <>
         <Typography variant="h6" gutterBottom>
@@ -74,7 +74,7 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
             {loading ? (
-              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+              <Skeleton sx={{ p: 3}} variant="rounded" animation="wave" />
             ) : (
               <>
               <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -96,7 +96,7 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
             </Grid>
             <Grid item xs={12} md={6}>
             {loading ? (
-              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+              <Skeleton sx={{ p: 3}} variant="rounded" animation="wave" />
             ) : (
               <>
               <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -124,7 +124,7 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
             </Grid>
             <Grid item xs={12} md={6}>
             {loading ? (
-              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+              <Skeleton sx={{ p: 3}} variant="rounded" animation="wave" />
             ) : (
               <>
               <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -152,7 +152,7 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
             </Grid>
             <Grid item xs={12} md={6}>
             {loading ? (
-              <Skeleton sx={{ fontSize: '1.5rem', pt: 4 }} animation="wave" />
+              <Skeleton sx={{ p: 3}} variant="rounded" animation="wave" />
             ) : (
               <>
               <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
