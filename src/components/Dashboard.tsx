@@ -376,7 +376,7 @@ export default function Dashboard(props: DashboardProps) {
             </Button>
           </DialogActions>
         </Dialog>
-        <Drawer variant="permanent" open={open} color="#448aff">
+        <Drawer variant="permanent" open={open} sx={{'& .MuiDrawer-paper': {backgroundColor: theme.palette.primary.light}}}>
           <Toolbar
             sx={{
               display: 'flex',
@@ -388,54 +388,54 @@ export default function Dashboard(props: DashboardProps) {
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
+        </Toolbar>
+          <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
+          <List component="nav" sx={{ color: theme.palette.primary.contrastText }}>
             <ListItem>
               <ListItemAvatar>
                 <Avatar>
-                  <AccountBoxRoundedIcon />
+                  <AccountBoxRoundedIcon sx={{ color: theme.palette.primary.contrastText }}/>
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary={adminData.firstname+' '+adminData.lastname} secondary="Admin 1" />
+              <ListItemText primary={adminData.firstname+' '+adminData.lastname} secondary='Admin 1'/>
             </ListItem>
-            <Divider />
+            <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
             <Link to="/admindashboard" style={{ textDecoration: 'none', color:"inherit" }}>
               <ListItemButton
               selected={selectedIndex === 0}
               onClick={(event) => handleListItemClick(event, 0)}
               >
                 <ListItemIcon>
-                  <DashboardIcon />
+                  <DashboardIcon sx={{ color: theme.palette.primary.contrastText }}/>
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
               </ListItemButton>
             </Link>
-            <Divider />
+            <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
             <Link to="/admindashboard/report" style={{ textDecoration: 'none', color:"inherit" }} >
             <ListItemButton
             selected={selectedIndex === 1}
             onClick={(event) => handleListItemClick(event, 1)}
             >
               <ListItemIcon>
-                <BarChartIcon />
+                <BarChartIcon sx={{ color: theme.palette.primary.contrastText }}/>
               </ListItemIcon>
               <ListItemText primary="Reports" />
             </ListItemButton>
             </Link>
-            <Divider />
+            <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
             <Link to="/admindashboard/alarm" style={{ textDecoration: 'none', color:"inherit" }}>
             <ListItemButton
             selected={selectedIndex === 2}
             onClick={(event) => handleListItemClick(event, 2)}
             >
               <ListItemIcon>
-                <NotificationsActiveIcon />
+                <NotificationsActiveIcon sx={{ color: theme.palette.primary.contrastText }}/>
               </ListItemIcon>
               <ListItemText primary="Alarm" />
             </ListItemButton>
             </Link>
-            <Divider />
+            <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
           </List>
         </Drawer>
         <Box
@@ -450,8 +450,8 @@ export default function Dashboard(props: DashboardProps) {
             overflow: 'auto',
           }}
         >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Toolbar />
+          <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }} fixed={false}>
               <Breadcrumbs 
                 aria-label="breadcrumb"
                 separator={<NavigateNextIcon fontSize="small" />}
@@ -462,7 +462,7 @@ export default function Dashboard(props: DashboardProps) {
                 />
                 {breadcrumbContent}
               </Breadcrumbs>
-                <Paper variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }, bgcolor: 'primary' }} elevation={3}>
+                <Paper variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }, backgroundColor: theme.palette.primary.dark}} elevation={3}>
                   {dashboardContent()}
                 </Paper>
             <Copyright sx={{ pt: 4 }} />

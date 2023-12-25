@@ -115,6 +115,8 @@ function AppContent() {
       newTitle = 'Monitoring System';
     }
 
+    document.title = newTitle;
+
   }, [route.pathname, token]);
 
   //component

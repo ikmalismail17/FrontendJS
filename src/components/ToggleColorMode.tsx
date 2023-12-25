@@ -30,6 +30,12 @@ export function ColorModeProvider({ children }: { children: ReactNode }) {
       createTheme({
         palette: {
           mode,
+          primary: {
+            light: mode === 'dark' ? '#263238' : '#90a4ae', //grey blue
+            main: mode === 'dark' ? '#0277bd' : '#4fc3f7', //blue
+            dark: mode === 'dark' ? '#2e7d32' : '#4caf50', //green
+            contrastText: mode === 'dark' ? '#fff' : '#000', //black & white
+          },
         },
       }),
     [mode]
