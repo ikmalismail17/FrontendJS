@@ -52,7 +52,7 @@ import Chip from '@mui/material/Chip';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Paper from '@mui/material/Paper';
 import companyLogo from '../assets/logo 2.svg'
-import '../assets/css/ColorChange.css'
+import '../assets/css/Animation.css'
 
 function Copyright(props: any) {
   return (
@@ -463,7 +463,7 @@ export default function Dashboard(props: DashboardProps) {
                 />
                 {breadcrumbContent}
               </Breadcrumbs>
-                <Paper className="colorChange" variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }}} elevation={3}>
+                <Paper className="animation" variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }}} elevation={3}>
                   {dashboardContent()}
                 </Paper>
             <Copyright sx={{ pt: 4 }} />
