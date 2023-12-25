@@ -260,14 +260,14 @@ export default function DashBoardReport(){
               {loading ? (
                 <StyledTableRow>
                   <StyledTableCell colSpan={8} align='center'>
-                    <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
-                    <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
-                    <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
-                    <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
-                    <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
-                    <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
-                    <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
-                    <Skeleton variant='text' sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
                   </StyledTableCell>
                 </StyledTableRow>
               ) : (
