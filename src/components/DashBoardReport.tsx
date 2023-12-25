@@ -22,7 +22,7 @@ import Box from '@mui/material/Box';
 import dayjs from 'dayjs';
 import axios, { AxiosError } from 'axios';
 import { TextField } from '@mui/material';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../hooks/AuthContext';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 import Skeleton from '@mui/material/Skeleton';

@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import axios from 'axios';
 import { useState } from 'react';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../hooks/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';

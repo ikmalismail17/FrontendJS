@@ -1,11 +1,9 @@
-import * as React from 'react';
 import dayjs from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker as  MuiDatePicker } from '@mui/x-date-pickers/DatePicker';
 import ClearIcon from '@mui/icons-material/Clear';
-import { IconButton } from '@mui/material';
+import { IconButton, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 
 interface DateProps {
@@ -21,13 +19,13 @@ export default function DatePicker({onDateChange }: DateProps) {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center'}}>
                 <MuiDatePicker 
                     label="Choose Date"
                     format='DD/MM/YYYY'
                     onChange={handleDateChange}
                 />
-                <IconButton onClick={() => handleDateChange(null)}>
+                <IconButton onClick={() => handleDateChange(null)} sx={{ color: '#000' }}>
                     <ClearIcon />
                 </IconButton>
             </Box>

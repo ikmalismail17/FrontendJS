@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import companyLogo from '../assets/logo 2.svg'
+import TitleAnimation from './TitleAnimation';
 
 
 interface HeaderProps {
@@ -45,18 +46,7 @@ export default function Header(props: HeaderProps) {
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Box component="img" src={companyLogo} alt={`web logo`} style={{ width: '1.5em', height: '1.5em', marginRight: '0.5em' }} />
-          <Typography
-            variant="h6"
-            noWrap
-            sx={{
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-            }}
-          >
-            RivDepMon
-          </Typography>
+          <TitleAnimation />
         </Box>
         <Link to="/signin">
           <Button variant="outlined" size="small">

@@ -7,20 +7,20 @@ import Container from '@mui/material/Container';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import {ThemeProvider, useTheme } from '@mui/material/styles';
+import {ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
 import Header from './components/Header';
 import MainFeaturedPost from './components/MainFeaturedPost';
 import FeaturedPost from './components/FeaturedPost';
 import Sidebar from './components/SideBar';
 import Footer from './components/Footer';
-import { useColorMode } from './components/ToggleColorMode';
+import { useColorMode } from './hooks/ToggleColorMode';
 import SignInSide from "./components/SignInSide";
 import {BrowserRouter as Router, Route, Routes, useLocation} from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import DashBoardContent from "./components/DashBoardContent";
 import DashBoardReport from "./components/DashBoardReport";
 import DashboardAlarm from "./components/DashboardAlarm";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "./hooks/AuthContext";
 import React from "react";
 
 const sections = [
@@ -98,6 +98,7 @@ function AppContent() {
   const theme = useTheme();
   const { token } = useAuth();
   const route = useLocation();
+  createTheme
 
   //web title
   React.useEffect(() => {
@@ -138,59 +139,71 @@ function AppContent() {
 
   //main content
   let mainContent;
-  if(route.pathname == '/signin'){
-    mainContent = (
-      <>
-      <SignInSide></SignInSide>
-      </>
-    )
-  }else if(route.pathname == '/admindashboard' && token){
-    mainContent = (
-      <>
-      <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminDashboard} adminTitle="Dashboard"></Dashboard>
-      </>
-    )
-  }else if(route.pathname == '/admindashboard/report' && token){
-    mainContent = (
-      <>
-      <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminReport} adminTitle="Report"></Dashboard>
-      </>
-    )
-  }else if(route.pathname == '/admindashboard/alarm' && token){
-    mainContent = (
-      <>
-      <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminAlarm} adminTitle="Alarm"></Dashboard>
-      </>
-    )
-  }else{
-    mainContent = (
-      <>
-      <Container maxWidth="lg">
-        <Header title="Monitoring System" sections={sections} toggleColorMode={toggleColorMode}/>
-        <main>
-          <MainFeaturedPost post={mainFeaturedPost} />
-          <Grid container spacing={4}>
-            {featuredPosts.map((post) => (
-              <FeaturedPost key={post.title} post={post} />
-            ))}
-          </Grid>
-          <Grid container spacing={5} sx={{ mt: 2 }}>
-          <MainSec></MainSec>
-            <Sidebar
-              title={sidebar.title}
-              description={sidebar.description}
-              archives={sidebar.archives}
-              social={sidebar.social}
-            />
-          </Grid>
-        </main>
-      </Container>
-      <Footer
-        title="Footer"
-        description="MonitorSystem"
-      />
-      </>
-    )
+  switch (route.pathname) {
+    case '/signin':
+      mainContent = (
+        <>
+          <SignInSide></SignInSide>
+        </>
+      );
+      break;
+    case '/admindashboard':
+      if (token) {
+        mainContent = (
+          <>
+            <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminDashboard} adminTitle="Dashboard"></Dashboard>
+          </>
+        );
+      }
+      break;
+    case '/admindashboard/report':
+      if (token) {
+        mainContent = (
+          <>
+            <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminReport} adminTitle="Report"></Dashboard>
+          </>
+        );
+      }
+      break;
+    case '/admindashboard/alarm':
+      if (token) {
+        mainContent = (
+          <>
+            <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminAlarm} adminTitle="Alarm"></Dashboard>
+          </>
+        );
+      }
+      break;
+    default:
+      mainContent = (
+        <>
+          <Container maxWidth="lg">
+            <Header title="Monitoring System" sections={sections} toggleColorMode={toggleColorMode} />
+            <main>
+              <MainFeaturedPost post={mainFeaturedPost} />
+              <Grid container spacing={4}>
+                {featuredPosts.map((post) => (
+                  <FeaturedPost key={post.title} post={post} />
+                ))}
+              </Grid>
+              <Grid container spacing={5} sx={{ mt: 2 }}>
+                <MainSec></MainSec>
+                <Sidebar
+                  title={sidebar.title}
+                  description={sidebar.description}
+                  archives={sidebar.archives}
+                  social={sidebar.social}
+                />
+              </Grid>
+            </main>
+          </Container>
+          <Footer
+            title="Footer"
+            description="MonitorSystem"
+          />
+        </>
+      );
+      break;
   }
 
   return (

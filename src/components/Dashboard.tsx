@@ -9,24 +9,15 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-// import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-// import Grid from '@mui/material/Grid';
-// import Paper from '@mui/material/Paper';
-// import Link from '@mui/material/Link';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-// import NotificationsIcon from '@mui/icons-material/Notifications';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-// import { mainListItems, secondaryListItems } from './ListItems';
 import LogoutIcon from '@mui/icons-material/Logout';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-// import Chart from './Chart';
-// import Deposits from './Deposits';
-// import Orders from './Orders';
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
 import { useTheme} from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -34,7 +25,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../hooks/AuthContext';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
@@ -46,13 +37,14 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
-// import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Chip from '@mui/material/Chip';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Paper from '@mui/material/Paper';
 import companyLogo from '../assets/logo 2.svg'
-import '../assets/css/Animation.css'
+import '../assets/css/PaperAnimation.css'
+import '../assets/css/ListItemButton.css'
+import TypingAnimation from './TitleAnimation';
 
 function Copyright(props: any) {
   return (
@@ -333,21 +325,7 @@ export default function Dashboard(props: DashboardProps) {
               <MenuIcon />
             </IconButton>
               <Box component="img" src={companyLogo} alt={`web logo`} style={{ width: '1.5em', height: '1.5em'}} sx={{ display: { xs: 'none', md: 'flex' }, mr: 2 }} />
-              <Typography
-                variant="h6"
-                noWrap
-                sx={{
-                  mr: 2,
-                  display: { xs: 'none', md: 'flex' },
-                  fontFamily: 'monospace',
-                  fontWeight: 700,
-                  letterSpacing: '.3rem',
-                  color: 'inherit',
-                  flexGrow: 1,
-                }}
-              >
-                RivDepMon
-              </Typography>
+              <TypingAnimation />
             <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
@@ -384,6 +362,7 @@ export default function Dashboard(props: DashboardProps) {
               alignItems: 'center',
               justifyContent: 'flex-end',
               px: [1],
+              // backgroundImage: 'url(https://source.unsplash.com/random)'
             }}
           >
             <IconButton onClick={toggleDrawer}>
@@ -391,20 +370,26 @@ export default function Dashboard(props: DashboardProps) {
             </IconButton>
         </Toolbar>
           <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
-          <List component="nav" sx={{ color: theme.palette.primary.contrastText }}>
-            <ListItem>
+            <List component="nav" sx={{ color: theme.palette.primary.contrastText, p: 0 }}>
+            <ListItem 
+            sx={{ 
+              backgroundImage: 'url(https://static.vecteezy.com/system/resources/thumbnails/026/747/041/small/dark-and-blue-concreate-and-cement-wall-to-present-product-and-background-generative-ai-free-photo.jpg)',
+              backgroundSize: 'cover', // Adjust to 'contain' or 'auto' as needed
+              backgroundPosition: 'center', // Adjust as needed
+            }}>
               <ListItemAvatar>
                 <Avatar>
                   <AccountBoxRoundedIcon sx={{ color: theme.palette.primary.contrastText }}/>
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary={adminData.firstname+' '+adminData.lastname} secondary='Admin 1'/>
+              <ListItemText primary={adminData.firstname+' '+adminData.lastname} secondary='Admin'/>
             </ListItem>
             <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
             <Link to="/admindashboard" style={{ textDecoration: 'none', color:"inherit" }}>
               <ListItemButton
               selected={selectedIndex === 0}
               onClick={(event) => handleListItemClick(event, 0)}
+              className={selectedIndex === 0 ? 'selected-animation' : ''}
               >
                 <ListItemIcon>
                   <DashboardIcon sx={{ color: theme.palette.primary.contrastText }}/>
@@ -417,6 +402,7 @@ export default function Dashboard(props: DashboardProps) {
             <ListItemButton
             selected={selectedIndex === 1}
             onClick={(event) => handleListItemClick(event, 1)}
+            className={selectedIndex === 1 ? 'selected-animation' : ''}
             >
               <ListItemIcon>
                 <BarChartIcon sx={{ color: theme.palette.primary.contrastText }}/>
@@ -429,6 +415,7 @@ export default function Dashboard(props: DashboardProps) {
             <ListItemButton
             selected={selectedIndex === 2}
             onClick={(event) => handleListItemClick(event, 2)}
+            className={selectedIndex === 2 ? 'selected-animation' : ''}
             >
               <ListItemIcon>
                 <NotificationsActiveIcon sx={{ color: theme.palette.primary.contrastText }}/>

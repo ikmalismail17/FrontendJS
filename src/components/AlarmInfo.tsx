@@ -11,7 +11,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import EmailIcon from '@mui/icons-material/Email';
 import BadgeIcon from '@mui/icons-material/Badge';
 import MessageIcon from '@mui/icons-material/Message';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../hooks/AuthContext';
 import Skeleton from '@mui/material/Skeleton';
 
 interface MyFormData {
