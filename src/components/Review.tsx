@@ -8,26 +8,25 @@ import { useAuth } from '../hooks/AuthContext';
 import { useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Skeleton from '@mui/material/Skeleton';
+import { useData } from '../hooks/DataContext';
 
 interface FormData {
   alarmInfo: {
-    // firstName: string,
-    // lastName: string,
-    // adminID: string,
-    // email: string,
     message: string
   };
+
   dataInfo: {
-    dataID: string,
-    dataCM: string,
-    dataInch: string,
+    distanceCm: string,
+    distanceInch: string,
     date: string,
+    time: string,
   };
 }
 
 export default function Review({alarmInfo, dataInfo}: FormData) {
   const { id } = useAuth();
   const [loading, setLoading] = useState(true); // Add loading state
+  const { dataReport } = useData();
   const [admindata, setAdminData] = useState({
     email: '',
     firstname: '',
@@ -48,7 +47,7 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
   .catch((error) => {
     console.error('Error fetching data:', error);
   });
-
+  
   //skeleton loading
   React.useEffect(() => {
     // Simulate loading by setting a timeout
@@ -150,7 +149,7 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
               <Skeleton sx={{ fontSize: '1.5rem', pt: 2 }} animation="wave" />
             ) : (
               <>
-              <Typography gutterBottom>{`ID: ${dataInfo.dataID}`}</Typography>
+              <Typography gutterBottom>{`ID: ${dataReport}`}</Typography>
               </>
             )}
             </Grid>
@@ -169,7 +168,7 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
               <Skeleton sx={{ fontSize: '1.5rem', pt: 2 }} animation="wave" />
             ) : (
               <>
-              <Typography gutterBottom>{`Data in CM: ${dataInfo.dataCM}`}</Typography>
+              <Typography gutterBottom>{`CM: ${dataInfo.distanceCm}`}</Typography>
               </>
             )}
 
@@ -177,7 +176,7 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
               <Skeleton sx={{ fontSize: '1.5rem', pt: 2 }} animation="wave" />
             ) : (
               <>
-              <Typography gutterBottom>{`Data in Inch: ${dataInfo.dataInch}`}</Typography>
+              <Typography gutterBottom>{`Inch: ${dataInfo.distanceInch}`}</Typography>
               </>
             )}
             
@@ -185,7 +184,15 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
               <Skeleton sx={{ fontSize: '1.5rem', pt: 2 }} animation="wave" />
             ) : (
               <>
-              <Typography gutterBottom>{`Data Date: ${dataInfo.date}`}</Typography>
+              <Typography gutterBottom>{`Date: ${dataInfo.date}`}</Typography>
+              </>
+            )}
+
+            {loading ? (
+              <Skeleton sx={{ fontSize: '1.5rem', pt: 2 }} animation="wave" />
+            ) : (
+              <>
+              <Typography gutterBottom>{`Time: ${dataInfo.time}`}</Typography>
               </>
             )}
             </Grid>

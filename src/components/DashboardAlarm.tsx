@@ -24,16 +24,16 @@ interface FormAlarm {
 }
 
 interface FormData {
-  dataID: string,
-  dataCM: string,
-  dataInch: string,
+  distanceCm: string,
+  distanceInch: string,
   date: string,
+  time: string,
 }
 
 export default function Checkout() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [loading, setLoading] = React.useState(true); // Add loading state
-    const [isAddressFormFilled, setIsAddressFormFilled] = React.useState(false);
+    // const [isAddressFormFilled, setIsAddressFormFilled] = React.useState(false);
     const [alarmInfo, setAlarmInfo] = React.useState({
       // firstName: '',
       // lastName: '',
@@ -43,22 +43,22 @@ export default function Checkout() {
     })
 
     const [dataInfo, setDataInfo] = React.useState({
-      dataID: '',
-      dataCM: '',
-      dataInch: '',
+      distanceCm: '',
+      distanceInch: '',
       date: '',
+      time: '',
     })
 
     const handleAddressFormFilled = (formData: FormAlarm) => {
       // Advance to the next step when AddressForm is filled
       setAlarmInfo(formData)
-      setIsAddressFormFilled(true);
+      // setIsAddressFormFilled(true);
       setActiveStep(1);
     };
 
     const resAddressFormFilled = () => {
       // Advance to the next step when AddressForm is filled
-      setIsAddressFormFilled(false);
+      // setIsAddressFormFilled(false);
       setActiveStep(0);
     };
 
@@ -121,7 +121,9 @@ export default function Checkout() {
             </Paper>
             <Grid xs={12}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
-                <PaymentForm onFormFilled={handlePaymentFormFilled} onDisabled={activeStep} isAddressFormFilled={isAddressFormFilled}></PaymentForm>
+                <PaymentForm onFormFilled={handlePaymentFormFilled}
+                // isAddressFormFilled={isAddressFormFilled}
+                ></PaymentForm>
             </Paper>
             </Grid>
         </Grid>

@@ -11,29 +11,87 @@ import Grid3x3Icon from '@mui/icons-material/Grid3x3';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import InputAdornment from '@mui/material/InputAdornment';
 import Skeleton from '@mui/material/Skeleton';
+import { useData } from '../hooks/DataContext';
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
+import { IconButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { ClearIcon } from '@mui/x-date-pickers';
 
 interface MyFormData {
-  dataID: string,
-  dataCM: string,
-  dataInch: string,
+  distanceCm: string,
+  distanceInch: string,
   date: string,
+  time: string,
 }
 
 interface PaymentFormProps{
     onFormFilled: (formData: MyFormData) => void;
-    onDisabled: number;
-    isAddressFormFilled: boolean;
+    // onDisabled: number;
+    // isAddressFormFilled: boolean;
 }
 
-export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFilled}: PaymentFormProps) {
+export default function PaymentForm({onFormFilled}: PaymentFormProps) {
     const [loading, setLoading] = useState(true); // Add loading state
+    const { dataReport } = useData();
+    const { setDataReport, setChangeReport } = useData();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        dataID: '',
-        dataCM: '',
-        dataInch: '',
+        distanceCm: '',
+        distanceInch: '',
         date: '',
+        time: '',
       });
 
+      const handleChangeData = () => {
+        setChangeReport(true);
+        navigate('/admindashboard/report');
+      }
+
+      const handleClearData = () => {
+        // Clear the form data immediately
+        setFormData({
+          ...formData,
+          distanceCm: '',
+          distanceInch: '',
+          date: '',
+          time: '',
+        });
+      
+        // Clear the dataReport after a short delay
+        setTimeout(() => {
+          setDataReport('');
+        }, 50); // Adjust the delay as needed
+      };
+      
+      // Simulate loading with a delay
+      const handleClearDataWithDelay = () => {
+        setLoading(true);
+      
+        // Clear data after a delay
+        setTimeout(() => {
+          handleClearData();
+          handleClearData();
+          setLoading(false);
+        }, 2000); // Adjust the delay as needed
+      };
+      
+
+      //handle single data search from backend
+      fetch('http://localhost:3000/datareport/' + dataReport)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setFormData(data);
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+
+      //handle text input change
       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
           ...formData,
@@ -41,24 +99,24 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
         });
       };
 
-      // Notify parent component when the form is filled
+    // Notify parent component when the form is filled
     useEffect(() => {
       const isFormFilled = Object.values(formData).every(Boolean);
-      if (isFormFilled && isAddressFormFilled) {
+      if (isFormFilled) {
         onFormFilled(formData);
       }
-    }, [formData, onFormFilled, isAddressFormFilled]);
+    }, [formData, onFormFilled]);
 
     //skeleton loading
-  React.useEffect(() => {
-    // Simulate loading by setting a timeout
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    React.useEffect(() => {
+      // Simulate loading by setting a timeout
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2000);
 
-    // Clear the timeout when the component unmounts or when loading is complete
-    return () => clearTimeout(timer);
-  }, []);
+      // Clear the timeout when the component unmounts or when loading is complete
+      return () => clearTimeout(timer);
+    }, []);
 
   return (
     <React.Fragment>
@@ -72,7 +130,7 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
         </>
       )}
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
             {loading ? (
               <Skeleton sx={{ p: 3}} variant="rounded" animation="wave" />
             ) : (
@@ -81,15 +139,22 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
                 <Grid3x3Icon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
                 <TextField
                   required
+                  disabled
                   id="dataID"
                   name= "dataID"
                   label="Data ID"
                   fullWidth
                   variant="standard"
-                  value={formData.dataID}
+                  value={dataReport}
                   onChange={handleInputChange}
-                  disabled={onDisabled === 0 || !isAddressFormFilled}
+                  // disabled={onDisabled === 0 || !isAddressFormFilled}
                 />
+                <IconButton aria-aria-label='new data' onClick={handleChangeData}>
+                  <ChangeCircleIcon sx={{ color: '#2196f3'}}/>
+                </IconButton>
+                <IconButton aria-aria-label='clear data' onClick={handleClearDataWithDelay}>
+                  <ClearIcon sx={{ color: '#2196f3'}}/>
+                </IconButton>
               </Box>
               </>
             )}
@@ -114,9 +179,9 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
                       <InputAdornment position="end">cm</InputAdornment>
                     ),
                   }}
-                  value={formData.dataCM}
+                  value={formData.distanceCm}
                   onChange={handleInputChange}
-                  disabled={onDisabled === 0 || !isAddressFormFilled}
+                  disabled
                 />
               </Box>
               </>
@@ -142,9 +207,9 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
                       <InputAdornment position="end">inch</InputAdornment>
                     ),
                   }}
-                  value={formData.dataInch}
+                  value={formData.distanceInch}
                   onChange={handleInputChange}
-                  disabled={onDisabled === 0 || !isAddressFormFilled}
+                  disabled
                 />
               </Box>
               </>
@@ -167,7 +232,30 @@ export default function PaymentForm({onFormFilled, onDisabled, isAddressFormFill
                   variant="standard"
                   value={formData.date}
                   onChange={handleInputChange}
-                  disabled={onDisabled === 0 || !isAddressFormFilled}
+                  disabled
+                />
+              </Box>
+              </>
+            )}
+            </Grid>
+            <Grid item xs={12} md={6}>
+            {loading ? (
+              <Skeleton sx={{ p: 3}} variant="rounded" animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <CalendarMonthIcon sx={{ color: '#2196f3', mr: 1, my: 0.5 }} />
+                <TextField
+                  required
+                  id="time"
+                  name="time"
+                  label="Time"
+                  fullWidth
+                  autoComplete="cc-csc"
+                  variant="standard"
+                  value={formData.time}
+                  onChange={handleInputChange}
+                  disabled
                 />
               </Box>
               </>

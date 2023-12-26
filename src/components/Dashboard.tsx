@@ -45,6 +45,8 @@ import companyLogo from '../assets/logo 2.svg'
 import '../assets/css/PaperAnimation.css'
 import '../assets/css/ListItemButton.css'
 import TypingAnimation from './TitleAnimation';
+import { DataProvider } from '../hooks/DataContext';
+import { useSelectedIndex } from '../hooks/SelectIndexContext';
 
 function Copyright(props: any) {
   return (
@@ -150,7 +152,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 export default function Dashboard(props: DashboardProps) {
   const [open, setOpen] = React.useState(true);
   const {toggleColorMode, dashboardContent, adminTitle} = props;
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const { selectedIndex, setSelectedIndex, setIndexByRoute } = useSelectedIndex();
   const theme = useTheme();
   const { logout } = useAuth(); // Include the logout function
   const navigate = useNavigate();
@@ -171,6 +173,11 @@ export default function Dashboard(props: DashboardProps) {
   ) => {
     setSelectedIndex(index);
   };
+
+  useEffect(() => {
+    // Set the selectedIndex based on the route when the route changes
+    setIndexByRoute(location.pathname);
+  }, [location.pathname, setIndexByRoute]);
 
   //Dialog box
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -439,22 +446,24 @@ export default function Dashboard(props: DashboardProps) {
           }}
         >
         <Toolbar />
-          <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }} fixed={false}>
-              <Breadcrumbs 
-                aria-label="breadcrumb"
-                separator={<NavigateNextIcon fontSize="small" />}
-              >
-                <StyledBreadcrumb
-                  label="Dashboard"
-                  icon={<DashboardIcon fontSize="small" />}
-                />
-                {breadcrumbContent}
-              </Breadcrumbs>
-                <Paper className="animation" variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }}} elevation={3}>
-                  {dashboardContent()}
-                </Paper>
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
+        <DataProvider>
+            <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }} fixed={false}>
+                <Breadcrumbs 
+                  aria-label="breadcrumb"
+                  separator={<NavigateNextIcon fontSize="small" />}
+                >
+                  <StyledBreadcrumb
+                    label="Dashboard"
+                    icon={<DashboardIcon fontSize="small" />}
+                  />
+                  {breadcrumbContent}
+                </Breadcrumbs>
+                  <Paper className="animation" variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }}} elevation={3}>
+                    {dashboardContent()}
+                  </Paper>
+              <Copyright sx={{ pt: 4 }} />
+            </Container>
+          </DataProvider>
         </Box>
       </Box>
   );

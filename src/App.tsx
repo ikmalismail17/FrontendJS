@@ -22,6 +22,7 @@ import DashBoardReport from "./components/DashBoardReport";
 import DashboardAlarm from "./components/DashboardAlarm";
 import { useAuth } from "./hooks/AuthContext";
 import React from "react";
+import { SelectedIndexProvider } from "./hooks/SelectIndexContext";
 
 const sections = [
   { title: 'Main Post', url: '#mainpost' },
@@ -208,12 +209,14 @@ function AppContent() {
 
   return (
     <ThemeProvider theme={theme}>
+      <SelectedIndexProvider>
       <CssBaseline />
         <Routes>
           <Route path="/" element={mainContent} />
           <Route path="/admindashboard/*" element={mainContent}/>
           <Route path="/signin" element={mainContent}/>
         </Routes>
+      </SelectedIndexProvider>
     </ThemeProvider>
   )
 }

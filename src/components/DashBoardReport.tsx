@@ -21,11 +21,15 @@ import MuiDatePicker from './DatePicker';
 import Box from '@mui/material/Box';
 import dayjs from 'dayjs';
 import axios, { AxiosError } from 'axios';
-import { TextField } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import { useAuth } from '../hooks/AuthContext';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 import Skeleton from '@mui/material/Skeleton';
+import { useData } from '../hooks/DataContext';
+import { useNavigate } from 'react-router-dom';
+import PsychologyAltIcon from '@mui/icons-material/PsychologyAlt';
+import { useTheme} from '@mui/material/styles';
 
 interface DataItem {
   _id: number;
@@ -70,10 +74,13 @@ export default function DashBoardReport(){
 
   const [data, setData] = useState<DataItem[]>([]);
   const [open, setOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const [dateUI, setDateUI] = useState<Date | null>(null);
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
   const { token, id } = useAuth();
+  const { changeReport, setChangeReport } = useData();
 
   const handleClickOpen = (id: number) => {
     setSelectedItemId(id);
@@ -82,17 +89,34 @@ export default function DashBoardReport(){
 
   const handleClose = () => {
     setOpen(false);
+    setDialogOpen(false);
   };
 
   //Snackbar
-  const [snackMessage, setSnackMessage] = React.useState('' as string);
-  const [snackSeverity, setSnackSeverity] = React.useState<AlertColor>('error');
+  const [snackMessage, setSnackMessage] = useState('' as string);
+  const [snackSeverity, setSnackSeverity] = useState<AlertColor>('error');
   const [loading, setLoading] = useState(true); // Add loading state
-  const [stateSnack, setStateSnack] = React.useState<State>({
+  const theme = useTheme();
+  const [stateSnack, setStateSnack] = useState<State>({
     openSnack: false,
     vertical: 'top',
     horizontal: 'center',
   });
+
+  //dialog data report
+  const { setDataReport } = useData();
+
+  const handleClickOpenReport = (id: number) => {
+    setSelectedItemId(id);
+    setDialogOpen(true);
+    setOpen(true);
+  };
+
+  const handleClickReport = (id: number) => {
+    setDataReport(id.toString());
+    setChangeReport(false);
+    navigate('/admindashboard/alarm');
+  };
 
   const { vertical, horizontal, openSnack } = stateSnack;
   
@@ -116,7 +140,6 @@ export default function DashBoardReport(){
         return response.json();
       })
       .then((data) => {
-        console.log('Received data:', data); // Log the received data
         setData(data);
       })
       .catch((error) => {
@@ -192,7 +215,7 @@ export default function DashBoardReport(){
       }
     };
     
-    
+    console.log(changeReport);
     
     
     const handleDatePicker = (date: Date | null) => {
@@ -232,12 +255,18 @@ export default function DashBoardReport(){
           {snackMessage}
         </AlertSnack>
       </Snackbar>
-      <Box sx={{ my: { xs: 3, md: 2 }}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', my: { xs: 3, md: 2 } }}>
         {loading ? (
           <Skeleton variant='rounded' width="30%" sx={{ p: 3 }} animation="wave" />
         ) : (
           <>
-          <MuiDatePicker onDateChange={handleDatePicker} />
+            <MuiDatePicker onDateChange={handleDatePicker} />
+            {changeReport && (
+              <Paper variant='outlined' sx={{ ml: 1, p: 1, marginLeft: 'auto', display: 'flex', alignItems: 'center', backgroundColor: theme.palette.primary.dark }}>
+                <PsychologyAltIcon sx={{ mr: 1 }}></PsychologyAltIcon>
+                <Typography>Please choose new data to report</Typography>
+              </Paper>
+            )}
           </>
         )}
       </Box>
@@ -291,21 +320,117 @@ export default function DashBoardReport(){
                           </StyledTableCell>
                           <StyledTableCell align='center'>
                             <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                              <Button href="#text-buttons" color='success'>Edit</Button>
-                              <Button href="#text-buttons" color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
-                              <Dialog
-                                open={open && selectedItemId === item._id}
-                                onClose={handleClose}
-                                aria-labelledby="alert-dialog-title"
-                                aria-describedby="alert-dialog-description"
-                              >
-                                <DialogTitle id="alert-dialog-title">
-                                  {"Are you sure want to delete?"}
-                                </DialogTitle>
-                                {/* Dialog content */}
-                              </Dialog>
+                              {changeReport ? (
+                                  <Button color='success' onClick={() => handleClickOpenReport(item._id)}>Report</Button>
+                                ) : (
+                                  <>
+                                  <Button color='success' onClick={() => handleClickOpenReport(item._id)}>Report</Button>
+                                  <Button color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
+                                  </>
+                                )}
                             </ButtonGroup>
                           </StyledTableCell>
+                          <Dialog
+                            open={open && selectedItemId === item._id}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                          >
+                            { dialogOpen ? (
+                              <>
+                              <DialogTitle id="alert-dialog-title">
+                                {"Are you sure want to choose this data?"}
+                              </DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                  After this data selected, it will set on notification data info
+                                  <TableContainer component={Paper}>
+                                    <Table aria-label="simple table">
+                                      <TableHead>
+                                        <TableRow>
+                                          <TableCell align="center">Data ID</TableCell>
+                                        </TableRow>
+                                      </TableHead>
+                                      <TableBody>
+                                        {data.map((item) => {
+                                          if (item._id === selectedItemId) {
+                                            return (
+                                              <TableRow>
+                                                <TableCell align='center'>{item._id}</TableCell>
+                                              </TableRow>
+                                            );
+                                          }
+                                          return null;
+                                        })}
+                                      </TableBody>
+                                    </Table>
+                                  </TableContainer>
+                                </DialogContentText>
+                              </DialogContent>
+                              <DialogActions>
+                                <Button onClick={handleClose}>Disagree</Button>
+                                <Button onClick={() => {
+                                  handleClickReport(item._id);
+                                  handleClose();
+                                }} autoFocus>
+                                  Agree
+                                </Button>
+                              </DialogActions>
+                              </>
+                            ) : (
+                              <>
+                              <DialogTitle id="alert-dialog-title">
+                                {"Are you sure want to delete?"}
+                              </DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                  Warning: This data is important and you need to take consideration to delete this
+                                  <TableContainer component={Paper}>
+                                    <Table aria-label="simple table" sx={{ mt: 1 }}>
+                                      <TableHead>
+                                        <TableRow>
+                                          <TableCell align="center">Data ID</TableCell>
+                                        </TableRow>
+                                      </TableHead>
+                                      <TableBody>
+                                        {data.map((item) => {
+                                          if (item._id === selectedItemId) {
+                                            return (
+                                              <TableRow>
+                                                <TableCell align='center'>{item._id}</TableCell>
+                                              </TableRow>
+                                            );
+                                          }
+                                          return null;
+                                        })}
+                                      </TableBody>
+                                    </Table>
+                                  </TableContainer>
+                                  <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    autoComplete="current-password"
+                                  />
+                                </DialogContentText>
+                              </DialogContent>
+                              <DialogActions>
+                                <Button onClick={handleClose}>Disagree</Button>
+                                <Button onClick={async () => {
+                                  await handleDelete(item._id);
+                                  handleClose();
+                                }} autoFocus>
+                                  Agree
+                                </Button>
+                              </DialogActions>
+                              </>
+                            )}
+                          </Dialog>
                         </StyledTableRow>
                       ))
                     )
@@ -328,8 +453,14 @@ export default function DashBoardReport(){
                           </StyledTableCell>
                           <StyledTableCell align='center'>
                             <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                              <Button color='success'>Edit</Button>
-                              <Button color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
+                              {changeReport ? (
+                                <Button color='success' onClick={() => handleClickOpenReport(item._id)}>Report</Button>
+                              ) : (
+                                <>
+                                <Button color='success' onClick={() => handleClickOpenReport(item._id)}>Report</Button>
+                                <Button color='error' onClick={() => handleClickOpen(item._id)}>Delete</Button>
+                                </>
+                              )}
                             </ButtonGroup>
                           </StyledTableCell>
                           <Dialog
@@ -338,55 +469,100 @@ export default function DashBoardReport(){
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
                           >
-                            <DialogTitle id="alert-dialog-title">
-                              {"Are you sure want to delete?"}
-                            </DialogTitle>
-                            <DialogContent>
-                              <DialogContentText id="alert-dialog-description">
-                                Warning: This data is important and you need to take consideration to delete this
-                                <TableContainer component={Paper}>
-                                  <Table aria-label="simple table">
-                                    <TableHead>
-                                      <TableRow>
-                                        <TableCell align="center">Data ID</TableCell>
-                                      </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                      {data.map((item) => {
-                                        if (item._id === selectedItemId) {
-                                          return (
-                                            <TableRow>
-                                              <TableCell align='center'>{item._id}</TableCell>
-                                            </TableRow>
-                                          );
-                                        }
-                                        return null;
-                                      })}
-                                    </TableBody>
-                                  </Table>
-                                </TableContainer>
-                                <TextField
-                                  margin="normal"
-                                  required
-                                  fullWidth
-                                  name="password"
-                                  label="Password"
-                                  type="password"
-                                  id="password"
-                                  onChange={(e) => setPassword(e.target.value)}
-                                  autoComplete="current-password"
-                                />
-                              </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                              <Button onClick={handleClose}>Disagree</Button>
-                              <Button onClick={async () => {
-                                await handleDelete(item._id);
-                                handleClose();
-                              }} autoFocus>
-                                Agree
-                              </Button>
-                            </DialogActions>
+                            { dialogOpen ? (
+                              <>
+                              <DialogTitle id="alert-dialog-title">
+                                {"Are you sure want to choose this data?"}
+                              </DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                  After this data selected, it will set on notification data info
+                                  <TableContainer component={Paper}>
+                                    <Table aria-label="simple table">
+                                      <TableHead>
+                                        <TableRow>
+                                          <TableCell align="center">Data ID</TableCell>
+                                        </TableRow>
+                                      </TableHead>
+                                      <TableBody>
+                                        {data.map((item) => {
+                                          if (item._id === selectedItemId) {
+                                            return (
+                                              <TableRow>
+                                                <TableCell align='center'>{item._id}</TableCell>
+                                              </TableRow>
+                                            );
+                                          }
+                                          return null;
+                                        })}
+                                      </TableBody>
+                                    </Table>
+                                  </TableContainer>
+                                </DialogContentText>
+                              </DialogContent>
+                              <DialogActions>
+                                <Button onClick={handleClose}>Disagree</Button>
+                                <Button onClick={() => {
+                                  handleClickReport(item._id);
+                                  handleClose();
+                                }} autoFocus>
+                                  Agree
+                                </Button>
+                              </DialogActions>
+                              </>
+                            ) : (
+                              <>
+                              <DialogTitle id="alert-dialog-title">
+                                {"Are you sure want to delete?"}
+                              </DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                  Warning: This data is important and you need to take consideration to delete this
+                                  <TableContainer component={Paper} >
+                                    <Table aria-label="simple table" sx={{ mt: 1 }}>
+                                      <TableHead>
+                                        <TableRow>
+                                          <TableCell align="center">Data ID</TableCell>
+                                        </TableRow>
+                                      </TableHead>
+                                      <TableBody>
+                                        {data.map((item) => {
+                                          if (item._id === selectedItemId) {
+                                            return (
+                                              <TableRow>
+                                                <TableCell align='center'>{item._id}</TableCell>
+                                              </TableRow>
+                                            );
+                                          }
+                                          return null;
+                                        })}
+                                      </TableBody>
+                                    </Table>
+                                  </TableContainer>
+                                  <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    autoComplete="current-password"
+                                  />
+                                </DialogContentText>
+                              </DialogContent>
+                              <DialogActions>
+                                <Button onClick={handleClose}>Disagree</Button>
+                                <Button onClick={async () => {
+                                  await handleDelete(item._id);
+                                  handleClose();
+                                }} autoFocus>
+                                  Agree
+                                </Button>
+                              </DialogActions>
+                              </>
+                            )}
                           </Dialog>
                         </StyledTableRow>
                       ))
