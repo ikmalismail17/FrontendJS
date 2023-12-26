@@ -46,34 +46,6 @@ export default function PaymentForm({onFormFilled}: PaymentFormProps) {
         setChangeReport(true);
         navigate('/admindashboard/report');
       }
-
-      const handleClearData = () => {
-        // Clear the form data immediately
-        setFormData({
-          ...formData,
-          distanceCm: '',
-          distanceInch: '',
-          date: '',
-          time: '',
-        });
-      
-        // Clear the dataReport after a short delay
-        setTimeout(() => {
-          setDataReport('');
-        }, 50); // Adjust the delay as needed
-      };
-      
-      // Simulate loading with a delay
-      const handleClearDataWithDelay = () => {
-        setLoading(true);
-      
-        // Clear data after a delay
-        setTimeout(() => {
-          handleClearData();
-          handleClearData();
-          setLoading(false);
-        }, 2000); // Adjust the delay as needed
-      };
       
 
       //handle single data search from backend
@@ -151,9 +123,6 @@ export default function PaymentForm({onFormFilled}: PaymentFormProps) {
                 />
                 <IconButton aria-aria-label='new data' onClick={handleChangeData}>
                   <ChangeCircleIcon sx={{ color: '#2196f3'}}/>
-                </IconButton>
-                <IconButton aria-aria-label='clear data' onClick={handleClearDataWithDelay}>
-                  <ClearIcon sx={{ color: '#2196f3'}}/>
                 </IconButton>
               </Box>
               </>
