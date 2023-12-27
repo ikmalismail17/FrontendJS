@@ -1,60 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Typography from '@mui/material/Typography';
+import { Typography } from '@mui/material';
 
-const TypingAnimation = () => {
-  const [typedText, setTypedText] = useState('');
-  const currentIndexRef = useRef(0);
-
-  useEffect(() => {
-    const targetText = 'RivDepMon';
-
-    let typingInterval = setInterval(() => {
-      setTypedText((prevText) => prevText + targetText[currentIndexRef.current]);
-
-      currentIndexRef.current += 1;
-
-      if (currentIndexRef.current === targetText.length) {
-        clearInterval(typingInterval);
-
-        // Reset the typing animation after a short delay (e.g., 1 second)
-        setTimeout(() => {
-          setTypedText('');
-          currentIndexRef.current = 0;
-          // Re-start typing animation
-          typingIntervalFunc();
-        }, 1000);
-      }
-    }, 500); // Adjust the typing speed (milliseconds)
-
-    const typingIntervalFunc = () => {
-      typingInterval = setInterval(() => {
-        setTypedText((prevText) => prevText + targetText[currentIndexRef.current]);
-
-        currentIndexRef.current += 1;
-
-        if (currentIndexRef.current === targetText.length) {
-          clearInterval(typingInterval);
-
-          // Reset the typing animation after a short delay (e.g., 1 second)
-          setTimeout(() => {
-            setTypedText('');
-            currentIndexRef.current = 0;
-            // Re-start typing animation
-            typingIntervalFunc();
-          }, 1000);
-        }
-      }, 500); // Adjust the typing speed (milliseconds)
-    };
-
-    return () => {
-      clearInterval(typingInterval);
-    };
-  }, []); // The empty dependency array ensures that this effect runs once when the component mounts
-
+const TitleAnimation = () => {
   return (
     <Typography
       variant="h6"
       noWrap
+      className='typing-text'
       sx={{
         mr: 2,
         display: { xs: 'none', md: 'flex' },
@@ -65,9 +16,9 @@ const TypingAnimation = () => {
         flexGrow: 1,
       }}
     >
-      {typedText}
+      RivDepMon
     </Typography>
   );
 };
 
-export default TypingAnimation;
+export default TitleAnimation;

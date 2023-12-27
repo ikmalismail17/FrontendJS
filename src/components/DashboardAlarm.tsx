@@ -115,11 +115,11 @@ export default function Checkout() {
             )}
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6} lg={6} spacing={2}>
+        <Grid item xs={12} md={6} lg={6}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 1 }, p: { xs: 2, md: 3 } }}>
               <AddressForm onFormFilled={handleAddressFormFilled} onFormUnfilled={resAddressFormFilled}></AddressForm>
             </Paper>
-            <Grid xs={12}>
+            <Grid item xs={12}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
                 <PaymentForm onFormFilled={handlePaymentFormFilled}
                 // isAddressFormFilled={isAddressFormFilled}
@@ -128,27 +128,9 @@ export default function Checkout() {
             </Grid>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-              <Paper variant="outlined" sx={{ my: { xs: 3, md: 1 }, p: { xs: 2, md: 3 } }}>
-                <Review alarmInfo={alarmInfo} dataInfo={dataInfo}></Review>
-              </Paper>
-              <Grid xs={12}>
-              <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
-                {loading ? (
-                  <Skeleton sx={{ fontSize: '2rem', display: 'flex', justifyContent: 'flex-end' }} animation="wave" />
-                ) : (
-                  <>
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button
-                    variant="contained"
-                    sx={{ mt: 0.5, ml: 1 }}
-                  >
-                    SUBMIT
-                  </Button>
-                  </Box>
-                  </>
-                )}
-              </Paper>
-              </Grid>
+          <Paper variant="outlined" sx={{ my: { xs: 3, md: 1 }, p: { xs: 2, md: 3 } }}>
+            <Review alarmInfo={alarmInfo} dataInfo={dataInfo}></Review>
+          </Paper>
         </Grid>
         </Grid>
         {/* <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>

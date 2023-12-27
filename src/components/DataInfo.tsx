@@ -15,7 +15,6 @@ import { useData } from '../hooks/DataContext';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { ClearIcon } from '@mui/x-date-pickers';
 
 interface MyFormData {
   distanceCm: string,
@@ -26,14 +25,12 @@ interface MyFormData {
 
 interface PaymentFormProps{
     onFormFilled: (formData: MyFormData) => void;
-    // onDisabled: number;
-    // isAddressFormFilled: boolean;
 }
 
 export default function PaymentForm({onFormFilled}: PaymentFormProps) {
     const [loading, setLoading] = useState(true); // Add loading state
     const { dataReport } = useData();
-    const { setDataReport, setChangeReport } = useData();
+    const { setChangeReport } = useData();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         distanceCm: '',
@@ -44,24 +41,26 @@ export default function PaymentForm({onFormFilled}: PaymentFormProps) {
 
       const handleChangeData = () => {
         setChangeReport(true);
-        navigate('/admindashboard/report');
+        navigate('/admindashboard/data');
       }
       
 
-      //handle single data search from backend
-      fetch('http://localhost:3000/datareport/' + dataReport)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setFormData(data);
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-        });
+      if (dataReport) {
+        //handle single data search from backend
+        fetch('http://localhost:3000/datareport/' + dataReport)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            setFormData(data);
+          })
+          .catch((error) => {
+            // console.error('Error fetching data:', error);
+          });
+      }
 
       //handle text input change
       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,7 +120,7 @@ export default function PaymentForm({onFormFilled}: PaymentFormProps) {
                   onChange={handleInputChange}
                   // disabled={onDisabled === 0 || !isAddressFormFilled}
                 />
-                <IconButton aria-aria-label='new data' onClick={handleChangeData}>
+                <IconButton onClick={handleChangeData}>
                   <ChangeCircleIcon sx={{ color: '#2196f3'}}/>
                 </IconButton>
               </Box>

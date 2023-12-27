@@ -18,11 +18,13 @@ import SignInSide from "./components/SignInSide";
 import {BrowserRouter as Router, Route, Routes, useLocation} from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import DashBoardContent from "./components/DashBoardContent";
-import DashBoardReport from "./components/DashBoardReport";
+import DashBoardData from "./components/DashBoardData";
 import DashboardAlarm from "./components/DashboardAlarm";
+import DashboardProfile from "./components/DashboardProfile";
 import { useAuth } from "./hooks/AuthContext";
 import React from "react";
 import { SelectedIndexProvider } from "./hooks/SelectIndexContext";
+import DashBoardReport from "./components/DashboardReport";
 
 const sections = [
   { title: 'Main Post', url: '#mainpost' },
@@ -99,7 +101,6 @@ function AppContent() {
   const theme = useTheme();
   const { token } = useAuth();
   const route = useLocation();
-  createTheme
 
   //web title
   React.useEffect(() => {
@@ -107,10 +108,12 @@ function AppContent() {
 
     if (route.pathname === '/admindashboard' && token) {
       newTitle = 'Dashboard';
-    } else if (route.pathname === '/admindashboard/report' && token) {
-      newTitle = 'Report';
+    } else if (route.pathname === '/admindashboard/data' && token) {
+      newTitle = 'Data';
     } else if (route.pathname === '/admindashboard/alarm' && token) {
       newTitle = 'Alarm';
+    } else if (route.pathname === '/admindashboard/profile' && token) {
+      newTitle = 'Profile';
     } else if (route.pathname === '/signin') {
       newTitle = 'Sign In';
     } else{
@@ -127,14 +130,24 @@ function AppContent() {
       <DashBoardContent />
     )
   }
-  const AdminReport = () => {
+  const AdminData = () => {
     return (
-      <DashBoardReport />
+      <DashBoardData />
     )
   }
   const AdminAlarm = () => {
     return (
       <DashboardAlarm />
+    )
+  }
+  const AdminProfile = () => {
+    return (
+      <DashboardProfile />
+    )
+  }
+  const AdminReport = () => {
+    return (
+      <DashBoardReport />
     )
   }
 
@@ -157,11 +170,11 @@ function AppContent() {
         );
       }
       break;
-    case '/admindashboard/report':
+    case '/admindashboard/data':
       if (token) {
         mainContent = (
           <>
-            <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminReport} adminTitle="Report"></Dashboard>
+            <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminData} adminTitle="Data"></Dashboard>
           </>
         );
       }
@@ -171,6 +184,24 @@ function AppContent() {
         mainContent = (
           <>
             <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminAlarm} adminTitle="Alarm"></Dashboard>
+          </>
+        );
+      }
+      break;
+    case '/admindashboard/profile':
+      if (token) {
+        mainContent = (
+          <>
+            <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminProfile} adminTitle="Profile"></Dashboard>
+          </>
+        );
+      }
+      break;
+    case '/admindashboard/report':
+      if (token) {
+        mainContent = (
+          <>
+            <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminReport} adminTitle="Report"></Dashboard>
           </>
         );
       }

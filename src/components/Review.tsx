@@ -9,6 +9,11 @@ import { useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Skeleton from '@mui/material/Skeleton';
 import { useData } from '../hooks/DataContext';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import { AxiosError } from 'axios';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   alarmInfo: {
@@ -24,14 +29,49 @@ interface FormData {
 }
 
 export default function Review({alarmInfo, dataInfo}: FormData) {
-  const { id } = useAuth();
+  const { id, token } = useAuth();
   const [loading, setLoading] = useState(true); // Add loading state
-  const { dataReport } = useData();
+  const { dataReport, setDataReport } = useData();
+  const navigate = useNavigate();
   const [admindata, setAdminData] = useState({
     email: '',
     firstname: '',
     lastname: '',
   });
+
+  const handleInsertReport = async() => {
+    try {
+      console.log('Before Axios POST request');
+    const response = await axios.post(
+      'http://localhost:3000/alarmreport',
+      {
+        adminId: id,
+        dataId: dataReport,
+        message: alarmInfo.message,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+      // setSnackSeverity('success');
+      // setSnackMessage("Insert report successful");
+      // handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
+      console.log('Insert successful:', response);
+      localStorage.setItem('snackReport', 'success')
+
+      setDataReport('');
+      navigate('/admindashboard/report');
+    } catch (error) {
+      const errorAxios = error as AxiosError;
+  
+      localStorage.setItem('snackReport', 'fail')
+      console.log('Inside catch block');
+      console.error('Failed:', error);
+    }
+  }
 
   // Fetch data from Node.js server
   fetch('http://localhost:3000/admininfo/'+id)
@@ -45,7 +85,13 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
     setAdminData(admindata);
   })
   .catch((error) => {
-    console.error('Error fetching data:', error);
+    // console.error('Error fetching data:', error);
+
+    // // Log additional information about the error
+    // console.error('Error details:', {
+    //   message: error.message,
+    //   stack: error.stack,
+    // });
   });
   
   //skeleton loading
@@ -58,7 +104,6 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
     // Clear the timeout when the component unmounts or when loading is complete
     return () => clearTimeout(timer);
   }, []);
-
 
   return (
     <React.Fragment>
@@ -197,6 +242,24 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
             )}
             </Grid>
           </Grid>
+          <Divider />
+          <Box sx={{  mt:1 }}>
+            {loading ? (
+              <Skeleton sx={{ fontSize: '2rem', display: 'flex', justifyContent: 'flex-end' }} animation="wave" />
+            ) : (
+              <>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                variant="contained"
+                sx={{ mt: 0.5, ml: 1 }}
+                onClick={handleInsertReport}
+              >
+                SUBMIT
+              </Button>
+              </Box>
+              </>
+            )}
+          </Box>
     </React.Fragment>
   );
 }

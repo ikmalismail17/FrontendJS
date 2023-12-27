@@ -20,10 +20,14 @@ export const SelectedIndexProvider: React.FC<SelectedIndexContextProps>= ({ chil
     let index = 0; // Default index
 
     // Update index based on route
-    if (route === '/admindashboard/report') {
+    if (route === '/admindashboard/data') {
       index = 1;
     } else if (route === '/admindashboard/alarm') {
       index = 2;
+    } else if (route === '/admindashboard/profile') {
+      index = 3;
+    } else if (route === '/admindashboard/report') {
+      index = 4;
     }
 
     setSelectedIndex(index);

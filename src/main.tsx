@@ -1,13 +1,17 @@
-import ReactDOM from 'react-dom';
-import { ColorModeProvider } from './hooks/ToggleColorMode'; // Update the import path
+import { createRoot } from 'react-dom/client';
+import { ColorModeProvider } from './hooks/ToggleColorMode';
 import App from './App';
 import { AuthProvider } from './hooks/AuthContext';
 
-ReactDOM.render(
+const rootElement = document.getElementById('root');
+
+// Use createRoot instead of ReactDOM.render
+const root = createRoot(rootElement!);
+
+root.render(
   <AuthProvider>
     <ColorModeProvider>
       <App />
     </ColorModeProvider>
-  </AuthProvider>,
-  document.getElementById('root')
+  </AuthProvider>
 );

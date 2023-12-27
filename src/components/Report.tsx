@@ -110,7 +110,7 @@ export default function Orders() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Link to="/admindashboard/report" style={{ color:"inherit" }}>
+      <Link to="/admindashboard/data" style={{ color:"inherit" }}>
         See more data...
       </Link>
     </React.Fragment>

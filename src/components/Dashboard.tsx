@@ -18,7 +18,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import LogoutIcon from '@mui/icons-material/Logout';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
+import StorageIcon from '@mui/icons-material/Storage';
 import { useTheme} from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -44,9 +44,11 @@ import Paper from '@mui/material/Paper';
 import companyLogo from '../assets/logo 2.svg'
 import '../assets/css/PaperAnimation.css'
 import '../assets/css/ListItemButton.css'
-import TypingAnimation from './TitleAnimation';
+import TitleAnimation from './TitleAnimation';
 import { DataProvider } from '../hooks/DataContext';
 import { useSelectedIndex } from '../hooks/SelectIndexContext';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
 function Copyright(props: any) {
   return (
@@ -227,18 +229,14 @@ export default function Dashboard(props: DashboardProps) {
 
         // Check for the success message in local storage only once when the component mounts
         const loginSuccessMessage = localStorage.getItem('loginSuccessMessage');
-        console.log('loginSuccessMessage:', loginSuccessMessage); // Add this log statement
 
-        if (loginSuccessMessage === null) {
-          console.log('No success message found in local storage'); // Add this log statement
-        }else{  
+        if (loginSuccessMessage) {
           // Parse the message and open the Snackbar
           handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
 
           // Clear the success message from local storage
-         localStorage.removeItem('loginSuccessMessage');
+          localStorage.removeItem('loginSuccessMessage');
         }
-
         setAdminData(admindata);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -253,31 +251,43 @@ export default function Dashboard(props: DashboardProps) {
     logout();
     // Redirect to the login page
     navigate('/');
-    // Clear the Snackbar state from local storage
-    localStorage.removeItem('snackbarState');
   };
 
-  //breadcrumb
-  let breadcrumbContent;
-  if(adminTitle == 'Report'){
-    breadcrumbContent = (
-      <>
-        <StyledBreadcrumb
-          label="Report"
-          icon={<BarChartIcon fontSize="small" />}
-        />
-      </>
-    )
-  }else if(adminTitle == 'Alarm'){
-    breadcrumbContent = (
-      <>
-        <StyledBreadcrumb
-          label="Alarm"
-          icon={<NotificationsActiveIcon fontSize="small" />}
-        />
-      </>
-    )
-  }
+  // Breadcrumb
+let breadcrumbContent;
+if (adminTitle === 'Data') {
+  breadcrumbContent = [
+    <StyledBreadcrumb
+      key="data"
+      label="Data"
+      icon={<StorageIcon fontSize="small" />}
+    />,
+  ];
+} else if (adminTitle === 'Alarm') {
+  breadcrumbContent = [
+    <StyledBreadcrumb
+      key="alarm"
+      label="Alarm"
+      icon={<NotificationsActiveIcon fontSize="small" />}
+    />,
+  ];
+} else if (adminTitle === 'Profile') {
+  breadcrumbContent = [
+    <StyledBreadcrumb
+      key="profile"
+      label="Profile"
+      icon={<AccountCircleIcon fontSize="small" />}
+    />,
+  ];
+}else if (adminTitle === 'Report') {
+  breadcrumbContent = [
+    <StyledBreadcrumb
+      key="report"
+      label="Report"
+      icon={<TextSnippetIcon fontSize="small" />}
+    />,
+  ];
+}
 
   // const handleBeforeUnload = (event: BeforeUnloadEvent) => {
   //   const confirmationMessage = 'Are you sure you want to leave this page?';
@@ -332,7 +342,7 @@ export default function Dashboard(props: DashboardProps) {
               <MenuIcon />
             </IconButton>
               <Box component="img" src={companyLogo} alt={`web logo`} style={{ width: '1.5em', height: '1.5em'}} sx={{ display: { xs: 'none', md: 'flex' }, mr: 2 }} />
-              <TypingAnimation />
+              <TitleAnimation />
             <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
@@ -378,19 +388,23 @@ export default function Dashboard(props: DashboardProps) {
         </Toolbar>
           <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
             <List component="nav" sx={{ color: theme.palette.primary.contrastText, p: 0 }}>
-            <ListItem 
-            sx={{ 
-              backgroundImage: 'url(https://static.vecteezy.com/system/resources/thumbnails/026/747/041/small/dark-and-blue-concreate-and-cement-wall-to-present-product-and-background-generative-ai-free-photo.jpg)',
-              backgroundSize: 'cover', // Adjust to 'contain' or 'auto' as needed
-              backgroundPosition: 'center', // Adjust as needed
-            }}>
-              <ListItemAvatar>
-                <Avatar>
-                  <AccountBoxRoundedIcon sx={{ color: theme.palette.primary.contrastText }}/>
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={adminData.firstname+' '+adminData.lastname} secondary='Admin'/>
-            </ListItem>
+            <Link to="/admindashboard/profile" style={{ textDecoration: 'none', color:"inherit" }}>
+              <ListItemButton 
+              selected={selectedIndex === 3}
+              onClick={(event) => handleListItemClick(event, 3)}
+              sx={{ 
+                backgroundImage: 'url(https://static.vecteezy.com/system/resources/thumbnails/026/747/041/small/dark-and-blue-concreate-and-cement-wall-to-present-product-and-background-generative-ai-free-photo.jpg)',
+                backgroundSize: 'cover', // Adjust to 'contain' or 'auto' as needed
+                backgroundPosition: 'center', // Adjust as needed
+              }}>
+                <ListItemAvatar>
+                  <Avatar>
+                    <AccountCircleIcon sx={{ color: theme.palette.primary.contrastText }}/>
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={adminData.firstname+' '+adminData.lastname} secondary='Admin'/>
+              </ListItemButton>
+            </Link>
             <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
             <Link to="/admindashboard" style={{ textDecoration: 'none', color:"inherit" }}>
               <ListItemButton
@@ -405,16 +419,16 @@ export default function Dashboard(props: DashboardProps) {
               </ListItemButton>
             </Link>
             <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
-            <Link to="/admindashboard/report" style={{ textDecoration: 'none', color:"inherit" }} >
+            <Link to="/admindashboard/data" style={{ textDecoration: 'none', color:"inherit" }} >
             <ListItemButton
             selected={selectedIndex === 1}
             onClick={(event) => handleListItemClick(event, 1)}
             className={selectedIndex === 1 ? 'selected-animation' : ''}
             >
               <ListItemIcon>
-                <BarChartIcon sx={{ color: theme.palette.primary.contrastText }}/>
+                <StorageIcon sx={{ color: theme.palette.primary.contrastText }}/>
               </ListItemIcon>
-              <ListItemText primary="Reports" />
+              <ListItemText primary="Data" />
             </ListItemButton>
             </Link>
             <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
@@ -428,6 +442,19 @@ export default function Dashboard(props: DashboardProps) {
                 <NotificationsActiveIcon sx={{ color: theme.palette.primary.contrastText }}/>
               </ListItemIcon>
               <ListItemText primary="Alarm" />
+            </ListItemButton>
+            </Link>
+            <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
+            <Link to="/admindashboard/report" style={{ textDecoration: 'none', color:"inherit" }}>
+            <ListItemButton
+            selected={selectedIndex === 4}
+            onClick={(event) => handleListItemClick(event, 4)}
+            className={selectedIndex === 4 ? 'selected-animation' : ''}
+            >
+              <ListItemIcon>
+                <TextSnippetIcon sx={{ color: theme.palette.primary.contrastText }}/>
+              </ListItemIcon>
+              <ListItemText primary="Report" />
             </ListItemButton>
             </Link>
             <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
@@ -458,7 +485,7 @@ export default function Dashboard(props: DashboardProps) {
                   />
                   {breadcrumbContent}
                 </Breadcrumbs>
-                  <Paper className="animation" variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }}} elevation={3}>
+                  <Paper className="animation" variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }}}>
                     {dashboardContent()}
                   </Paper>
               <Copyright sx={{ pt: 4 }} />
