@@ -182,7 +182,7 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
                   label="Date"
                   fullWidth
                   variant="standard"
-                  value={Date().substring(4, 15)}
+                  value={new Date().toLocaleDateString('en-GB')}
                 />
               </Box>
               </>
@@ -201,7 +201,7 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
                   label="Time"
                   fullWidth
                   variant="standard"
-                  value={Date().substring(15,21)}
+                  value={new Date().toLocaleTimeString()}
                 />
               </Box>
               </>

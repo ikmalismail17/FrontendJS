@@ -29,7 +29,7 @@ import Skeleton from '@mui/material/Skeleton';
 import { useData } from '../hooks/DataContext';
 import { useNavigate } from 'react-router-dom';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
-import { useTheme} from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 
 interface DataItem {
   _id: number;
@@ -92,17 +92,6 @@ export default function DashBoardReport(){
     setDialogOpen(false);
   };
 
-  //Snackbar
-  const [snackMessage, setSnackMessage] = useState('' as string);
-  const [snackSeverity, setSnackSeverity] = useState<AlertColor>('error');
-  const [loading, setLoading] = useState(true); // Add loading state
-  const theme = useTheme();
-  const [stateSnack, setStateSnack] = useState<State>({
-    openSnack: false,
-    vertical: 'top',
-    horizontal: 'center',
-  });
-
   //dialog data report
   const { setDataReport } = useData();
 
@@ -117,6 +106,17 @@ export default function DashBoardReport(){
     setChangeReport(false);
     navigate('/admindashboard/alarm');
   };
+
+  //Snackbar
+  const [snackMessage, setSnackMessage] = useState('' as string);
+  const [snackSeverity, setSnackSeverity] = useState<AlertColor>('error');
+  const [loading, setLoading] = useState(true); // Add loading state
+  const theme = useTheme();
+  const [stateSnack, setStateSnack] = useState<State>({
+    openSnack: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
 
   const { vertical, horizontal, openSnack } = stateSnack;
   
@@ -217,7 +217,10 @@ export default function DashBoardReport(){
     
     const handleDatePicker = (date: Date | null) => {
       setDateUI(date);
-      console.log(dayjs(date).format('DD/MM/YYYY'));
+      // console.log('Date:', date);
+      // console.log('Raw Date: ', data[0] ? dayjs(data[0].date, 'DD/MM/YYYY') : null)
+      // console.log('Formatted Date: ', dayjs(date).format('DD/MM/YYYY'));
+      // console.log('Formatted Raw Date: ', data[0] ? dayjs(data[0].date).format('DD/MM/YYYY') : null);
     }
 
     //skeleton loading
@@ -259,10 +262,9 @@ export default function DashBoardReport(){
           <>
             <MuiDatePicker onDateChange={handleDatePicker} />
             {changeReport && (
-              <Paper variant='outlined' sx={{ ml: 1, p: 1, marginLeft: 'auto', display: 'flex', alignItems: 'center', backgroundColor: theme.palette.primary.dark }}>
+              <Box sx={{ ml: 1, p: 1, marginLeft: 'auto', display: 'flex', alignItems: 'center', backgroundColor: theme.palette.primary.dark }}>
                 <FiberNewIcon sx={{ mr: 1 }}></FiberNewIcon>
-                <Typography>Please choose new data to report</Typography>
-              </Paper>
+              </Box>
             )}
           </>
         )}
@@ -299,12 +301,12 @@ export default function DashBoardReport(){
               ) : (
                 <>
                   {dateUI ? (
-                    data.filter((item) => dayjs(item.date).isSame(dayjs(dateUI).format('DD/MM/YYYY'), 'day')).length === 0 ? (
+                    data.filter((item) => dayjs(item.date, 'DD/MM/YYYY').isSame(dayjs(dateUI).format('MM/DD/YYYY'), 'day')).length === 0 ? (
                       <StyledTableRow>
                         <StyledTableCell colSpan={8} align='center'>No data found</StyledTableCell>
                       </StyledTableRow>
                     ) : (
-                      data.filter((item) => dayjs(item.date).isSame(dayjs(dateUI).format('DD/MM/YYYY'), 'day')).map((item, index) => (
+                      data.filter((item) => dayjs(item.date, 'DD/MM/YYYY').isSame(dayjs(dateUI).format('MM/DD/YYYY'), 'day')).map((item, index) => (
                         <StyledTableRow key={item._id}>
                           <StyledTableCell align='center'>{index + 1}</StyledTableCell>
                           <StyledTableCell align='center'>{item._id}</StyledTableCell>

@@ -14,6 +14,8 @@ import Button from '@mui/material/Button';
 import { AxiosError } from 'axios';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 
 interface FormData {
   alarmInfo: {
@@ -28,10 +30,22 @@ interface FormData {
   };
 }
 
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+interface State extends SnackbarOrigin {
+  openSnack: boolean;
+}
+
 export default function Review({alarmInfo, dataInfo}: FormData) {
   const { id, token } = useAuth();
   const [loading, setLoading] = useState(true); // Add loading state
   const { dataReport, setDataReport } = useData();
+  const [snackMessage, setSnackMessage] = useState('');
   const navigate = useNavigate();
   const [admindata, setAdminData] = useState({
     email: '',
@@ -39,9 +53,26 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
     lastname: '',
   });
 
+  // Snackbar
+  const [stateSnack, setStateSnack] = React.useState<State>({
+    openSnack: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+
+  const { vertical, horizontal, openSnack } = stateSnack;
+
+  const handleOpenSnack = (newState: SnackbarOrigin) => () => {
+    setStateSnack({ ...newState, openSnack: true });
+  };
+
+  const handleCloseSnack = () => {
+    setStateSnack({ ...stateSnack, openSnack: false });
+  };
+
   const handleInsertReport = async() => {
     try {
-      console.log('Before Axios POST request');
+    console.log('Before Axios POST request');
     const response = await axios.post(
       'http://localhost:3000/alarmreport',
       {
@@ -56,9 +87,6 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
       }
     );
 
-      // setSnackSeverity('success');
-      // setSnackMessage("Insert report successful");
-      // handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
       console.log('Insert successful:', response);
       localStorage.setItem('snackReport', 'success')
 
@@ -66,10 +94,22 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
       navigate('/admindashboard/report');
     } catch (error) {
       const errorAxios = error as AxiosError;
-  
-      localStorage.setItem('snackReport', 'fail')
+
       console.log('Inside catch block');
-      console.error('Failed:', error);
+      console.log(errorAxios);
+      
+      if (errorAxios.response && errorAxios.response.status === 401) {
+        setSnackMessage('Token not provided');
+        handleOpenSnack({ vertical: 'bottom', horizontal: 'right' })();
+
+      }else if(errorAxios.response && errorAxios.response.status === 501){
+        setSnackMessage('Invalid token');
+        handleOpenSnack({ vertical: 'bottom', horizontal: 'right' })();
+
+      }else if(errorAxios.response && errorAxios.response.status === 601){
+        setSnackMessage('Data Id or Message are empty');
+        handleOpenSnack({ vertical: 'bottom', horizontal: 'right' })();
+      }
     }
   }
 
@@ -107,15 +147,15 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
 
   return (
     <React.Fragment>
-      {loading ? (
-        <Skeleton sx={{ fontSize: '2rem' }} width="40%" animation="wave" />
-      ) : (
-        <>
-          <Typography variant="h6" gutterBottom>
-            Review summary
-          </Typography>
-        </>
-      )}
+          {loading ? (
+            <Skeleton sx={{ fontSize: '2rem' }} width="40%" animation="wave" />
+          ) : (
+            <>
+              <Typography variant="h6" gutterBottom>
+                Review summary
+              </Typography>
+            </>
+          )}
           <Divider />
           <List disablePadding>
           {loading ? (
@@ -153,7 +193,7 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
           ) : (
             <>
             <ListItem>
-              <ListItemText primary="Date" secondary={Date().substring(4, 15)} />
+              <ListItemText primary="Date" secondary={new Date().toLocaleDateString('en-GB')} />
             </ListItem>
             </>
           )}
@@ -163,7 +203,7 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
           ) : (
             <>
             <ListItem>
-              <ListItemText primary="Time" secondary={Date().substring(15,21)} />
+              <ListItemText primary="Time" secondary={new Date().toLocaleTimeString()} />
             </ListItem>
             </>
           )}
@@ -244,6 +284,17 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
           </Grid>
           <Divider />
           <Box sx={{  mt:1 }}>
+          <Snackbar
+            open={openSnack}
+            autoHideDuration={5000}
+            onClose={handleCloseSnack}
+            anchorOrigin={{ vertical, horizontal }}
+            key={vertical + horizontal}
+          >
+            <Alert onClose={handleCloseSnack} severity="error" sx={{ width: '100%' }}>
+              {snackMessage}
+            </Alert>
+          </Snackbar>
             {loading ? (
               <Skeleton sx={{ fontSize: '2rem', display: 'flex', justifyContent: 'flex-end' }} animation="wave" />
             ) : (

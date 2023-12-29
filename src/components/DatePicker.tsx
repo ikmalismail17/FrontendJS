@@ -3,7 +3,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker as  MuiDatePicker } from '@mui/x-date-pickers/DatePicker';
 import ClearIcon from '@mui/icons-material/Clear';
-import { IconButton, TextField } from '@mui/material';
+import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 
 interface DateProps {
@@ -14,7 +14,7 @@ export default function DatePicker({onDateChange }: DateProps) {
 
     const handleDateChange = (date: Date | null) => {
         onDateChange(date);
-        console.log(dayjs(date).format('DD/MM/YYYY')); // Console log the selected date in 'DD/MM/YYYY' format
+        // console.log(dayjs(date).format('DD/MM/YYYY')); // Console log the selected date in 'DD/MM/YYYY' format
     };
 
     return (

@@ -23,7 +23,7 @@ interface HeaderProps {
 }
 
 export default function Header(props: HeaderProps) {
-  const { sections, title, toggleColorMode } = props;
+  const { sections, toggleColorMode } = props;
   const theme = useTheme();
 
   return (

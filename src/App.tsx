@@ -7,7 +7,7 @@ import Container from '@mui/material/Container';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import {ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
+import {ThemeProvider, useTheme } from '@mui/material/styles';
 import Header from './components/Header';
 import MainFeaturedPost from './components/MainFeaturedPost';
 import FeaturedPost from './components/FeaturedPost';
@@ -114,6 +114,8 @@ function AppContent() {
       newTitle = 'Alarm';
     } else if (route.pathname === '/admindashboard/profile' && token) {
       newTitle = 'Profile';
+    } else if (route.pathname === '/admindashboard/report' && token) {
+      newTitle = 'Report';
     } else if (route.pathname === '/signin') {
       newTitle = 'Sign In';
     } else{
