@@ -23,6 +23,7 @@ import MuiDatePicker from './DatePicker';
 import Box from '@mui/material/Box';
 import dayjs from 'dayjs';
 import Skeleton from '@mui/material/Skeleton';
+import Tooltip from '@mui/material/Tooltip';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
@@ -171,7 +172,12 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
           )}
         </Box>
         { loading ? (
+          <>
+          <Skeleton variant='rounded' width="100%" sx={{ p: 3, mb:1 }} animation="wave" />
+          <Skeleton variant='rounded' width="100%" sx={{ p: 3, mb:1 }} animation="wave" />
+          <Skeleton variant='rounded' width="100%" sx={{ p: 3, mb:1 }} animation="wave" />
           <Skeleton variant='rounded' width="100%" sx={{ p: 3 }} animation="wave" />
+          </>
         ) : (
           <>
            { dateUI ? (
@@ -190,20 +196,28 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                     aria-controls={`panel${index}bh-content`}
                     id={`panel${index}bh-header`}
                   >
-                  {index === 0 && item._id === data.slice().reverse()[0]._id ? (
-                          <Typography sx={{ width: '5%', flexShrink: 0 }}>
-                              <FiberNewIcon />
-                          </Typography>
-                      ) : (
-                          <Typography sx={{ width: '5%', flexShrink: 0 }}>
-                              {index+1}
-                          </Typography>
-                      )} 
-                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                      Id: {item._id}
-                    </Typography>
-                    <Typography sx={{ mr:1 }}>Date: {item.date}</Typography>
-                    <Typography >Time: {item.time}</Typography>
+                    <Grid container spacing={1}>
+                      <Grid item xs={12} md={1} lg={1}>
+                        {index === 0 ? (
+                            <Typography sx={{ flexShrink: 0 }}>
+                                <FiberNewIcon />
+                            </Typography>
+                        ) : (
+                            <Typography sx={{ flexShrink: 0 }}>
+                                {index+1}
+                            </Typography>
+                        )}
+                      </Grid>
+                      <Grid item xs={12} md={6} lg={6}>
+                        <Typography sx={{flexShrink: 0 }}>
+                          Id: {item._id}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} md={5} lg={5}>
+                        <Typography sx={{ mr:1 }}>Date: {item.date}</Typography>
+                        <Typography >Time: {item.time}</Typography>
+                      </Grid>
+                    </Grid>
                   </AccordionSummary>
                   <AccordionDetails>
                   <Grid container spacing={2}>
@@ -288,12 +302,16 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                   </Grid>
                   </AccordionDetails>
                   <AccordionActions disableSpacing={true}>
-                    <IconButton aria-label='Delete'>
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton aria-label='Publish'>
-                      <SendIcon />
-                    </IconButton>
+                    <Tooltip title="Delete" placement='top'>
+                      <IconButton>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Send" placement='top'>
+                      <IconButton aria-label='Send'>
+                        <SendIcon />
+                      </IconButton>
+                    </Tooltip>
                   </AccordionActions>
                 </Accordion>
                 ))
@@ -314,20 +332,28 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                   aria-controls={`panel${index}bh-content`}
                   id={`panel${index}bh-header`}
                 >
-                {index === 0 ? (
-                        <Typography sx={{ width: '5%', flexShrink: 0 }}>
-                            <FiberNewIcon />
-                        </Typography>
-                    ) : (
-                        <Typography sx={{ width: '5%', flexShrink: 0 }}>
-                            {index+1}
-                        </Typography>
-                    )} 
-                  <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                    Id: {item._id}
-                  </Typography>
-                  <Typography sx={{ mr:1 }}>Date: {item.date}</Typography>
-                  <Typography >Time: {item.time}</Typography>
+                  <Grid container spacing={1}>
+                    <Grid item xs={12} md={1} lg={1}>
+                      {index === 0 ? (
+                          <Typography sx={{ flexShrink: 0 }}>
+                              <FiberNewIcon />
+                          </Typography>
+                      ) : (
+                          <Typography sx={{ flexShrink: 0 }}>
+                              {index+1}
+                          </Typography>
+                      )}
+                    </Grid>
+                    <Grid item xs={12} md={6} lg={6}>
+                      <Typography sx={{flexShrink: 0 }}>
+                        Id: {item._id}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={5} lg={5}>
+                      <Typography sx={{ mr:1 }}>Date: {item.date}</Typography>
+                      <Typography >Time: {item.time}</Typography>
+                    </Grid>
+                  </Grid>
                 </AccordionSummary>
                 <AccordionDetails>
                 <Grid container spacing={2}>
@@ -412,12 +438,16 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                 </Grid>
                 </AccordionDetails>
                 <AccordionActions disableSpacing={true}>
-                  <IconButton aria-label='Delete'>
-                    <DeleteIcon />
-                  </IconButton>
-                  <IconButton aria-label='Publish'>
-                    <SendIcon />
-                  </IconButton>
+                  <Tooltip title="Delete" placement='top'>
+                      <IconButton>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Send" placement='top'>
+                      <IconButton aria-label='Send'>
+                        <SendIcon />
+                      </IconButton>
+                    </Tooltip>
                 </AccordionActions>
               </Accordion>
               ))

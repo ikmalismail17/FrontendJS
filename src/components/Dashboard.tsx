@@ -5,28 +5,20 @@ import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import StorageIcon from '@mui/icons-material/Storage';
 import { useTheme} from '@mui/material/styles';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -44,9 +36,15 @@ import '../assets/css/PaperAnimation.css'
 import '../assets/css/ListItemButton.css'
 import TitleAnimation from './TitleAnimation';
 import { DataProvider } from '../hooks/DataContext';
-import { useSelectedIndex } from '../hooks/SelectIndexContext';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import ListItems from './ListItems';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import AppBar from '@mui/material/AppBar';
+import Drawer from '@mui/material/Drawer';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Popover from '@mui/material/Popover';
+import Stack from '@mui/material/Stack';
 
 function Copyright(props: any) {
   return (
@@ -63,59 +61,60 @@ function Copyright(props: any) {
 
 const drawerWidth: number = 240;
 
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
+interface Props {
+  window?: () => Window;
 }
 
-interface DashboardProps {
+interface DashboardProps extends Props {
     toggleColorMode:() => void;
     dashboardContent:() => React.ReactNode;
     adminTitle: string;
 }
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
+// const AppBar = styled(MuiAppBar, {
+//   shouldForwardProp: (prop) => prop !== 'open',
+// })<AppBarProps>(({ theme, open }) => ({
+//   zIndex: theme.zIndex.drawer + 1,
+//   transition: theme.transitions.create(['width', 'margin'], {
+//     easing: theme.transitions.easing.sharp,
+//     duration: theme.transitions.duration.leavingScreen,
+//   }),
+//   ...(open && {
+//     marginLeft: drawerWidth,
+//     width: `calc(100% - ${drawerWidth}px)`,
+//     transition: theme.transitions.create(['width', 'margin'], {
+//       easing: theme.transitions.easing.sharp,
+//       duration: theme.transitions.duration.enteringScreen,
+//     }),
+//   }),
+// }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    '& .MuiDrawer-paper': {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      boxSizing: 'border-box',
-      ...(!open && {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
-        },
-      }),
-    },
-  }),
-);
+// old drawer
+// const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+//   ({ theme, open }) => ({
+//     '& .MuiDrawer-paper': {
+//       position: 'relative',
+//       whiteSpace: 'nowrap',
+//       width: drawerWidth,
+//       transition: theme.transitions.create('width', {
+//         easing: theme.transitions.easing.sharp,
+//         duration: theme.transitions.duration.enteringScreen,
+//       }),
+//       boxSizing: 'border-box',
+//       ...(!open && {
+//         overflowX: 'hidden',
+//         transition: theme.transitions.create('width', {
+//           easing: theme.transitions.easing.sharp,
+//           duration: theme.transitions.duration.leavingScreen,
+//         }),
+//         width: theme.spacing(7),
+//         [theme.breakpoints.up('sm')]: {
+//           width: theme.spacing(9),
+//         },
+//       }),
+//     },
+//   }),
+// );
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -150,34 +149,38 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 }) as typeof Chip;
 
 export default function Dashboard(props: DashboardProps) {
-  const [open, setOpen] = React.useState(true);
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
   const {toggleColorMode, dashboardContent, adminTitle} = props;
-  const { selectedIndex, setSelectedIndex, setIndexByRoute } = useSelectedIndex();
   const theme = useTheme();
   const { logout } = useAuth(); // Include the logout function
   const navigate = useNavigate();
   const { id } = useAuth();
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
   const [adminData, setAdminData] = React.useState({
     email: '',
     firstname: '',
     lastname: '',
   });
 
-  //handle list focus when click
-  const handleListItemClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    index: number,
-  ) => {
-    setSelectedIndex(index);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
-  useEffect(() => {
-    // Set the selectedIndex based on the route when the route changes
-    setIndexByRoute(location.pathname);
-  }, [location.pathname, setIndexByRoute]);
+  // popover
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const handleOpenPop = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePop = () => {
+    setAnchorEl(null);
+  };
+
+  const openPop = Boolean(anchorEl);
+  const idPop = openPop ? 'simple-popover' : undefined;
+
+  // Drawer
+  const container = window !== undefined ? () => window().document.body : undefined;
 
   //Dialog box
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -286,31 +289,19 @@ if (adminTitle === 'Data') {
     />,
   ];
 }
-
-  // const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-  //   const confirmationMessage = 'Are you sure you want to leave this page?';
-
-  //   // Check if the event's properties have been modified (indicating a refresh)
-  //   if (event.defaultPrevented || event.returnValue === confirmationMessage) {
-  //     // Page is being closed or browser is being closed
-  //     handleLogout();
-  //   } else {
-  //     // Page is being refreshed, so prevent logout
-  //     event.preventDefault();
-  //   }
-  // };
-
-  // window.addEventListener('beforeunload', handleBeforeUnload);
-
-  // return () => {
-  //   window.removeEventListener('beforeunload', handleBeforeUnload);
-  // };
   
 
   return (
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open} enableColorOnDark>
+        <AppBar 
+          position="absolute"
+          enableColorOnDark
+          sx={{
+            width: { lg: `calc(100% - ${drawerWidth}px)` },
+            ml: { lg: `${drawerWidth}px` },
+          }}
+          >
           <Snackbar 
             open={openSnack} 
             autoHideDuration={5000} 
@@ -331,22 +322,41 @@ if (adminTitle === 'Data') {
               edge="start"
               color="inherit"
               aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { lg: 'none' } }}
+              // sx={{
+              //   marginRight: '36px',
+              //   ...(open && { display: 'none' }),
+              // }}
             >
               <MenuIcon />
             </IconButton>
-              <Box component="img" src={companyLogo} alt={`web logo`} style={{ width: '1.5em', height: '1.5em'}} sx={{ display: { xs: 'none', md: 'flex' }, mr: 2 }} />
+              <Box component="img" src={companyLogo} alt={`web logo`} style={{ width: '1.5em', height: '1.5em'}} sx={{ display: "flex", mr: 2 }} />
               <TitleAnimation />
-            <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
-            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+            <IconButton sx={{ ml: 1 }} color="inherit" onClick={handleOpenPop}>
+              <MoreVertIcon />
             </IconButton>
-            <IconButton sx={{ ml: 1 }} color="inherit" onClick={handleClickOpen}>
-             <LogoutIcon></LogoutIcon>
-            </IconButton>
+            <Popover
+              id={idPop}
+              open={openPop}
+              anchorEl={anchorEl}
+              onClose={handleClosePop}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+            >
+              <Stack>
+              <Button sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
+                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                <Typography>{theme.palette.mode === 'dark' ? "Dark" : "Light"}</Typography>
+              </Button>
+              <Button sx={{ ml: 1 }} color="inherit" onClick={handleClickOpen}>
+                <LogoutIcon/>
+                <Typography>Log out</Typography>
+              </Button>
+              </Stack>
+            </Popover>
           </Toolbar>
         </AppBar>
         <Dialog
@@ -370,7 +380,27 @@ if (adminTitle === 'Data') {
             </Button>
           </DialogActions>
         </Dialog>
-        <Drawer variant="permanent" open={open} sx={{'& .MuiDrawer-paper': {backgroundColor: theme.palette.primary.light}}}>
+        <Box
+        component="nav"
+        sx={{ width: { lg: drawerWidth }, flexShrink: { lg: 0 } }}
+        aria-label="mailbox folders"
+        >
+        <Drawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'block', md: 'block', lg: 'none' },
+            '& .MuiDrawer-paper': { 
+              backgroundColor: theme.palette.primary.light,
+              boxSizing: 'border-box', 
+              width: drawerWidth },
+          }}
+        >
           <Toolbar
             sx={{
               display: 'flex',
@@ -380,84 +410,40 @@ if (adminTitle === 'Data') {
               // backgroundImage: 'url(https://source.unsplash.com/random)'
             }}
           >
-            <IconButton onClick={toggleDrawer}>
+            <IconButton onClick={handleDrawerToggle}>
               <ChevronLeftIcon />
             </IconButton>
-        </Toolbar>
-          <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
-            <List component="nav" sx={{ color: theme.palette.primary.contrastText, p: 0 }}>
-            <Link to="/admindashboard/profile" style={{ textDecoration: 'none', color:"inherit" }}>
-              <ListItemButton 
-              selected={selectedIndex === 3}
-              onClick={(event) => handleListItemClick(event, 3)}
-              sx={{ 
-                backgroundImage: 'url(https://static.vecteezy.com/system/resources/thumbnails/026/747/041/small/dark-and-blue-concreate-and-cement-wall-to-present-product-and-background-generative-ai-free-photo.jpg)',
-                backgroundSize: 'cover', // Adjust to 'contain' or 'auto' as needed
-                backgroundPosition: 'center', // Adjust as needed
-              }}>
-                <ListItemAvatar>
-                  <Avatar>
-                    <AccountCircleIcon sx={{ color: theme.palette.primary.contrastText }}/>
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={adminData.firstname+' '+adminData.lastname} secondary='Admin'/>
-              </ListItemButton>
-            </Link>
-            <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
-            <Link to="/admindashboard" style={{ textDecoration: 'none', color:"inherit" }}>
-              <ListItemButton
-              selected={selectedIndex === 0}
-              onClick={(event) => handleListItemClick(event, 0)}
-              className={selectedIndex === 0 ? 'selected-animation' : ''}
-              >
-                <ListItemIcon>
-                  <DashboardIcon sx={{ color: theme.palette.primary.contrastText }}/>
-                </ListItemIcon>
-                <ListItemText primary="Dashboard" />
-              </ListItemButton>
-            </Link>
-            <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
-            <Link to="/admindashboard/data" style={{ textDecoration: 'none', color:"inherit" }} >
-            <ListItemButton
-            selected={selectedIndex === 1}
-            onClick={(event) => handleListItemClick(event, 1)}
-            className={selectedIndex === 1 ? 'selected-animation' : ''}
-            >
-              <ListItemIcon>
-                <StorageIcon sx={{ color: theme.palette.primary.contrastText }}/>
-              </ListItemIcon>
-              <ListItemText primary="Data" />
-            </ListItemButton>
-            </Link>
-            <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
-            <Link to="/admindashboard/alarm" style={{ textDecoration: 'none', color:"inherit" }}>
-            <ListItemButton
-            selected={selectedIndex === 2}
-            onClick={(event) => handleListItemClick(event, 2)}
-            className={selectedIndex === 2 ? 'selected-animation' : ''}
-            >
-              <ListItemIcon>
-                <NotificationsActiveIcon sx={{ color: theme.palette.primary.contrastText }}/>
-              </ListItemIcon>
-              <ListItemText primary="Alarm" />
-            </ListItemButton>
-            </Link>
-            <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
-            <Link to="/admindashboard/report" style={{ textDecoration: 'none', color:"inherit" }}>
-            <ListItemButton
-            selected={selectedIndex === 4}
-            onClick={(event) => handleListItemClick(event, 4)}
-            className={selectedIndex === 4 ? 'selected-animation' : ''}
-            >
-              <ListItemIcon>
-                <TextSnippetIcon sx={{ color: theme.palette.primary.contrastText }}/>
-              </ListItemIcon>
-              <ListItemText primary="Report" />
-            </ListItemButton>
-            </Link>
-            <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
-          </List>
+          </Toolbar>
+          <ListItems adminData={{ firstname: adminData.firstname, lastname: adminData.lastname }} />
         </Drawer>
+        <Drawer
+          variant="permanent"
+          open
+          sx={{
+            display: { xs: 'none', sm: 'none', md: 'none', lg: 'block' },
+            width: drawerWidth,
+            '& .MuiDrawer-paper': {
+            backgroundColor: theme.palette.primary.light,
+            boxSizing: 'border-box', 
+            width: drawerWidth
+          }}}
+          >
+          <Toolbar
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              px: [1],
+              // backgroundImage: 'url(https://source.unsplash.com/random)'
+            }}
+          >
+            {/* <IconButton onClick={toggleDrawer}>
+              <ChevronLeftIcon />
+            </IconButton> */}
+          </Toolbar>
+          <ListItems adminData={{ firstname: adminData.firstname, lastname: adminData.lastname }} />
+        </Drawer>
+        </Box>
         <Box
           component="main"
           sx={{
@@ -468,6 +454,8 @@ if (adminTitle === 'Data') {
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
+            p: 3, 
+            width: { lg: `calc(100% - ${drawerWidth}px)` }
           }}
         >
         <Toolbar />
