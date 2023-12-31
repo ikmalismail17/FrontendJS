@@ -45,6 +45,14 @@ import Drawer from '@mui/material/Drawer';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
+import SettingsIcon from '@mui/icons-material/Settings';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Divider from '@mui/material/Divider';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Avatar from '@mui/material/Avatar';
+import Tooltip from '@mui/material/Tooltip';
+
 
 function Copyright(props: any) {
   return (
@@ -177,7 +185,10 @@ export default function Dashboard(props: DashboardProps) {
   };
 
   const openPop = Boolean(anchorEl);
-  const idPop = openPop ? 'simple-popover' : undefined;
+
+  const handleOpenProfile = () => {
+    navigate('/admindashboard/profile');
+  }
 
   // Drawer
   const container = window !== undefined ? () => window().document.body : undefined;
@@ -333,10 +344,72 @@ if (adminTitle === 'Data') {
             </IconButton>
               <Box component="img" src={companyLogo} alt={`web logo`} style={{ width: '1.5em', height: '1.5em'}} sx={{ display: "flex", mr: 2 }} />
               <TitleAnimation />
-            <IconButton sx={{ ml: 1 }} color="inherit" onClick={handleOpenPop}>
-              <MoreVertIcon />
-            </IconButton>
-            <Popover
+            <Tooltip title="More Options" placement="bottom">
+              <IconButton sx={{ ml: 1, display: { xs:'block', sm:'none' } }} color="inherit" onClick={handleOpenPop}>
+                <MoreVertIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Settings" placement="bottom">
+              <IconButton sx={{ ml: 1, display: { xs:'none', sm:'block' } }} color="inherit" onClick={handleOpenPop}>
+                <SettingsIcon/>
+              </IconButton>
+            </Tooltip>
+            <Menu
+              anchorEl={anchorEl}
+              id="account-menu"
+              open={openPop}
+              onClose={handleClosePop}
+              onClick={handleClosePop}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: 'visible',
+                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                  mt: 1.5,
+                  '& .MuiAvatar-root': {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  '&::before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: 'background.paper',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+              <MenuItem onClick={() => { handleClosePop(); handleOpenProfile();}}>
+                <Avatar>
+                  <AccountCircleIcon />
+                </Avatar>
+                Profile
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={() => { handleClosePop(); toggleColorMode();}}>
+                <ListItemIcon>
+                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                </ListItemIcon>
+                {theme.palette.mode === 'dark' ? "Light" : "Dark"}
+              </MenuItem>
+              <MenuItem onClick={() => { handleClosePop(); handleClickOpen();}}>
+                <ListItemIcon>
+                  <LogoutIcon fontSize="small" />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
+            </Menu>
+            {/* <Popover
               id={idPop}
               open={openPop}
               anchorEl={anchorEl}
@@ -347,16 +420,18 @@ if (adminTitle === 'Data') {
               }}
             >
               <Stack>
-              <Button sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
-                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-                <Typography>{theme.palette.mode === 'dark' ? "Dark" : "Light"}</Typography>
-              </Button>
-              <Button sx={{ ml: 1 }} color="inherit" onClick={handleClickOpen}>
-                <LogoutIcon/>
-                <Typography>Log out</Typography>
-              </Button>
+                <Button onClick={toggleColorMode} color="inherit">
+                  {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                  <Typography variant="body2" sx={{ ml: "auto" }}>
+                    {theme.palette.mode === 'dark' ? "Light" : "Dark"}
+                  </Typography>
+                </Button>
+                <Button color="inherit" onClick={handleClickOpen}>
+                  <LogoutIcon />
+                  <Typography variant="body2" sx={{ ml: "auto" }}>Log out</Typography>
+                </Button>
               </Stack>
-            </Popover>
+            </Popover> */}
           </Toolbar>
         </AppBar>
         <Dialog
@@ -374,7 +449,7 @@ if (adminTitle === 'Data') {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Close</Button>
+            <Button onClick={handleClose}>No</Button>
             <Button onClick={handleLogout} autoFocus>
               Yes
             </Button>
@@ -460,7 +535,7 @@ if (adminTitle === 'Data') {
         >
         <Toolbar />
         <DataProvider>
-            <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }} fixed={false}>
+            <Container maxWidth="xl" sx={{ mt: 4, mb: 4, px: { xs:0, sm: 0, md:0 } }}>
                 <Breadcrumbs 
                   aria-label="breadcrumb"
                   separator={<NavigateNextIcon fontSize="small" />}
@@ -471,9 +546,12 @@ if (adminTitle === 'Data') {
                   />
                   {breadcrumbContent}
                 </Breadcrumbs>
-                  <Paper className="animation" variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }}}>
+                  <Paper className="animation" variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }, display: { xs: 'none', sm: 'block'}}}>
                     {dashboardContent()}
                   </Paper>
+                  <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                    {dashboardContent()}
+                  </Box>
               <Copyright sx={{ pt: 4 }} />
             </Container>
           </DataProvider>

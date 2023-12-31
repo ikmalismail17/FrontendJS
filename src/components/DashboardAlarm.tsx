@@ -107,7 +107,7 @@ export default function Checkout() {
               <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
                 {steps.map((label) => (
                 <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
+                    <StepLabel><Box sx={{ display: { xs: 'none', sm: 'block' } }}>{label}</Box></StepLabel>
                 </Step>
                 ))}
               </Stepper>
@@ -133,19 +133,6 @@ export default function Checkout() {
           </Paper>
         </Grid>
         </Grid>
-        {/* <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 } }}>
-            <React.Fragment>
-              <Typography variant="h5" gutterBottom>
-                Thank you for your order.
-              </Typography>
-              <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
-                confirmation, and will send you an update when your order has
-                shipped.
-              </Typography>
-            </React.Fragment>
-        </Paper> */}
-        
     </React.Fragment>
   );
 }

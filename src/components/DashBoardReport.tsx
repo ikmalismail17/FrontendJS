@@ -24,6 +24,22 @@ import Box from '@mui/material/Box';
 import dayjs from 'dayjs';
 import Skeleton from '@mui/material/Skeleton';
 import Tooltip from '@mui/material/Tooltip';
+import TextField from '@mui/material/TextField';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import axios, { AxiosError } from 'axios';
+import { useAuth } from '../hooks/AuthContext';
+import Modal from '@mui/material/Modal';
+import Stack from '@mui/material/Stack';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import MenuItem from '@mui/material/MenuItem';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
@@ -56,13 +72,165 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     time: string;
   }
 
+  //modal
+  const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid red',
+    boxShadow: 24,
+    p: 4,
+  };
+
   export default function DashBoardReport() {
     const [snackMessage, setSnackMessage] = useState('');
-    const [snackSeverity, setSnackSeverity] = useState<AlertColor>('error');
     const [expanded, setExpanded] = useState<string | false>(false);
     const [data, setData] = useState<DataItem[]>([]);
+    const [open, setOpen] = React.useState(false);
+    const [openModal, setOpenModal] = React.useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+    const [password, setPassword] = useState('');
+    const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
     const [dateUI, setDateUI] = useState<Date | null>(null);
     const [loading, setLoading] = useState(true); // Add loading state
+    const { token, id } = useAuth();
+
+    //publish report
+    const[openPublish, setOpenPublish] = useState(false);
+
+    const handleClickOpenPublish = (id: number) => {
+      setSelectedItemId(id);
+      setOpenPublish(true);
+    };
+
+    const handleClosePublish = async () => {
+      setOpenPublish(false);
+    }
+
+    const [toEmails, setToEmails] = useState<string[]>([]);
+    const [subject, setSubject] = useState('');
+    const [email, setEmail] = useState(''); 
+
+    const handleAddToEmail = () => {
+      if (email.trim() !== '') {
+        setToEmails((prevEmails) => [...prevEmails, email.trim()]);
+        setEmail('');
+        const addEmailInput = document.getElementById('addEmail') as HTMLInputElement;
+        addEmailInput.value = '';
+      }
+    };
+
+    const handleRemoveToEmail = (index: number) => {
+      setToEmails((prevEmails) => {
+        const updatedEmails = [...prevEmails];
+        updatedEmails.splice(index, 1);
+        return updatedEmails;
+      });
+    };
+
+    const handleSubmitReport = async () => {
+      try {
+        // Send emails with pre-defined subject and text
+        for (const to of toEmails) {
+          const response = await axios.post('http://localhost:3001/send-email', {
+            to,
+            subject,
+            // text,
+          });
+
+          if (response.status === 200) {
+            console.log(`Email sent successfully to ${to}`);
+          } else {
+            console.error(`Error sending email to ${to}`);
+          }
+        }
+      } catch (error) {
+        console.error('Error sending emails:', error);
+      }
+    };
+
+    const subjectEmail = [
+      {
+        value: `Daily River Depth Update - ${new Date().toLocaleDateString('en-GB')}`,
+      },
+      {
+        value: `Warning: Unusual River Depth Conditions Detected Today - ${new Date().toLocaleDateString('en-GB')}`,
+      },
+      {
+        value: `System Testing - ${new Date().toLocaleDateString('en-GB')}`,
+      },
+    ];
+
+    //dialog
+    const handleClickOpen = (id: number) => {
+      setSelectedItemId(id);
+      setOpen(true);
+    };
+  
+    const handleClose = async () => {
+      setOpen(false)
+    };
+
+    //handle modal
+    const handleOpenModal = () => setOpenModal(true);
+    const handleCloseModal = () => setOpenModal(false);
+
+    //delete report
+    const handleDelete = async (dataId: number) => {
+      try {
+        console.log('Before Axios DELETE request');
+        const response = await axios.delete(`http://localhost:3000/reportdelete/${dataId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          data: { id, password },
+        });
+
+        setSnackMessage("Delete successful");
+        handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
+        console.log('Delete successful:', response);
+    
+        // If you want to perform any action after successful deletion, you can do it here
+    
+      } catch (error) {
+        const errorAxios = error as AxiosError;
+    
+        console.log('Inside catch block');
+        console.error('Delete failed:', errorAxios);
+    
+        // Check if the error is due to unauthorized access (wrong password)
+        if (errorAxios.response && errorAxios.response.status === 401) {
+          console.log('Token not provided');
+          setModalMessage("Token not provided");
+          handleOpenModal();
+
+        }else if (errorAxios.response && errorAxios.response.status === 501) {
+          console.log('Invalid Token');
+          setModalMessage("Invalid Token");
+          handleOpenModal();
+
+        }else if (errorAxios.response && errorAxios.response.status === 601) {
+          console.log('Password doesnt match');
+          setModalMessage("Password doesn't match");
+          handleOpenModal();
+          
+        }else if (errorAxios.response && errorAxios.response.status === 701) {
+          console.log('Eror at verify admin');
+
+        }else if (errorAxios.response && errorAxios.response.status === 801) {
+          console.log('No data found');
+          setModalMessage("No data found");
+          handleOpenModal();
+
+        }else if (errorAxios.response && errorAxios.response.status === 901) {
+          console.log('Eror at deleteData');
+
+        }
+      }
+    };
     
     //handle accordion
     const handleChangeAccordian = (panel: string) => (
@@ -91,7 +259,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   
     useEffect(() => {
       if (localStorage.getItem('snackReport') === 'success') {
-        setSnackSeverity('success');
         setSnackMessage('Insert report successful');
         handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
         localStorage.removeItem('snackReport');
@@ -158,10 +325,25 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
           anchorOrigin={{ vertical, horizontal }}
           key={vertical + horizontal}
         >
-          <Alert onClose={handleCloseSnack} severity={snackSeverity} sx={{ width: '100%' }}>
+          <Alert onClose={handleCloseSnack} severity={'success'} sx={{ width: '100%' }}>
             {snackMessage}
           </Alert>
         </Snackbar>
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color:'red' }}>
+              Error
+            </Typography>
+            <Alert onClose={handleCloseModal} severity={'error'} sx={{ width: '100%', mt:2 }}>
+              {modalMessage}
+            </Alert>
+          </Box>
+        </Modal>
         <Box sx={{ display: 'flex', alignItems: 'center', my: { xs: 3, md: 2 } }}>
           {loading ? (
             <Skeleton variant='rounded' width="30%" sx={{ p: 3 }} animation="wave" />
@@ -198,7 +380,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                   >
                     <Grid container spacing={1}>
                       <Grid item xs={12} md={1} lg={1}>
-                        {index === 0 ? (
+                        {index === 0 && item._id === data.slice().reverse()[0]._id ? (
                             <Typography sx={{ flexShrink: 0 }}>
                                 <FiberNewIcon />
                             </Typography>
@@ -303,16 +485,167 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                   </AccordionDetails>
                   <AccordionActions disableSpacing={true}>
                     <Tooltip title="Delete" placement='top'>
-                      <IconButton>
+                      <IconButton onClick={() => handleClickOpen(item._id)}>
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Send" placement='top'>
-                      <IconButton aria-label='Send'>
+                    <Tooltip title="Report" placement='top'>
+                      <IconButton aria-label='Report' onClick={() => handleClickOpenPublish(item._id)}>
                         <SendIcon />
                       </IconButton>
                     </Tooltip>
                   </AccordionActions>
+                  <Dialog
+                    open={openPublish && selectedItemId === item._id}
+                    onClose={handleClosePublish}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {"Publish Details"}
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} md={12} lg={12}>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-end', mt: 1}}>
+                          <TextField
+                            id="addEmail"
+                            label="To"
+                            fullWidth
+                            placeholder="Add email"
+                            onChange={(e) => setEmail(e.target.value)}
+                          />
+                          <Tooltip title="Add Email" placement="top">
+                            <IconButton onClick={handleAddToEmail} size='large'>
+                              <AddCircleIcon sx={{ color: '#2196f3', fontSize: 30 }}/>
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
+                        </Grid>
+                        <Grid item xs={12} md={12} lg={12}>
+                          <Divider sx={{ mt:1, mb:1 }} />
+                          <Box sx={{ margin: '1rem', minHeight: '100px' }}>
+                            <Typography sx={{ mb:1 }}>Email</Typography>
+                            <Stack spacing={1}>
+                              {toEmails.length === 0 ? (
+                                <>
+                                <Chip
+                                  label={"No email added"}
+                                  disabled
+                                  deleteIcon={<QuestionMarkIcon />}
+                                  onDelete={() => handleRemoveToEmail(index)}
+                                />
+                                </>
+                              ) : (
+                                <>
+                                {toEmails.map((email, index) => (
+                                    <Chip
+                                      key={index}
+                                      label={email}
+                                      onDelete={() => handleRemoveToEmail(index)}
+                                      sx={{
+                                        color: toEmails.slice(0, index).includes(email) ? 'red' : undefined,
+                                        border: toEmails.slice(0, index).includes(email) ? '2px solid red' : undefined,
+                                      }}
+                                    />
+                                ))}
+                                </>
+                              )}
+                            </Stack>
+                          </Box>
+                          <Divider sx={{ mt:1, mb:1 }} />
+                        </Grid>
+                        <Grid item xs={12} md={12} lg={12}>
+                          <TextField
+                            label="Subject"
+                            fullWidth
+                            value={subject}
+                            onChange={(e) => setSubject(e.target.value)}
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={12} lg={12}>
+                          <TextField
+                            label="Message"
+                            disabled
+                            fullWidth
+                            multiline
+                            rows={4}
+                            value={item.message}
+                          />
+                        </Grid>
+                      </Grid>
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClosePublish}>Cancel</Button>
+                      <Button 
+                      // onClick={async () => {
+                      //   await handleDelete(item._id);
+                      //   handleClose();
+                      // }} autoFocus
+                      onClick={handleClosePublish}
+                      >
+                        <SendIcon />
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                  <Dialog
+                    open={open && selectedItemId === item._id}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                  <DialogTitle id="alert-dialog-title" sx={{ color:'red' }}>
+                    {"Are you sure want to delete?"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                    <Alert severity="error" variant="filled">Warning: This report will be deleted and are you sure?</Alert>
+                      <TableContainer component={Paper} sx={{ mt: 1 }}>
+                        <Table aria-label="simple table" sx={{ mt: 1 }}>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell align="center">Report ID</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {data.map((item) => {
+                              if (item._id === selectedItemId) {
+                                return (
+                                  <TableRow key={item._id}>
+                                    <TableCell align='center'>{item._id}</TableCell>
+                                  </TableRow>
+                                );
+                              }
+                              return null;
+                            })}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="current-password"
+                      />
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleClose} sx={{ color:'red' }}>Cancel</Button>
+                    <Button onClick={async () => {
+                      await handleDelete(item._id);
+                      handleClose();
+                    }} autoFocus>
+                      Yes
+                    </Button>
+                  </DialogActions>
+                  </Dialog>
                 </Accordion>
                 ))
               )
@@ -333,7 +666,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                   id={`panel${index}bh-header`}
                 >
                   <Grid container spacing={1}>
-                    <Grid item xs={12} md={1} lg={1}>
+                    <Grid item xs={1} sm={1} md={1} lg={1}>
                       {index === 0 ? (
                           <Typography sx={{ flexShrink: 0 }}>
                               <FiberNewIcon />
@@ -344,12 +677,12 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                           </Typography>
                       )}
                     </Grid>
-                    <Grid item xs={12} md={6} lg={6}>
+                    <Grid item xs={11} sm={6} md={6} lg={6}>
                       <Typography sx={{flexShrink: 0 }}>
                         Id: {item._id}
                       </Typography>
                     </Grid>
-                    <Grid item xs={12} md={5} lg={5}>
+                    <Grid item xs={12} sm={5} md={5} lg={5}>
                       <Typography sx={{ mr:1 }}>Date: {item.date}</Typography>
                       <Typography >Time: {item.time}</Typography>
                     </Grid>
@@ -439,16 +772,173 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                 </AccordionDetails>
                 <AccordionActions disableSpacing={true}>
                   <Tooltip title="Delete" placement='top'>
-                      <IconButton>
+                      <IconButton onClick={() => handleClickOpen(item._id)}>
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Send" placement='top'>
-                      <IconButton aria-label='Send'>
+                    <Tooltip title="Report" placement='top'>
+                      <IconButton aria-label='Report' onClick={() => handleClickOpenPublish(item._id)}>
                         <SendIcon />
                       </IconButton>
                     </Tooltip>
                 </AccordionActions>
+                <Dialog
+                  open={openPublish && selectedItemId === item._id}
+                  onClose={handleClosePublish}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {"Publish Details"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} md={12} lg={12}>
+                      <Box sx={{ display: 'flex', alignItems: 'flex-end', mt: 1}}>
+                        <TextField
+                          id="addEmail"
+                          label="To"
+                          fullWidth
+                          placeholder="Add email"
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <Tooltip title="Add Email" placement="top">
+                          <IconButton onClick={handleAddToEmail} size='large'>
+                            <AddCircleIcon sx={{ color: '#2196f3', fontSize: 30 }}/>
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                      </Grid>
+                      <Grid item xs={12} md={12} lg={12}>
+                        <Divider sx={{ mt:1, mb:1 }} />
+                        <Box sx={{ margin: '1rem', minHeight: '100px' }}>
+                          <Typography sx={{ mb:1 }}>Email</Typography>
+                          <Stack spacing={1}>
+                            {toEmails.length === 0 ? (
+                              <>
+                              <Chip
+                                label={"No email added"}
+                                disabled
+                                deleteIcon={<QuestionMarkIcon />}
+                                onDelete={() => handleRemoveToEmail(index)}
+                              />
+                              </>
+                            ) : (
+                              <>
+                              {toEmails.map((email, index) => (
+                                  <Chip
+                                    key={index}
+                                    label={email}
+                                    onDelete={() => handleRemoveToEmail(index)}
+                                    sx={{
+                                      color: toEmails.slice(0, index).includes(email) ? 'red' : undefined,
+                                      border: toEmails.slice(0, index).includes(email) ? '2px solid red' : undefined,
+                                    }}
+                                  />
+                              ))}
+                              </>
+                            )}
+                          </Stack>
+                        </Box>
+                        <Divider sx={{ mt:1, mb:1 }} />
+                      </Grid>
+                      <Grid item xs={12} md={12} lg={12}>
+                        <TextField
+                          label="Subject"
+                          select
+                          fullWidth
+                          onChange={(e) => setSubject(e.target.value)}
+                        >
+                          {subjectEmail.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.value}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Grid>
+                      <Grid item xs={12} md={12} lg={12}>
+                        <TextField
+                          label="Message"
+                          disabled
+                          fullWidth
+                          multiline
+                          rows={4}
+                          value={item.message}
+                        />
+                      </Grid>
+                    </Grid>
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleClosePublish}>Cancel</Button>
+                    <Button 
+                    // onClick={async () => {
+                    //   await handleDelete(item._id);
+                    //   handleClose();
+                    // }} autoFocus
+                    onClick={handleClosePublish}
+                    >
+                      <SendIcon />
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={open && selectedItemId === item._id}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                  <DialogTitle id="alert-dialog-title" sx={{ color:'red' }}>
+                    {"Are you sure want to delete?"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                    <Alert severity="error" variant="filled">Warning: This report will be deleted and are you sure?</Alert>
+                      <TableContainer component={Paper} sx={{ mt: 1 }}>
+                        <Table aria-label="simple table" sx={{ mt: 1 }}>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell align="center">Report ID</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {data.map((item) => {
+                              if (item._id === selectedItemId) {
+                                return (
+                                  <TableRow key={item._id}>
+                                    <TableCell align='center'>{item._id}</TableCell>
+                                  </TableRow>
+                                );
+                              }
+                              return null;
+                            })}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="current-password"
+                      />
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleClose} sx={{ color:'red' }}>Cancel</Button>
+                    <Button onClick={async () => {
+                      await handleDelete(item._id);
+                      handleClose();
+                    }} autoFocus>
+                      Yes
+                    </Button>
+                  </DialogActions>
+                  </Dialog>
               </Accordion>
               ))
             )
