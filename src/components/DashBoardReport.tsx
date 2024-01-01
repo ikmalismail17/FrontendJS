@@ -40,6 +40,8 @@ import Divider from '@mui/material/Divider';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import MenuItem from '@mui/material/MenuItem';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
@@ -80,7 +82,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid red',
     boxShadow: 24,
     p: 4,
   };
@@ -93,10 +94,22 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     const [openModal, setOpenModal] = React.useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [password, setPassword] = useState('');
+    const [colorModal, setColorModal] = useState('');
+    const [modalTitle, setModalTitle] = useState('');
+    const [severityAlert, setSeverityAlert] = useState<AlertColor>('success');
     const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
     const [dateUI, setDateUI] = useState<Date | null>(null);
     const [loading, setLoading] = useState(true); // Add loading state
     const { token, id } = useAuth();
+
+    //backdrop
+    const [openBackDrop, setOpenBackDrop] = React.useState(false);
+    const handleCloseBackDrop = () => {
+      setOpenBackDrop(false);
+    };
+    const handleOpenBackDrop = () => {
+      setOpenBackDrop(true);
+    };
 
     //publish report
     const[openPublish, setOpenPublish] = useState(false);
@@ -131,24 +144,84 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
       });
     };
 
-    const handleSubmitReport = async () => {
+    const handleSubmitReport = async (reportId : number) => {
+
+      handleClosePublish();
+      handleOpenBackDrop();
       try {
+
+        const message = data.filter((item) => item._id === reportId)[0].message;
+        const adminFirstName = data.filter((item) => item._id === reportId)[0].admin[0].firstname;
+        const adminLastName = data.filter((item) => item._id === reportId)[0].admin[0].lastname;
+        const dataCm = data.filter((item) => item._id === reportId)[0].data[0].distanceCm;
+        const dataInch = data.filter((item) => item._id === reportId)[0].data[0].distanceInch;
+        const dataDate = data.filter((item) => item._id === reportId)[0].data[0].date;
+        const dataTime = data.filter((item) => item._id === reportId)[0].data[0].time;
+
         // Send emails with pre-defined subject and text
         for (const to of toEmails) {
-          const response = await axios.post('http://localhost:3001/send-email', {
+          const response = await axios.post(`http://localhost:3000/sendemail/${reportId}`, {
             to,
             subject,
-            // text,
-          });
+            message: message,
+            name : `${adminFirstName} ${adminLastName}`,
+            dataCm : dataCm,
+            dataInch : dataInch,
+            dataDate : dataDate,
+            dataTime : dataTime,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          }
+          );
 
           if (response.status === 200) {
+            handleCloseBackDrop();
             console.log(`Email sent successfully to ${to}`);
-          } else {
-            console.error(`Error sending email to ${to}`);
+            setColorModal('green');
+            setSeverityAlert('success');
+            setModalTitle("Success");
+            setModalMessage("Report sent successfully");
+            handleOpenModal();
           }
         }
       } catch (error) {
-        console.error('Error sending emails:', error);
+        const errorAxios = error as AxiosError;
+        console.error('Error sending emails:', errorAxios);
+
+        handleCloseBackDrop();
+
+        // Check if the error is due to unauthorized access (wrong password)
+        if (errorAxios.response && errorAxios.response.status === 401) {
+          console.log('Token not provided');
+          setColorModal('red');
+          setModalTitle("Error");
+          setSeverityAlert('error');
+          setModalMessage("Token not provided");
+          handleOpenModal();
+
+        }else if (errorAxios.response && errorAxios.response.status === 501) {
+          console.log('Invalid Token');
+          setColorModal('red');
+          setModalTitle("Error");
+          setSeverityAlert('error');
+          setModalMessage("Invalid Token");
+          handleOpenModal();
+
+        }else if (errorAxios.response && errorAxios.response.status === 601) {
+          console.log('Error sending email');
+          setColorModal('red');
+          setModalTitle("Error");
+          setSeverityAlert('error');
+          setModalMessage("Error sending email");
+          handleOpenModal();
+          
+        }else if (errorAxios.response && errorAxios.response.status === 701) {
+          console.log('Internal server error');
+          
+        }
       }
     };
 
@@ -189,9 +262,12 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
           data: { id, password },
         });
 
-        setSnackMessage("Delete successful");
-        handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
-        console.log('Delete successful:', response);
+        console.log(response);
+        setColorModal('green');
+        setModalTitle("Success");
+        setSeverityAlert('success');
+        setModalMessage("Delete report successful");
+        handleOpenModal();
     
         // If you want to perform any action after successful deletion, you can do it here
     
@@ -204,16 +280,25 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
         // Check if the error is due to unauthorized access (wrong password)
         if (errorAxios.response && errorAxios.response.status === 401) {
           console.log('Token not provided');
+          setColorModal('red');
+          setModalTitle("Error");
+          setSeverityAlert('error');
           setModalMessage("Token not provided");
           handleOpenModal();
 
         }else if (errorAxios.response && errorAxios.response.status === 501) {
           console.log('Invalid Token');
+          setColorModal('red');
+          setModalTitle("Error");
+          setSeverityAlert('error');
           setModalMessage("Invalid Token");
           handleOpenModal();
 
         }else if (errorAxios.response && errorAxios.response.status === 601) {
           console.log('Password doesnt match');
+          setColorModal('red');
+          setModalTitle("Error");
+          setSeverityAlert('error');
           setModalMessage("Password doesn't match");
           handleOpenModal();
           
@@ -222,6 +307,9 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
         }else if (errorAxios.response && errorAxios.response.status === 801) {
           console.log('No data found');
+          setColorModal('red');
+          setModalTitle("Error");
+          setSeverityAlert('error');
           setModalMessage("No data found");
           handleOpenModal();
 
@@ -335,15 +423,22 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color:'red' }}>
-              Error
+            <Box sx={{ ...style, border: `2px solid ${colorModal}` }}>
+            <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color: colorModal }}>
+              {modalTitle}
             </Typography>
-            <Alert onClose={handleCloseModal} severity={'error'} sx={{ width: '100%', mt:2 }}>
+            <Alert onClose={handleCloseModal} severity={severityAlert} sx={{ width: '100%', mt:2 }}>
               {modalMessage}
             </Alert>
           </Box>
         </Modal>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={openBackDrop}
+          // onClick={handleCloseBackDrop}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
         <Box sx={{ display: 'flex', alignItems: 'center', my: { xs: 3, md: 2 } }}>
           {loading ? (
             <Skeleton variant='rounded' width="30%" sx={{ p: 3 }} animation="wave" />
@@ -540,6 +635,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                               ) : (
                                 <>
                                 {toEmails.map((email, index) => (
+                                  <>
                                     <Chip
                                       key={index}
                                       label={email}
@@ -549,6 +645,8 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                                         border: toEmails.slice(0, index).includes(email) ? '2px solid red' : undefined,
                                       }}
                                     />
+                                    <Alert severity="error" variant="outlined">There's same email</Alert>
+                                  </>
                                 ))}
                                 </>
                               )}
@@ -557,12 +655,19 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                           <Divider sx={{ mt:1, mb:1 }} />
                         </Grid>
                         <Grid item xs={12} md={12} lg={12}>
-                          <TextField
-                            label="Subject"
-                            fullWidth
-                            value={subject}
-                            onChange={(e) => setSubject(e.target.value)}
-                          />
+                        <TextField
+                          label="Subject"
+                          select
+                          fullWidth
+                          value={subject}
+                          onChange={(e) => setSubject(e.target.value)}
+                        >
+                          {subjectEmail.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.value}
+                            </MenuItem>
+                          ))}
+                        </TextField>
                         </Grid>
                         <Grid item xs={12} md={12} lg={12}>
                           <TextField
@@ -580,11 +685,9 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                     <DialogActions>
                       <Button onClick={handleClosePublish}>Cancel</Button>
                       <Button 
-                      // onClick={async () => {
-                      //   await handleDelete(item._id);
-                      //   handleClose();
-                      // }} autoFocus
-                      onClick={handleClosePublish}
+                      onClick={async () => {
+                        await handleSubmitReport(item._id);
+                      }} autoFocus
                       >
                         <SendIcon />
                       </Button>
@@ -827,6 +930,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                             ) : (
                               <>
                               {toEmails.map((email, index) => (
+                                <>
                                   <Chip
                                     key={index}
                                     label={email}
@@ -836,6 +940,8 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                                       border: toEmails.slice(0, index).includes(email) ? '2px solid red' : undefined,
                                     }}
                                   />
+                                  {toEmails.slice(0, index).includes(email) ? (<Alert severity="error" variant="outlined">There's same email</Alert>) : undefined}
+                                </>
                               ))}
                               </>
                             )}
@@ -848,6 +954,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                           label="Subject"
                           select
                           fullWidth
+                          value={subject}
                           onChange={(e) => setSubject(e.target.value)}
                         >
                           {subjectEmail.map((option) => (
@@ -873,14 +980,12 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                   <DialogActions>
                     <Button onClick={handleClosePublish}>Cancel</Button>
                     <Button 
-                    // onClick={async () => {
-                    //   await handleDelete(item._id);
-                    //   handleClose();
-                    // }} autoFocus
-                    onClick={handleClosePublish}
-                    >
-                      <SendIcon />
-                    </Button>
+                      onClick={async () => {
+                        await handleSubmitReport(item._id);
+                      }} autoFocus
+                      >
+                        <SendIcon />
+                      </Button>
                   </DialogActions>
                 </Dialog>
                 <Dialog

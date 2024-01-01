@@ -349,7 +349,7 @@ if (adminTitle === 'Data') {
                 <MoreVertIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Settings" placement="bottom">
+            <Tooltip title="More Options" placement="bottom">
               <IconButton sx={{ ml: 1, display: { xs:'none', sm:'block' } }} color="inherit" onClick={handleOpenPop}>
                 <SettingsIcon/>
               </IconButton>
