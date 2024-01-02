@@ -158,6 +158,8 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
         const dataDate = data.filter((item) => item._id === reportId)[0].data[0].date;
         const dataTime = data.filter((item) => item._id === reportId)[0].data[0].time;
 
+        let allEmailsSuccessful = true;
+
         // Send emails with pre-defined subject and text
         for (const to of toEmails) {
           const response = await axios.post(`http://localhost:3000/sendemail/${reportId}`, {
@@ -177,16 +179,21 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
           }
           );
 
-          if (response.status === 200) {
-            handleCloseBackDrop();
-            console.log(`Email sent successfully to ${to}`);
-            setColorModal('green');
-            setSeverityAlert('success');
-            setModalTitle("Success");
-            setModalMessage("Report sent successfully");
-            handleOpenModal();
+          if (response.status !== 200) {
+            allEmailsSuccessful = false;
+            break; // exit the loop if one email fails
           }
         }
+
+        if (allEmailsSuccessful) {
+          handleCloseBackDrop();
+          setColorModal('green');
+          setSeverityAlert('success');
+          setModalTitle("Success");
+          setModalMessage("Report sent successfully");
+          handleOpenModal();
+        }
+
       } catch (error) {
         const errorAxios = error as AxiosError;
         console.error('Error sending emails:', errorAxios);
@@ -433,7 +440,15 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
           </Box>
         </Modal>
         <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{
+            color: '#fff',
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}
           open={openBackDrop}
           // onClick={handleCloseBackDrop}
         >
@@ -600,7 +615,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                       {"Publish Details"}
                     </DialogTitle>
                     <DialogContent>
-                      <DialogContentText id="alert-dialog-description">
                       <Grid container spacing={2}>
                         <Grid item xs={12} md={12} lg={12}>
                         <Box sx={{ display: 'flex', alignItems: 'flex-end', mt: 1}}>
@@ -680,7 +694,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                           />
                         </Grid>
                       </Grid>
-                      </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={handleClosePublish}>Cancel</Button>
@@ -703,7 +716,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                     {"Are you sure want to delete?"}
                   </DialogTitle>
                   <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
                     <Alert severity="error" variant="filled">Warning: This report will be deleted and are you sure?</Alert>
                       <TableContainer component={Paper} sx={{ mt: 1 }}>
                         <Table aria-label="simple table" sx={{ mt: 1 }}>
@@ -737,7 +749,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                         onChange={(e) => setPassword(e.target.value)}
                         autoComplete="current-password"
                       />
-                    </DialogContentText>
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleClose} sx={{ color:'red' }}>Cancel</Button>
@@ -895,7 +906,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                     {"Publish Details"}
                   </DialogTitle>
                   <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
                     <Grid container spacing={2}>
                       <Grid item xs={12} md={12} lg={12}>
                       <Box sx={{ display: 'flex', alignItems: 'flex-end', mt: 1}}>
@@ -975,7 +985,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                         />
                       </Grid>
                     </Grid>
-                    </DialogContentText>
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleClosePublish}>Cancel</Button>
@@ -998,7 +1007,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                     {"Are you sure want to delete?"}
                   </DialogTitle>
                   <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
                     <Alert severity="error" variant="filled">Warning: This report will be deleted and are you sure?</Alert>
                       <TableContainer component={Paper} sx={{ mt: 1 }}>
                         <Table aria-label="simple table" sx={{ mt: 1 }}>
@@ -1032,7 +1040,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                         onChange={(e) => setPassword(e.target.value)}
                         autoComplete="current-password"
                       />
-                    </DialogContentText>
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleClose} sx={{ color:'red' }}>Cancel</Button>

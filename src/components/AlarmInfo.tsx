@@ -13,6 +13,7 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import MessageIcon from '@mui/icons-material/Message';
 import { useAuth } from '../hooks/AuthContext';
 import Skeleton from '@mui/material/Skeleton';
+import MenuItem from '@mui/material/MenuItem';
 
 interface MyFormData {
   message: string
@@ -32,20 +33,23 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
     lastname: '',
   });
 
-  // Fetch data from Node.js server
-    fetch('http://localhost:3000/admininfo/'+id)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((admindata) => {
-      setAdminData(admindata);
-    })
-    .catch((error) => {
-      // console.error('Error fetching data:', error);
-    });
+  useEffect(() => {
+    // Fetch data from Node.js server
+    fetch('http://localhost:3000/admininfo/' + id)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((admindata) => {
+        setAdminData(admindata);
+      })
+      .catch((error) => {
+        // console.error('Error fetching data:', error);
+      });
+  }, [id]);
+
 
      
   const [formData, setFormData] = useState({
@@ -80,6 +84,29 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
       onFormUnfilled();
     }
   }, [formData, onFormFilled, onFormUnfilled]);
+
+  //message option
+  const messageChoice = [
+    {
+      title: 'Warning',
+      value: `I regret to inform you that our system has detected an unexpected high depth reading at [specific monitoring point] today. 
+      This anomaly raises concerns, and we are actively investigating the issue to determine its cause. Please be assured that we are taking all necessary 
+      measures to address and rectify the situation promptly. In the meantime, I recommend that precautionary measures be taken in the affected area, 
+      and we will keep you updated on our progress in resolving this matter. Your cooperation and swift response in implementing any necessary actions are highly appreciated.`,
+    },
+    {
+      title: 'Daily Update',
+      value: `As of today, the system has been running smoothly, and we have received the daily data update from various monitoring points across the river. 
+      The information collected includes real-time river depth measurements, ensuring that we stay informed about the current conditions of our water resources.`,
+    },
+    {
+      title: 'System Testing',
+      value: `Additionally, our team will be conducting routine system testing over the next few days to ensure the overall functionality and reliability of the 
+      River Depth Monitoring System. During this period, you may experience temporary interruptions in data transmission. We apologize for any inconvenience this 
+      may cause and appreciate your understanding as we work to enhance the system's performance. If you have any questions or concerns regarding the system update, 
+      warning, or testing, please do not hesitate to contact us.`,
+    },
+  ];
 
     return (
       <React.Fragment>
@@ -220,12 +247,19 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
                   name="message"
                   label="Message"
                   multiline
+                  select
                   fullWidth
                   maxRows={4}
                   variant="standard"
                   value={formData.message}
                   onChange={handleInputChange}
-                />
+                >
+                  {messageChoice.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.title}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Box>
               </>
             )}

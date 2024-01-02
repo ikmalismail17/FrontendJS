@@ -45,8 +45,7 @@ export default function PaymentForm({onFormFilled}: PaymentFormProps) {
         navigate('/admindashboard/data');
       }
       
-
-      if (dataReport) {
+      useEffect(() => {
         //handle single data search from backend
         fetch('http://localhost:3000/datareport/' + dataReport)
           .then((response) => {
@@ -61,7 +60,7 @@ export default function PaymentForm({onFormFilled}: PaymentFormProps) {
           .catch((error) => {
             // console.error('Error fetching data:', error);
           });
-      }
+      }, [dataReport]);
 
       //handle text input change
       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

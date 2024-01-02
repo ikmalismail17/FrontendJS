@@ -127,6 +127,9 @@ export default function DashBoardReport(){
   //modal
   const [openModal, setOpenModal] = React.useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [colorModal, setColorModal] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
+  const [severityAlert, setSeverityAlert] = useState<AlertColor>('success');
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -191,9 +194,12 @@ export default function DashBoardReport(){
           data: { id, password },
         });
 
-        setSnackMessage("Delete successful");
-        handleOpenSnack({ vertical: 'top', horizontal: 'center' })();
-        console.log('Delete successful:', response);
+        console.log(response)
+        setColorModal('green');
+        setSeverityAlert('success');
+        setModalTitle("Success");
+        setModalMessage("Delete Successfully");
+        handleOpenModal();
     
         // If you want to perform any action after successful deletion, you can do it here
     
@@ -205,26 +211,33 @@ export default function DashBoardReport(){
     
         // Check if the error is due to unauthorized access (wrong password)
         if (errorAxios.response && errorAxios.response.status === 401) {
-          console.log('Token not provided');
+          setColorModal('red');
+          setSeverityAlert('error');
+          setModalTitle("Error");
           setModalMessage("Token not provided");
           handleOpenModal();
 
         }else if (errorAxios.response && errorAxios.response.status === 501) {
-          console.log('Invalid Token');
-          setModalMessage("Invalid Token");
+          setColorModal('red');
+          setSeverityAlert('error');
+          setModalTitle("Invalid Token");
           handleOpenModal();
 
         }else if (errorAxios.response && errorAxios.response.status === 601) {
-          console.log('Password doesnt match');
-          setModalMessage("Password doesn't match");
+          setColorModal('red');
+          setSeverityAlert('error');
+          setModalTitle("Error");
+          setModalMessage("Password does not match");
           handleOpenModal();
           
         }else if (errorAxios.response && errorAxios.response.status === 701) {
           console.log('Eror at verify admin');
 
         }else if (errorAxios.response && errorAxios.response.status === 801) {
-          console.log('No data found');
-          setModalMessage("No data found");
+          setColorModal('red');
+          setSeverityAlert('error');
+          setModalTitle("Error");
+          setModalMessage("Data not found");
           handleOpenModal();
 
         }else if (errorAxios.response && errorAxios.response.status === 901) {
@@ -236,10 +249,6 @@ export default function DashBoardReport(){
     
     const handleDatePicker = (date: Date | null) => {
       setDateUI(date);
-      // console.log('Date:', date);
-      // console.log('Raw Date: ', data[0] ? dayjs(data[0].date, 'DD/MM/YYYY') : null)
-      // console.log('Formatted Date: ', dayjs(date).format('DD/MM/YYYY'));
-      // console.log('Formatted Raw Date: ', data[0] ? dayjs(data[0].date).format('DD/MM/YYYY') : null);
     }
 
     //skeleton loading
@@ -280,11 +289,11 @@ export default function DashBoardReport(){
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color:'red' }}>
-            Error
+          <Box sx={{ ...style, border: `2px solid ${colorModal}` }}>
+          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color: colorModal }}>
+            {modalTitle}
           </Typography>
-          <AlertSnack onClose={handleCloseModal} severity={'error'} sx={{ width: '100%', mt:2 }}>
+          <AlertSnack onClose={handleCloseModal} severity={severityAlert} sx={{ width: '100%', mt:2 }}>
             {modalMessage}
           </AlertSnack>
         </Box>
@@ -373,7 +382,6 @@ export default function DashBoardReport(){
                             {"Are you sure want to choose this data?"}
                           </DialogTitle>
                           <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
                               After this data selected, it will set on notification data info
                               <TableContainer component={Paper} sx={{ mt:1 }}>
                                 <Table aria-label="simple table" sx={{ mt: 1 }}>
@@ -396,7 +404,6 @@ export default function DashBoardReport(){
                                   </TableBody>
                                 </Table>
                               </TableContainer>
-                            </DialogContentText>
                           </DialogContent>
                           <DialogActions>
                             <Button onClick={handleCloseReport}>Cancel</Button>
@@ -415,7 +422,6 @@ export default function DashBoardReport(){
                             {"Are you sure want to delete?"}
                           </DialogTitle>
                           <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
                               <Alert severity="error" variant="filled">Warning: This data is important and you need to take consideration to delete this</Alert>
                               <TableContainer component={Paper} sx={{ mt: 1 }}>
                                 <Table aria-label="simple table" sx={{ mt: 1 }}>
@@ -449,7 +455,6 @@ export default function DashBoardReport(){
                                 onChange={(e) => setPassword(e.target.value)}
                                 autoComplete="current-password"
                               />
-                            </DialogContentText>
                           </DialogContent>
                           <DialogActions>
                             <Button onClick={handleClose} sx={{ color:'red' }}>Cancel</Button>
@@ -503,7 +508,6 @@ export default function DashBoardReport(){
                             {"Are you sure want to choose this data?"}
                           </DialogTitle>
                           <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
                             After this data selected, it will set on notification data info
                               <TableContainer component={Paper} sx={{ mt: 1 }}>
                                 <Table aria-label="simple table" sx={{ mt: 1 }}>
@@ -526,7 +530,6 @@ export default function DashBoardReport(){
                                   </TableBody>
                                 </Table>
                               </TableContainer>
-                            </DialogContentText>
                           </DialogContent>
                           <DialogActions>
                             <Button onClick={handleCloseReport}>Cancel</Button>
@@ -548,7 +551,6 @@ export default function DashBoardReport(){
                             {"Are you sure want to delete?"}
                           </DialogTitle>
                           <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
                             <Alert severity="error" variant="filled">Warning: This data is important and you need to take consideration to delete this</Alert>
                               <TableContainer component={Paper} sx={{ mt: 1 }}>
                                 <Table aria-label="simple table" sx={{ mt: 1 }}>
@@ -582,7 +584,6 @@ export default function DashBoardReport(){
                                 onChange={(e) => setPassword(e.target.value)}
                                 autoComplete="current-password"
                               />
-                            </DialogContentText>
                           </DialogContent>
                           <DialogActions>
                             <Button onClick={handleClose} sx={{ color:'red' }}>Cancel</Button>
