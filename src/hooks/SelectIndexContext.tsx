@@ -8,12 +8,15 @@ interface SelectedIndexContextValue {
   selectedIndex: number;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
   setIndexByRoute: (route: string) => void;
+  isAnimationOn: boolean;
+  setIsAnimationOn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SelectedIndexContext = createContext<SelectedIndexContextValue | undefined>(undefined);
 
 export const SelectedIndexProvider: React.FC<SelectedIndexContextProps>= ({ children }) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [isAnimationOn, setIsAnimationOn] = useState<boolean>(true); // Set default value
 
   const setIndexByRoute = (route: string) => {
     // Logic to map route to index
@@ -34,7 +37,7 @@ export const SelectedIndexProvider: React.FC<SelectedIndexContextProps>= ({ chil
   };
 
   return (
-    <SelectedIndexContext.Provider value={{ selectedIndex, setSelectedIndex, setIndexByRoute }}>
+    <SelectedIndexContext.Provider value={{ selectedIndex, setSelectedIndex, setIndexByRoute, isAnimationOn, setIsAnimationOn }}>
       {children}
     </SelectedIndexContext.Provider>
   );

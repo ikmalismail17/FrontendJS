@@ -52,6 +52,9 @@ import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
+import { useSelectedIndex } from '../hooks/SelectIndexContext';
+import MotionPhotosOffIcon from '@mui/icons-material/MotionPhotosOff';
+import MotionPhotosAutoIcon from '@mui/icons-material/MotionPhotosAuto';
 
 
 function Copyright(props: any) {
@@ -163,6 +166,7 @@ export default function Dashboard(props: DashboardProps) {
   const theme = useTheme();
   const { logout } = useAuth(); // Include the logout function
   const navigate = useNavigate();
+  const { isAnimationOn, setIsAnimationOn } = useSelectedIndex(); // Include the isAnimationOn state
   const { id } = useAuth();
   const [adminData, setAdminData] = React.useState({
     email: '',
@@ -263,6 +267,11 @@ export default function Dashboard(props: DashboardProps) {
     logout();
     // Redirect to the login page
     navigate('/');
+  };
+
+  //animation
+  const handleClickAnimation = () => {
+    setIsAnimationOn(!isAnimationOn);
   };
 
   // Breadcrumb
@@ -401,6 +410,20 @@ if (adminTitle === 'Data') {
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
                 </ListItemIcon>
                 {theme.palette.mode === 'dark' ? "Light" : "Dark"}
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClosePop();
+                  handleClickAnimation();
+                }}
+                sx={{
+                  display: {xs:'none', sm:'flex'}, // Set display to flex
+                }}
+              >
+                <ListItemIcon>
+                  {isAnimationOn ? <MotionPhotosOffIcon /> : <MotionPhotosAutoIcon />}
+                </ListItemIcon>
+                Animation
               </MenuItem>
               <MenuItem onClick={() => { handleClosePop(); handleClickOpen();}}>
                 <ListItemIcon>
@@ -546,7 +569,7 @@ if (adminTitle === 'Data') {
                   />
                   {breadcrumbContent}
                 </Breadcrumbs>
-                  <Paper className="animation" variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }, display: { xs: 'none', sm: 'block'}}}>
+                  <Paper className={isAnimationOn ? 'animation' : 'stop-animation'} variant='outlined' sx={{ my: { xs: 3, md: 2 }, p: { xs: 2, md: 3 }, display: { xs: 'none', sm: 'block'}}}>
                     {dashboardContent()}
                   </Paper>
                   <Box sx={{ display: { xs: 'block', sm: 'none' } }}>

@@ -17,6 +17,7 @@
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.15.2",
+    "@mui/x-charts": "^6.18.4",
     "@mui/x-date-pickers": "^6.18.5",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.2",

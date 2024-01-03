@@ -32,3 +32,8 @@
   background: linear-gradient(90deg, #3498db, #5dade2, #85c1e9, #aed6f1, #3498db); /* Color wave with four blue shades */
   background-size: 400% 100%;
 }
+
+.stop-animation {
+  animation: none !important;
+  background-color: #3498db !important;
+}

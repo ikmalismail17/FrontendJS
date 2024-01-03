@@ -26,7 +26,7 @@ interface AdminDataProps {
 }
 
 export default function ListItems({adminData}: AdminDataProps){
-  const { selectedIndex, setSelectedIndex, setIndexByRoute } = useSelectedIndex();
+  const { selectedIndex, setSelectedIndex, setIndexByRoute, isAnimationOn } = useSelectedIndex();
   const theme = useTheme();
 
 
@@ -69,7 +69,7 @@ export default function ListItems({adminData}: AdminDataProps){
             <ListItemButton
             selected={selectedIndex === 0}
             onClick={(event) => handleListItemClick(event, 0)}
-            className={selectedIndex === 0 ? 'selected-animation' : ''}
+            className={(selectedIndex === 0) ? (isAnimationOn ? 'selected-animation' : 'stop-animation') : ''}
             >
               <ListItemIcon>
                 <DashboardIcon sx={{ color: theme.palette.primary.contrastText }}/>
@@ -82,7 +82,7 @@ export default function ListItems({adminData}: AdminDataProps){
           <ListItemButton
           selected={selectedIndex === 1}
           onClick={(event) => handleListItemClick(event, 1)}
-          className={selectedIndex === 1 ? 'selected-animation' : ''}
+          className={(selectedIndex === 1) ? (isAnimationOn ? 'selected-animation' : 'stop-animation') : ''}
           >
             <ListItemIcon>
               <StorageIcon sx={{ color: theme.palette.primary.contrastText }}/>
@@ -95,7 +95,7 @@ export default function ListItems({adminData}: AdminDataProps){
           <ListItemButton
           selected={selectedIndex === 2}
           onClick={(event) => handleListItemClick(event, 2)}
-          className={selectedIndex === 2 ? 'selected-animation' : ''}
+          className={(selectedIndex === 2) ? (isAnimationOn ? 'selected-animation' : 'stop-animation') : ''}
           >
             <ListItemIcon>
               <NotificationsActiveIcon sx={{ color: theme.palette.primary.contrastText }}/>
@@ -108,7 +108,7 @@ export default function ListItems({adminData}: AdminDataProps){
           <ListItemButton
           selected={selectedIndex === 4}
           onClick={(event) => handleListItemClick(event, 4)}
-          className={selectedIndex === 4 ? 'selected-animation' : ''}
+          className={(selectedIndex === 4) ? (isAnimationOn ? 'selected-animation' : 'stop-animation') : ''}
           >
             <ListItemIcon>
               <TextSnippetIcon sx={{ color: theme.palette.primary.contrastText }}/>

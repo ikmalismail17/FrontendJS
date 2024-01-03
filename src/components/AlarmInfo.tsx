@@ -89,22 +89,25 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
   const messageChoice = [
     {
       title: 'Warning',
-      value: `I regret to inform you that our system has detected an unexpected high depth reading at [specific monitoring point] today. 
-      This anomaly raises concerns, and we are actively investigating the issue to determine its cause. Please be assured that we are taking all necessary 
-      measures to address and rectify the situation promptly. In the meantime, I recommend that precautionary measures be taken in the affected area, 
-      and we will keep you updated on our progress in resolving this matter. Your cooperation and swift response in implementing any necessary actions are highly appreciated.`,
+      value: `I regret to inform you that our system has detected an unexpected high depth reading at our river today.
+
+    This anomaly raises concerns, and we are actively investigating the issue to determine its cause whether the reading is true or our sensor error. Please be assured that we are taking all necessary measures to address and rectify the situation promptly.
+      
+    In the meantime, I recommend that precautionary measures be taken in the affected area, and we will keep you updated on our progress in resolving this matter. Your cooperation and swift response in implementing any necessary actions are highly appreciated.`,
     },
     {
       title: 'Daily Update',
-      value: `As of today, the system has been running smoothly, and we have received the daily data update from various monitoring points across the river. 
-      The information collected includes real-time river depth measurements, ensuring that we stay informed about the current conditions of our water resources.`,
+      value: `As of today, the system has been running smoothly, and we have received the daily data update from monitoring system. 
+
+    The information collected includes real-time river depth measurements, ensuring that we stay informed about the current conditions of our river depth.`,
     },
     {
       title: 'System Testing',
-      value: `Additionally, our team will be conducting routine system testing over the next few days to ensure the overall functionality and reliability of the 
-      River Depth Monitoring System. During this period, you may experience temporary interruptions in data transmission. We apologize for any inconvenience this 
-      may cause and appreciate your understanding as we work to enhance the system's performance. If you have any questions or concerns regarding the system update, 
-      warning, or testing, please do not hesitate to contact us.`,
+      value: `Additionally, our team will be conducting routine system testing over the next few days to ensure the overall functionality and reliability of the River Depth Monitoring System. 
+
+    During this period, you may experience temporary sending in data details. We apologize for any inconvenience this may cause and appreciate your understanding as we work to enhance the system's performance. 
+      
+    If you have any questions or concerns regarding the system update, warning, or testing, please do not hesitate to contact us.`,
     },
   ];
 

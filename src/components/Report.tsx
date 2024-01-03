@@ -13,6 +13,8 @@ import React from 'react';
 import Title from './Title';
 import Alert from '@mui/material/Alert';
 import TableContainer from '@mui/material/TableContainer';
+import Typography from '@mui/material/Typography';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
 interface DataItem {
   _id: number;
@@ -42,7 +44,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function Orders() {
+export default function Report() {
 
   const [data, setData] = useState<DataItem[]>([]);
 
@@ -95,7 +97,7 @@ export default function Orders() {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {data.slice(0, 5).map((item, index) => (
+            {data.reverse().slice(0, 5).map((item, index) => (
               <StyledTableRow key={item._id}>
                 <StyledTableCell>{index + 1}</StyledTableCell>
                 <StyledTableCell>{item.distanceCm}</StyledTableCell>
@@ -110,8 +112,10 @@ export default function Orders() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Link to="/admindashboard/data" style={{ color:"inherit" }}>
-        See more data...
+      <Link to="/admindashboard/data" style={{ color:"inherit", marginTop: '10px'}}>
+        <Typography sx={{ display:'flex' }}>
+          See more data... <ArrowCircleRightIcon sx={{ ml:1 }}/>
+        </Typography>
       </Link>
     </React.Fragment>
   );

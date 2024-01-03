@@ -349,7 +349,7 @@ export default function DashBoardReport(){
                         <StyledTableCell colSpan={8} align='center'>No data found</StyledTableCell>
                       </StyledTableRow>
                     ) : (
-                      data.filter((item) => dayjs(item.date, 'DD/MM/YYYY').isSame(dayjs(dateUI).format('MM/DD/YYYY'), 'day')).map((item, index) => (
+                      data.slice().reverse().filter((item) => dayjs(item.date, 'DD/MM/YYYY').isSame(dayjs(dateUI).format('MM/DD/YYYY'), 'day')).map((item, index) => (
                         <StyledTableRow key={item._id}>
                           <StyledTableCell align='center'>{index + 1}</StyledTableCell>
                           <StyledTableCell align='center'>{item._id}</StyledTableCell>
@@ -475,7 +475,7 @@ export default function DashBoardReport(){
                         <StyledTableCell colSpan={8} align='center'>No data found</StyledTableCell>
                       </StyledTableRow>
                     ) : (   
-                      data.map((item, index) => (
+                      data.slice().reverse().map((item, index) => (
                         <StyledTableRow  key={item._id}>
                           <StyledTableCell align='center'>{index + 1}</StyledTableCell>
                           <StyledTableCell align='center'>{item._id}</StyledTableCell>
