@@ -31,6 +31,8 @@ export const SelectedIndexProvider: React.FC<SelectedIndexContextProps>= ({ chil
       index = 3;
     } else if (route === '/admindashboard/report') {
       index = 4;
+    } else if (route === '/admindashboard/log') {
+      index = 5;
     }
 
     setSelectedIndex(index);

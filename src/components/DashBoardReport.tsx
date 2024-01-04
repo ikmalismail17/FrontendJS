@@ -171,6 +171,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
             dataInch : dataInch,
             dataDate : dataDate,
             dataTime : dataTime,
+            id : id,
           },
           {
             headers: {
@@ -939,20 +940,19 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                               </>
                             ) : (
                               <>
-                              {toEmails.map((email, index) => (
-                                <>
-                                  <Chip
-                                    key={index}
-                                    label={email}
-                                    onDelete={() => handleRemoveToEmail(index)}
-                                    sx={{
-                                      color: toEmails.slice(0, index).includes(email) ? 'red' : undefined,
-                                      border: toEmails.slice(0, index).includes(email) ? '2px solid red' : undefined,
-                                    }}
-                                  />
-                                  {toEmails.slice(0, index).includes(email) ? (<Alert severity="error" variant="outlined">There's same email</Alert>) : undefined}
-                                </>
-                              ))}
+                                {toEmails.map((email, index) => (
+                                  <React.Fragment key={index}>
+                                    <Chip
+                                      label={email}
+                                      onDelete={() => handleRemoveToEmail(index)}
+                                      sx={{
+                                        color: toEmails.slice(0, index).includes(email) ? 'red' : '',
+                                        border: toEmails.slice(0, index).includes(email) ? '2px solid red' : '',
+                                      }}
+                                    />
+                                    {toEmails.slice(0, index).includes(email) ? (<Alert severity="error" variant="outlined">There's same email</Alert>) : ''}
+                                  </React.Fragment>
+                                ))}
                               </>
                             )}
                           </Stack>

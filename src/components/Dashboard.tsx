@@ -55,6 +55,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { useSelectedIndex } from '../hooks/SelectIndexContext';
 import MotionPhotosOffIcon from '@mui/icons-material/MotionPhotosOff';
 import MotionPhotosAutoIcon from '@mui/icons-material/MotionPhotosAuto';
+import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 
 
 function Copyright(props: any) {
@@ -172,6 +173,7 @@ export default function Dashboard(props: DashboardProps) {
     email: '',
     firstname: '',
     lastname: '',
+    role: 0,
   });
 
   const handleDrawerToggle = () => {
@@ -308,6 +310,14 @@ if (adminTitle === 'Data') {
       icon={<TextSnippetIcon fontSize="small" />}
     />,
   ];
+}else if (adminTitle === 'Log') {
+  breadcrumbContent = [
+    <StyledBreadcrumb
+      key="log"
+      label="Log"
+      icon={<DocumentScannerIcon fontSize="small" />}
+    />,
+  ];
 }
   
 
@@ -432,29 +442,6 @@ if (adminTitle === 'Data') {
                 Logout
               </MenuItem>
             </Menu>
-            {/* <Popover
-              id={idPop}
-              open={openPop}
-              anchorEl={anchorEl}
-              onClose={handleClosePop}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-            >
-              <Stack>
-                <Button onClick={toggleColorMode} color="inherit">
-                  {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-                  <Typography variant="body2" sx={{ ml: "auto" }}>
-                    {theme.palette.mode === 'dark' ? "Light" : "Dark"}
-                  </Typography>
-                </Button>
-                <Button color="inherit" onClick={handleClickOpen}>
-                  <LogoutIcon />
-                  <Typography variant="body2" sx={{ ml: "auto" }}>Log out</Typography>
-                </Button>
-              </Stack>
-            </Popover> */}
           </Toolbar>
         </AppBar>
         <Dialog
@@ -512,7 +499,7 @@ if (adminTitle === 'Data') {
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
-          <ListItems adminData={{ firstname: adminData.firstname, lastname: adminData.lastname }} />
+          <ListItems adminData={{ firstname: adminData.firstname, lastname: adminData.lastname, role: adminData.role }} />
         </Drawer>
         <Drawer
           variant="permanent"
@@ -539,7 +526,7 @@ if (adminTitle === 'Data') {
               <ChevronLeftIcon />
             </IconButton> */}
           </Toolbar>
-          <ListItems adminData={{ firstname: adminData.firstname, lastname: adminData.lastname }} />
+          <ListItems adminData={{ firstname: adminData.firstname, lastname: adminData.lastname, role: adminData.role }} />
         </Drawer>
         </Box>
         <Box

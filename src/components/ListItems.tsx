@@ -14,11 +14,13 @@ import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import StorageIcon from '@mui/icons-material/Storage';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 
 
 interface AdminData {
   firstname: string;
   lastname: string;
+  role: number;
 }
 
 interface AdminDataProps {
@@ -117,6 +119,26 @@ export default function ListItems({adminData}: AdminDataProps){
           </ListItemButton>
           </Link>
           <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
+          {adminData.role === 1 ? (
+            <>
+            <Link to="/admindashboard/log" style={{ textDecoration: 'none', color:"inherit" }}>
+            <ListItemButton
+            selected={selectedIndex === 5}
+            onClick={(event) => handleListItemClick(event, 5)}
+            className={(selectedIndex === 5) ? (isAnimationOn ? 'selected-animation' : 'stop-animation') : ''}
+            >
+              <ListItemIcon>
+                <DocumentScannerIcon sx={{ color: theme.palette.primary.contrastText }}/>
+              </ListItemIcon>
+              <ListItemText primary="Log" />
+            </ListItemButton>
+            </Link>
+            <Divider sx={{ backgroundColor: theme.palette.primary.contrastText }}/>
+            </>
+          ) :(
+            ''
+          )}
+          
         </List>
     </React.Fragment>
   );

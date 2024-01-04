@@ -76,7 +76,7 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
     const response = await axios.post(
       'http://localhost:3000/alarmreport',
       {
-        adminId: id,
+        id: id,
         dataId: dataReport,
         message: alarmInfo.message,
       },

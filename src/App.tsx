@@ -25,6 +25,7 @@ import { useAuth } from "./hooks/AuthContext";
 import React from "react";
 import { SelectedIndexProvider } from "./hooks/SelectIndexContext";
 import DashBoardReport from "./components/DashboardReport";
+import DashBoardLog from "./components/DashboardLog";
 
 const sections = [
   { title: 'Main Post', url: '#mainpost' },
@@ -116,6 +117,8 @@ function AppContent() {
       newTitle = 'Profile';
     } else if (route.pathname === '/admindashboard/report' && token) {
       newTitle = 'Report';
+    } else if (route.pathname === '/admindashboard/log' && token) {
+      newTitle = 'Log';
     } else if (route.pathname === '/signin') {
       newTitle = 'Sign In';
     } else{
@@ -150,6 +153,11 @@ function AppContent() {
   const AdminReport = () => {
     return (
       <DashBoardReport />
+    )
+  }
+  const AdminLog = () => {
+    return (
+      <DashBoardLog />
     )
   }
 
@@ -204,6 +212,15 @@ function AppContent() {
         mainContent = (
           <>
             <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminReport} adminTitle="Report"></Dashboard>
+          </>
+        );
+      }
+      break;
+    case '/admindashboard/log':
+      if (token) {
+        mainContent = (
+          <>
+            <Dashboard toggleColorMode={toggleColorMode} dashboardContent={AdminLog} adminTitle="Log"></Dashboard>
           </>
         );
       }
