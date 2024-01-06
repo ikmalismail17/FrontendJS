@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer, Tooltip, BarChart, CartesianGrid, Legend, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer, Tooltip, BarChart, CartesianGrid, Legend, Bar, LabelList } from 'recharts';
 import Title from './Title';
 import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
@@ -123,18 +123,22 @@ const aggregatedData = data.reduce<Record<string, { date: string; distanceCmSum:
           height: 400,
           }}
         >
-        <Title>Today</Title>
+        <Title>Weekly's Average</Title>
         <ResponsiveContainer>
         <BarChart  height={400} data={averagedData}>
             <CartesianGrid strokeDasharray="3 3" />
             <Tooltip />
             <Legend />
             <XAxis dataKey="date" />
-            <YAxis />
+            <YAxis type="number" domain={[ 0 , 250]} />
             <Tooltip />
             <Legend />
-            <Bar dataKey="Cm" fill="#8884d8" />
-            <Bar dataKey="Inch" fill="#82ca9d" />
+            <Bar dataKey="Cm" fill="#8884d8">
+                <LabelList dataKey="Cm" position="top" />
+            </Bar>
+            <Bar dataKey="Inch" fill="#82ca9d">
+                <LabelList dataKey="Inch" position="top" />
+            </Bar>
         </BarChart>
         </ResponsiveContainer>
         </Paper>

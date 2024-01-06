@@ -8,6 +8,7 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 import TableRow from '@mui/material/TableRow';
 import { useEffect, useState } from 'react';
+import Skeleton from '@mui/material/Skeleton';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -40,6 +41,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function DashBoardLog(){
     const [data, setData] = useState<DataItem[]>([]);
+    const [loading, setLoading] = useState(true); // Add loading state
 
     const fetchData = () => {
         // Fetch data from Node.js server
@@ -67,6 +69,17 @@ export default function DashBoardLog(){
         clearInterval(refreshTimer);
         }
     }, []);
+
+    //skeleton loading
+    useEffect(() => {
+    // Simulate loading by setting a timeout
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+      // Clear the timeout when the component unmounts or when loading is complete
+      return () => clearTimeout(timer);
+    }, []);
     
     return (
     <>
@@ -75,17 +88,32 @@ export default function DashBoardLog(){
         <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <StyledTableRow>
-                <StyledTableCell align='center'>No</StyledTableCell>
-                <StyledTableCell align='center'>Log Id</StyledTableCell>
-                <StyledTableCell align='center'>Admin Id</StyledTableCell>
-                <StyledTableCell align='center'>Admin Key</StyledTableCell>
-                <StyledTableCell align='center'>Action</StyledTableCell>
-                <StyledTableCell align='center'>Date</StyledTableCell>
-                <StyledTableCell align='center'>Time</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("No")}</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Log Id")}</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Admin Id")}</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Admin Key")}</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Action")}</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Date")}</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Time")}</StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>
-            {data.filter((item => (item._id))).length === 0 ? (
+            {loading ? (
+                <StyledTableRow>
+                  <StyledTableCell colSpan={7} align='center'>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ) : (
+                <>
+                {data.filter((item => (item._id))).length === 0 ? (
                     <StyledTableRow>
                         <StyledTableCell colSpan={8} align='center'>No data found</StyledTableCell>
                     </StyledTableRow>
@@ -102,6 +130,8 @@ export default function DashBoardLog(){
                     </StyledTableRow>
                     ))
                 )}
+                </>
+              )}
             </TableBody>
         </Table>
     </TableContainer>

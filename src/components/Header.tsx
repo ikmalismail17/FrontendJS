@@ -28,7 +28,8 @@ export default function Header(props: HeaderProps) {
 
   return (
     <React.Fragment>
-      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
+      {/* <Box sx={{ position: 'sticky', top: 0, zIndex: 100, backdropFilter: 'blur(8px)' }}> */}
+      <Toolbar id="header" sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
         <Box
           sx={{
             display: 'flex',
@@ -37,6 +38,7 @@ export default function Header(props: HeaderProps) {
             color: 'text.primary',
             borderRadius: 1,
             p: 3,
+            // backgroundColor: 'transparent'
           }}
         >
           <IconButton sx={{ mr: 1 }} onClick={toggleColorMode} color="inherit">
@@ -73,6 +75,7 @@ export default function Header(props: HeaderProps) {
           </LinkMUI>
         ))}
       </Toolbar>
+      {/* </Box> */}
     </React.Fragment>
   );
 }

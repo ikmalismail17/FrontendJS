@@ -4,6 +4,7 @@ import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+import '../assets/css/ListItemButton.css';
 
 interface SidebarProps {
   archives: ReadonlyArray<{
@@ -19,41 +20,47 @@ interface SidebarProps {
 }
 
 export default function Sidebar(props: SidebarProps) {
-  const { archives, description, social, title } = props;
+  const { description, social, title } = props;
 
   return (
     <React.Fragment>
-      <Paper id="about" elevation={0} sx={{ p: 2, backgroundImage: 'url(https://img.freepik.com/premium-vector/vector-abstract-gradiente-background-blue-wallpaper_901408-861.jpg)' }}>
-        <Typography variant="h6" gutterBottom>
-          {title}
-        </Typography>
-        <Typography>{description}</Typography>
+      <Paper className='selected-animation' elevation={0} sx={{ p: 2 }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={8} md={8}>
+          <Typography variant="h6" gutterBottom sx={{ color:'black' }}>
+            {title}
+          </Typography>
+          <Typography sx={{ color:'black' }}>{description}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={4} md={4}>
+          <Paper
+            sx={{
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            }}
+          >
+          <Typography variant="h6" gutterBottom>
+            Social
+          </Typography>
+            {social.map((network) => (
+              <Link
+                display="block"
+                variant="body1"
+                href="#"
+                key={network.name}
+                sx={{ mb: 0.5 }}
+              >
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <network.icon />
+                  <span>{network.name}</span>
+                </Stack>
+              </Link>
+            ))}
+          </Paper>
+          </Grid>
+        </Grid>
       </Paper>
-      {/* <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-        Archives
-      </Typography> */}
-      {/* {archives.map((archive) => (
-        <Link display="block" variant="body1" href={archive.url} key={archive.title}>
-          {archive.title}
-        </Link>
-      ))} */}
-      <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-        Social
-      </Typography>
-      {social.map((network) => (
-        <Link
-          display="block"
-          variant="body1"
-          href="#"
-          key={network.name}
-          sx={{ mb: 0.5 }}
-        >
-          <Stack direction="row" spacing={1} alignItems="center">
-            <network.icon />
-            <span>{network.name}</span>
-          </Stack>
-        </Link>
-      ))}
     </React.Fragment>
   );
 }

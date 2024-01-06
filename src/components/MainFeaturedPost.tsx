@@ -19,7 +19,6 @@ export default function MainFeaturedPost(props: MainFeaturedPostProps) {
 
   return (
     <Paper
-      id="mainpost"
       sx={{
         position: 'relative',
         backgroundColor: 'grey.800',

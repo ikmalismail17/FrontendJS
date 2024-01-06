@@ -26,12 +26,17 @@ import React from "react";
 import { SelectedIndexProvider } from "./hooks/SelectIndexContext";
 import DashBoardReport from "./components/DashboardReport";
 import DashBoardLog from "./components/DashboardLog";
+import Fab from '@mui/material/Fab';
+import NavigationIcon from '@mui/icons-material/Navigation';
+import { Link, Tooltip } from "@mui/material";
+import FeedBack from "./components/FeedBack";
+
 
 const sections = [
   { title: 'Main Post', url: '#mainpost' },
+  { title: 'Visualization', url: '#tabledataoutside' },
   { title: 'About', url: '#about' },
-  { title: 'Visualization', url: '#tabledataoutside' }
-
+  { title: 'Feedback', url: '#feedback' }
 ];
 
 const mainFeaturedPost = {
@@ -228,16 +233,16 @@ function AppContent() {
     default:
       mainContent = (
         <>
-          <Container maxWidth="lg">
+          <Container maxWidth="lg" id="mainpost">
             <Header title="Monitoring System" sections={sections} toggleColorMode={toggleColorMode} />
             <main>
-              <MainFeaturedPost post={mainFeaturedPost} />
-              <Grid container spacing={4}>
+              <MainFeaturedPost post={mainFeaturedPost}/>
+              <Grid container spacing={4} id="tabledataoutside">
                 {featuredPosts.map((post) => (
                   <FeaturedPost key={post.title} post={post} />
                 ))}
               </Grid>
-              <Grid container spacing={5} sx={{ mt: 2 }}>
+              <Grid container spacing={5} sx={{ mt: 2 }} id="about">
                 <Grid item xs={12} md={12}>
                   <MainSec/>
                 </Grid>
@@ -249,11 +254,21 @@ function AppContent() {
                   social={sidebar.social}
                 />
                 </Grid>
+                <Grid item xs={12} md={12}>
+                  <FeedBack/>
+                </Grid>
               </Grid>
             </main>
+            <Link href="#header">
+              <Tooltip title="Back to top" placement="top">
+                <Fab color="primary" aria-label="add" sx={{ position: 'fixed', bottom: 25, right: 25 }}>
+                  <NavigationIcon />
+                </Fab>
+              </Tooltip>
+            </Link>
           </Container>
           <Footer
-            title="Footer"
+            title="RivDepMon"
             description="MonitorSystem"
           />
         </>
