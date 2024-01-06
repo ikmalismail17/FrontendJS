@@ -3,6 +3,7 @@ import Paper from '@mui/material/Paper';
 import Chart from './Chart';
 import ReportNoti from './ReportNoti';
 import Report from './Report';
+import ChartBar from './ChartBar';
 
 export default function DashBoardContent(){
     return (
@@ -13,6 +14,9 @@ export default function DashBoardContent(){
         </Grid>
         <Grid item xs={12}>
             <Chart />
+        </Grid>
+        <Grid item xs={12}>
+            <ChartBar />
         </Grid>
         <Grid item xs={12}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>

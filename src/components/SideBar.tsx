@@ -22,7 +22,7 @@ export default function Sidebar(props: SidebarProps) {
   const { archives, description, social, title } = props;
 
   return (
-    <Grid item xs={12} md={4}>
+    <React.Fragment>
       <Paper id="about" elevation={0} sx={{ p: 2, backgroundImage: 'url(https://img.freepik.com/premium-vector/vector-abstract-gradiente-background-blue-wallpaper_901408-861.jpg)' }}>
         <Typography variant="h6" gutterBottom>
           {title}
@@ -54,6 +54,6 @@ export default function Sidebar(props: SidebarProps) {
           </Stack>
         </Link>
       ))}
-    </Grid>
+    </React.Fragment>
   );
 }

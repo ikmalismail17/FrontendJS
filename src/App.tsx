@@ -238,13 +238,17 @@ function AppContent() {
                 ))}
               </Grid>
               <Grid container spacing={5} sx={{ mt: 2 }}>
-                <MainSec></MainSec>
+                <Grid item xs={12} md={12}>
+                  <MainSec/>
+                </Grid>
+                <Grid item xs={12} md={12}>
                 <Sidebar
                   title={sidebar.title}
                   description={sidebar.description}
                   archives={sidebar.archives}
                   social={sidebar.social}
                 />
+                </Grid>
               </Grid>
             </main>
           </Container>

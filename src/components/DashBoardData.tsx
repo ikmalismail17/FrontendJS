@@ -191,7 +191,7 @@ export default function DashBoardReport(){
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          data: { id, password },
+          data: { id, password, action:'Delete depth data' },
         });
 
         console.log(response)

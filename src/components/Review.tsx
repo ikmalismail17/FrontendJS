@@ -74,11 +74,12 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
     try {
     console.log('Before Axios POST request');
     const response = await axios.post(
-      'http://localhost:3000/alarmreport',
+      `http://localhost:3000/alarmreport/${dataReport}`,
       {
         id: id,
         dataId: dataReport,
         message: alarmInfo.message,
+        action: 'Insert new report'
       },
       {
         headers: {

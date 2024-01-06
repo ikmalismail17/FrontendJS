@@ -56,6 +56,8 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
   interface DataItem {
     _id: number;
+    adminId: number;
+    dataId: number;
     admin: { 
       _id: number;
       firstname: string;
@@ -144,94 +146,106 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
       });
     };
 
-    const handleSubmitReport = async (reportId : number) => {
-
+    const handleSubmitReport = async (reportId: number) => {
       handleClosePublish();
       handleOpenBackDrop();
+    
       try {
-
-        const message = data.filter((item) => item._id === reportId)[0].message;
-        const adminFirstName = data.filter((item) => item._id === reportId)[0].admin[0].firstname;
-        const adminLastName = data.filter((item) => item._id === reportId)[0].admin[0].lastname;
-        const dataCm = data.filter((item) => item._id === reportId)[0].data[0].distanceCm;
-        const dataInch = data.filter((item) => item._id === reportId)[0].data[0].distanceInch;
-        const dataDate = data.filter((item) => item._id === reportId)[0].data[0].date;
-        const dataTime = data.filter((item) => item._id === reportId)[0].data[0].time;
-
+        const reportData = data.find((item) => item._id === reportId);
+    
+        if (!reportData || !reportData.data || reportData.data.length === 0) {
+          // Handle the case where the data or data[0] is not found (deleted)
+          handleCloseBackDrop();
+          setColorModal('red');
+          setModalTitle('Error');
+          setSeverityAlert('error');
+          setModalMessage('Data not found or has been deleted');
+          handleOpenModal();
+          return;
+        }
+    
+        const {
+          message,
+          data: [{ distanceCm, distanceInch, date, time }],
+        } = reportData;
+    
         let allEmailsSuccessful = true;
-
+    
         // Send emails with pre-defined subject and text
         for (const to of toEmails) {
-          const response = await axios.post(`http://localhost:3000/sendemail/${reportId}`, {
-            to,
-            subject,
-            message: message,
-            name : `${adminFirstName} ${adminLastName}`,
-            dataCm : dataCm,
-            dataInch : dataInch,
-            dataDate : dataDate,
-            dataTime : dataTime,
-            id : id,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
+          const response = await axios.post(
+            `http://localhost:3000/sendemail/${reportId}`,
+            {
+              to,
+              subject,
+              message,
+              dataCm: distanceCm || 'No data!',
+              dataInch: distanceInch || 'No data!',
+              dataDate: date || 'No data!',
+              dataTime: time || 'No data!',
+              id,
+              action: `Send report data to ${to}`,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
-          }
           );
-
+    
           if (response.status !== 200) {
             allEmailsSuccessful = false;
             break; // exit the loop if one email fails
           }
         }
-
+    
         if (allEmailsSuccessful) {
           handleCloseBackDrop();
           setColorModal('green');
           setSeverityAlert('success');
-          setModalTitle("Success");
-          setModalMessage("Report sent successfully");
+          setModalTitle('Success');
+          setModalMessage('Report sent successfully');
           handleOpenModal();
         }
-
       } catch (error) {
         const errorAxios = error as AxiosError;
         console.error('Error sending emails:', errorAxios);
-
+    
         handleCloseBackDrop();
-
-        // Check if the error is due to unauthorized access (wrong password)
-        if (errorAxios.response && errorAxios.response.status === 401) {
-          console.log('Token not provided');
-          setColorModal('red');
-          setModalTitle("Error");
-          setSeverityAlert('error');
-          setModalMessage("Token not provided");
-          handleOpenModal();
-
-        }else if (errorAxios.response && errorAxios.response.status === 501) {
-          console.log('Invalid Token');
-          setColorModal('red');
-          setModalTitle("Error");
-          setSeverityAlert('error');
-          setModalMessage("Invalid Token");
-          handleOpenModal();
-
-        }else if (errorAxios.response && errorAxios.response.status === 601) {
-          console.log('Error sending email');
-          setColorModal('red');
-          setModalTitle("Error");
-          setSeverityAlert('error');
-          setModalMessage("Error sending email");
-          handleOpenModal();
-          
-        }else if (errorAxios.response && errorAxios.response.status === 701) {
+    
+        // Handle different error scenarios
+        if (errorAxios.response) {
+          const { status } = errorAxios.response;
+    
+          if (status === 401) {
+            console.log('Token not provided');
+            setColorModal('red');
+            setModalTitle('Error');
+            setSeverityAlert('error');
+            setModalMessage('Token not provided');
+            handleOpenModal();
+          } else if (status === 501) {
+            console.log('Invalid Token');
+            setColorModal('red');
+            setModalTitle('Error');
+            setSeverityAlert('error');
+            setModalMessage('Invalid Token');
+            handleOpenModal();
+          } else if (status === 601) {
+            console.log('Error sending email');
+            setColorModal('red');
+            setModalTitle('Error');
+            setSeverityAlert('error');
+            setModalMessage('Error sending email');
+            handleOpenModal();
+          }
+        } else {
           console.log('Internal server error');
-          
         }
       }
     };
+    
+    
 
     const subjectEmail = [
       {
@@ -267,7 +281,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          data: { id, password },
+          data: { id, password, action: 'Delete report data' },
         });
 
         console.log(response);
@@ -526,16 +540,24 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                           <TableBody>
                           <TableRow>
                               <TableCell><strong>Admin Id</strong></TableCell>
-                              <TableCell>{item.admin[0]._id}</TableCell>
+                              <TableCell>{item.adminId}</TableCell>
                           </TableRow>
-                          <TableRow>
-                              <TableCell><strong>Admin Name</strong></TableCell>
-                              <TableCell>{`${item.admin[0].firstname} ${item.admin[0].lastname}`}</TableCell>
-                          </TableRow>
-                          <TableRow>
-                              <TableCell><strong>Admin Email</strong></TableCell>
-                              <TableCell>{item.admin[0].email}</TableCell>
-                          </TableRow>
+                            {item.admin && item.admin.length > 0 ? (
+                            <>
+                              <TableRow>
+                                <TableCell><strong>Admin Name</strong></TableCell>
+                                <TableCell>{item.admin[0].firstname === null && item.admin[0].lastname === null ? 'No data!' : `${item.admin[0].firstname} ${item.admin[0].lastname}`}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                  <TableCell><strong>Admin Email</strong></TableCell>
+                                  <TableCell>{item.admin[0].email === null ? 'No data!' : item.admin[0].email}</TableCell>
+                              </TableRow>
+                            </>
+                          ) : (
+                            <TableRow>
+                              <TableCell colSpan={2} sx={{ color: 'red' }}><strong>No data available for this Admin Id!</strong></TableCell>
+                            </TableRow>
+                          )}
                           </TableBody>
                       </Table>
                       </TableContainer>
@@ -553,24 +575,32 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                           <TableBody>
                           <TableRow>
                               <TableCell><strong>Data Id</strong></TableCell>
-                              <TableCell>{item.data[0]._id}</TableCell>
+                              <TableCell>{item.dataId}</TableCell>
                           </TableRow>
-                          <TableRow>
+                            {item.data && item.data.length > 0 ? (
+                          <>
+                            <TableRow>
                               <TableCell><strong>Distance in Cm</strong></TableCell>
-                              <TableCell>{item.data[0].distanceCm}</TableCell>
-                          </TableRow>
-                          <TableRow>
+                              <TableCell>{item.data[0].distanceCm || 'No data!'}</TableCell>
+                            </TableRow>
+                            <TableRow>
                               <TableCell><strong>Distance in Inch</strong></TableCell>
-                              <TableCell>{item.data[0].distanceInch}</TableCell>
-                          </TableRow>
-                          <TableRow>
+                              <TableCell>{item.data[0].distanceInch || 'No data!'}</TableCell>
+                            </TableRow>
+                            <TableRow>
                               <TableCell><strong>Date</strong></TableCell>
-                              <TableCell>{item.data[0].date}</TableCell>
-                          </TableRow>
-                          <TableRow>
+                              <TableCell>{item.data[0].date || 'No data!'}</TableCell>
+                            </TableRow>
+                            <TableRow>
                               <TableCell><strong>Time</strong></TableCell>
-                              <TableCell>{item.data[0].time}</TableCell>
+                              <TableCell>{item.data[0].time || 'No data!'}</TableCell>
+                            </TableRow>
+                          </>
+                        ) : (
+                          <TableRow>
+                            <TableCell colSpan={2} sx={{ color:'red' }}><strong>No data available for this Data Id!</strong></TableCell>
                           </TableRow>
+                        )}
                           </TableBody>
                       </Table>
                       </TableContainer>
@@ -815,18 +845,22 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                         </TableRow>
                         </TableHead>
                         <TableBody>
-                        <TableRow>
-                            <TableCell><strong>Admin Id</strong></TableCell>
-                            <TableCell>{item.admin[0]._id}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell><strong>Admin Name</strong></TableCell>
-                            <TableCell>{`${item.admin[0].firstname} ${item.admin[0].lastname}`}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell><strong>Admin Email</strong></TableCell>
-                            <TableCell>{item.admin[0].email}</TableCell>
-                        </TableRow>
+                        {item.admin && item.admin.length > 0 ? (
+                            <>
+                              <TableRow>
+                                <TableCell><strong>Admin Name</strong></TableCell>
+                                <TableCell>{item.admin[0].firstname === null && item.admin[0].lastname === null ? 'No data!' : `${item.admin[0].firstname} ${item.admin[0].lastname}`}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                  <TableCell><strong>Admin Email</strong></TableCell>
+                                  <TableCell>{item.admin[0].email === null ? 'No data!' : item.admin[0].email}</TableCell>
+                              </TableRow>
+                            </>
+                          ) : (
+                            <TableRow>
+                              <TableCell colSpan={2}sx={{ color:'red' }}><strong>No data available for this Admin Id!</strong></TableCell>
+                            </TableRow>
+                          )}
                         </TableBody>
                     </Table>
                     </TableContainer>
@@ -844,24 +878,32 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
                         <TableBody>
                         <TableRow>
                             <TableCell><strong>Data Id</strong></TableCell>
-                            <TableCell>{item.data[0]._id}</TableCell>
+                            <TableCell>{item.dataId}</TableCell>
                         </TableRow>
-                        <TableRow>
+                        {item.data && item.data.length > 0 ? (
+                        <>
+                          <TableRow>
                             <TableCell><strong>Distance in Cm</strong></TableCell>
-                            <TableCell>{item.data[0].distanceCm}</TableCell>
-                        </TableRow>
-                        <TableRow>
+                            <TableCell>{item.data[0].distanceCm || 'No data!'}</TableCell>
+                          </TableRow>
+                          <TableRow>
                             <TableCell><strong>Distance in Inch</strong></TableCell>
-                            <TableCell>{item.data[0].distanceInch}</TableCell>
-                        </TableRow>
-                        <TableRow>
+                            <TableCell>{item.data[0].distanceInch || 'No data!'}</TableCell>
+                          </TableRow>
+                          <TableRow>
                             <TableCell><strong>Date</strong></TableCell>
-                            <TableCell>{item.data[0].date}</TableCell>
-                        </TableRow>
-                        <TableRow>
+                            <TableCell>{item.data[0].date || 'No data!'}</TableCell>
+                          </TableRow>
+                          <TableRow>
                             <TableCell><strong>Time</strong></TableCell>
-                            <TableCell>{item.data[0].time}</TableCell>
+                            <TableCell>{item.data[0].time || 'No data!'}</TableCell>
+                          </TableRow>
+                        </>
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={2} sx={{ color:'red' }}><strong>No data available for this Data Id!</strong></TableCell>
                         </TableRow>
+                      )}
                         </TableBody>
                     </Table>
                     </TableContainer>

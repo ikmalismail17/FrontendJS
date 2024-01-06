@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer, Tooltip, AreaChart, Area, Legend } from 'recharts';
 import Title from './Title';
 import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
@@ -53,7 +53,34 @@ export default function Chart() {
 
   React.useEffect (() => {
     fetchData();
+    const interval = setInterval(() => {
+      fetchData();
+    }, 10000);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
+
+  const targetDate = '09/12/2023';
+  const filteredData = data.filter(entry => entry.date === targetDate);
+
+  const preferredData = Object.values(filteredData).map(entry => ({
+    time: entry.time,
+    Cm: entry.distanceCm,
+    Inch: entry.distanceInch,
+  }));
+
+  // Get today's date
+// const today = new Date();
+
+// // Get yesterday's date
+// const yesterday = new Date();
+// yesterday.setDate(today.getDate() - 1);
+
+// // Format the dates as strings in the 'en-GB' format
+// const todayFormatted = today.toLocaleDateString('en-GB');
+// const yesterdayFormatted = yesterday.toLocaleDateString('en-GB');
 
   return (
     <React.Fragment>
@@ -64,13 +91,14 @@ export default function Chart() {
           p: 2,
           display: 'flex',
           flexDirection: 'column',
-          height: 240,
+          height: 300,
           }}
         >
         <Title>Today</Title>
         <ResponsiveContainer>
-          <LineChart
-            data={data}
+          <AreaChart
+            data={preferredData}
+            height={300}
             margin={{
               top: 16,
               right: 16,
@@ -78,6 +106,16 @@ export default function Chart() {
               left: 24,
             }}
           >
+            <defs>
+              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+              </linearGradient>
+              <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
             <XAxis
               dataKey="time"
               stroke={theme.palette.text.secondary}
@@ -97,18 +135,14 @@ export default function Chart() {
                   ...theme.typography.body1,
                 }}
               >
-                Depth (cm)
+                Depth
               </Label>
             </YAxis>
-            <Line
-              isAnimationActive={true}
-              type="monotone"
-              dataKey="distanceCm"
-              stroke={theme.palette.primary.main}
-              dot={true}
-            />
+            <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" dot={true} />
+            <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" dot={true} />
             <Tooltip />
-          </LineChart>
+            <Legend />
+          </AreaChart>
         </ResponsiveContainer>
         </Paper>
         </Grid>
@@ -118,13 +152,14 @@ export default function Chart() {
           p: 2,
           display: 'flex',
           flexDirection: 'column',
-          height: 240,
+          height: 300,
           }}
         >
-        <Title>Today</Title>
+        <Title>Yesterday</Title>
         <ResponsiveContainer>
-          <LineChart
-            data={data}
+          <AreaChart
+            data={preferredData}
+            height={300}
             margin={{
               top: 16,
               right: 16,
@@ -132,6 +167,16 @@ export default function Chart() {
               left: 24,
             }}
           >
+            <defs>
+              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+              </linearGradient>
+              <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
             <XAxis
               dataKey="time"
               stroke={theme.palette.text.secondary}
@@ -151,18 +196,14 @@ export default function Chart() {
                   ...theme.typography.body1,
                 }}
               >
-                Depth (Inch)
+                Depth
               </Label>
             </YAxis>
-            <Line
-              isAnimationActive={false}
-              type="monotone"
-              dataKey="distanceInch"
-              stroke={theme.palette.primary.main}
-              dot={true}
-            />
+            <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" dot={true} />
+            <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" dot={true} />
             <Tooltip />
-          </LineChart>
+            <Legend />
+          </AreaChart>
         </ResponsiveContainer>
         </Paper>
         </Grid>

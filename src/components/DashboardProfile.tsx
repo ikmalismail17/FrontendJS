@@ -267,7 +267,7 @@ export default function DashBoardContent(){
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          data: { id, newPassword },
+          data: { id, password: newPassword },
         });
 
         console.log(response);
