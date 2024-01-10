@@ -16,7 +16,7 @@ const SelectedIndexContext = createContext<SelectedIndexContextValue | undefined
 
 export const SelectedIndexProvider: React.FC<SelectedIndexContextProps>= ({ children }) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [isAnimationOn, setIsAnimationOn] = useState<boolean>(true); // Set default value
+  const [isAnimationOn, setIsAnimationOn] = useState<boolean>(false); // Set default value
 
   const setIndexByRoute = (route: string) => {
     // Logic to map route to index
