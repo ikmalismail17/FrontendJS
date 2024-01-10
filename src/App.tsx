@@ -21,7 +21,7 @@ import DashBoardContent from "./components/DashBoardContent";
 import DashBoardData from "./components/DashBoardData";
 import DashboardAlarm from "./components/DashboardAlarm";
 import DashboardProfile from "./components/DashboardProfile";
-import DashBoardReport from "./components/DashboardProfile";
+import DashBoardReport from "./components/DashboardReport";
 import DashBoardLog from "./components/DashboardLog";
 import { useAuth } from "./hooks/AuthContext";
 import React from "react";
