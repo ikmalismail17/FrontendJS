@@ -174,7 +174,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
         // Send emails with pre-defined subject and text
         for (const to of toEmails) {
           const response = await axios.post(
-            `http://localhost:3000/sendemail/${reportId}`,
+            `https://rivdepmonbackend.vercel.app/sendemail/${reportId}`,
             {
               to,
               subject,
@@ -277,7 +277,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     const handleDelete = async (dataId: number) => {
       try {
         console.log('Before Axios DELETE request');
-        const response = await axios.delete(`http://localhost:3000/reportdelete/${dataId}`, {
+        const response = await axios.delete(`https://rivdepmonbackend.vercel.app/reportdelete/${dataId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -378,7 +378,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     //calling report data
     const fetchData = () => {
     // Fetch data from Node.js server
-    fetch('http://localhost:3000/displayreport')
+    fetch('https://rivdepmonbackend.vercel.app/displayreport')
         .then((response) => {
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.status}`);

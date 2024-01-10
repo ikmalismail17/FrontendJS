@@ -164,7 +164,7 @@ export default function DashBoardProfile(){
       try {
         console.log('Before Axios POST request');
          await axios.post(
-          `http://localhost:3000/editprofile/${id}`,
+          `https://rivdepmonbackend.vercel.app/editprofile/${id}`,
           {
             firstname: editedAdminData.firstname,
             lastname: editedAdminData.lastname,
@@ -211,7 +211,7 @@ export default function DashBoardProfile(){
       try {
         console.log('Before Axios POST request');
         const response = await axios.post(
-          `http://localhost:3000/changepassword/${id}`,
+          `https://rivdepmonbackend.vercel.app/changepassword/${id}`,
           {
             oldPassword: oldPassword,
             newPassword: newPassword,
@@ -263,7 +263,7 @@ export default function DashBoardProfile(){
     const handleDeleteGuest = async (guestId: number) => {
       try {
         console.log('Before Axios DELETE request');
-        const response = await axios.delete(`http://localhost:3000/guestdelete/${guestId}`, {
+        const response = await axios.delete(`https://rivdepmonbackend.vercel.app/guestdelete/${guestId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -333,7 +333,7 @@ export default function DashBoardProfile(){
     // Fetch data from Node.js server
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/admininfo/'+id);
+        const response = await fetch('https://rivdepmonbackend.vercel.app/admininfo/'+id);
 
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
@@ -351,7 +351,7 @@ export default function DashBoardProfile(){
     // Fetch data from Node.js server
     const fetchDataGuest = async () => {
       try {
-        const response = await fetch('http://localhost:3000/guestinfo');
+        const response = await fetch('https://rivdepmonbackend.vercel.app/guestinfo');
 
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
@@ -375,7 +375,7 @@ export default function DashBoardProfile(){
       try {
         console.log('Before Axios POST request');
         await axios.post(
-          'http://localhost:3000/addnewguest',
+          'https://rivdepmonbackend.vercel.app/addnewguest',
           {
             firstname: guestData.firstname,
             key: guestData.key,

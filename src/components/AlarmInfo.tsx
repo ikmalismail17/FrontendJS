@@ -35,7 +35,7 @@ export default function AddressForm({ onFormFilled, onFormUnfilled }: AddressFor
 
   useEffect(() => {
     // Fetch data from Node.js server
-    fetch('http://localhost:3000/admininfo/' + id)
+    fetch('https://rivdepmonbackend.vercel.app/admininfo/' + id)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);

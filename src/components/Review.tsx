@@ -74,7 +74,7 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
     try {
     console.log('Before Axios POST request');
     const response = await axios.post(
-      `http://localhost:3000/alarmreport/${dataReport}`,
+      `https://rivdepmonbackend.vercel.app/alarmreport/${dataReport}`,
       {
         id: id,
         dataId: dataReport,
@@ -116,7 +116,7 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
 
   React.useEffect(() => {
     // Fetch data from Node.js server
-    fetch('http://localhost:3000/admininfo/' + id)
+    fetch('https://rivdepmonbackend.vercel.app/admininfo/' + id)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);

@@ -237,7 +237,7 @@ export default function Dashboard(props: DashboardProps) {
     // Fetch data from Node.js server
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/admininfo/' + id);
+        const response = await fetch('https://rivdepmonbackend.vercel.app/admininfo/' + id);
 
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);

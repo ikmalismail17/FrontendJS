@@ -159,7 +159,7 @@ export default function DashBoardData(){
 
   const fetchData = () => {
     // Fetch data from Node.js server
-    fetch('http://localhost:3000/datadisplay')
+    fetch('https://rivdepmonbackend.vercel.app/datadisplay')
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
@@ -187,7 +187,7 @@ export default function DashBoardData(){
     const handleDelete = async (dataId: number) => {
       try {
         console.log('Before Axios DELETE request');
-        const response = await axios.delete(`http://localhost:3000/datadelete/${dataId}`, {
+        const response = await axios.delete(`https://rivdepmonbackend.vercel.app/datadelete/${dataId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

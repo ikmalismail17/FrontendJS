@@ -45,7 +45,7 @@ export default function DashBoardLog(){
 
     const fetchData = () => {
         // Fetch data from Node.js server
-        fetch('http://localhost:3000/logdisplay')
+        fetch('https://rivdepmonbackend.vercel.app/logdisplay')
         .then((response) => {
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.status}`);

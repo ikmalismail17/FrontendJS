@@ -47,7 +47,7 @@ export default function PaymentForm({onFormFilled}: PaymentFormProps) {
       
       useEffect(() => {
         //handle single data search from backend
-        fetch('http://localhost:3000/datareport/' + dataReport)
+        fetch('https://rivdepmonbackend.vercel.app/datareport/' + dataReport)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`Network response was not ok: ${response.status}`);

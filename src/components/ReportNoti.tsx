@@ -41,7 +41,7 @@ export default function Deposits() {
 
   const fetchReport = () => {
       // Fetch data from Node.js server
-      fetch('http://localhost:3000/displayreport')
+      fetch('https://rivdepmonbackend.vercel.app/displayreport')
       .then((response) => {
       if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
@@ -58,7 +58,7 @@ export default function Deposits() {
 
   const fetchData = () => {
     // Fetch data from Node.js server
-    fetch('http://localhost:3000/datadisplay')
+    fetch('https://rivdepmonbackend.vercel.app/datadisplay')
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
