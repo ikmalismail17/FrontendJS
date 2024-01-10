@@ -30,7 +30,7 @@ interface FormData {
   time: string,
 }
 
-export default function Checkout() {
+export default function DashboardAlarm() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [loading, setLoading] = React.useState(true); // Add loading state
     // const [isAddressFormFilled, setIsAddressFormFilled] = React.useState(false);

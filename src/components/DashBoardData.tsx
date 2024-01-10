@@ -84,7 +84,7 @@ interface State extends SnackbarOrigin {
     p: 4,
   };
 
-export default function DashBoardReport(){
+export default function DashBoardData(){
 
   const [data, setData] = useState<DataItem[]>([]);
   const [open, setOpen] = React.useState(false);

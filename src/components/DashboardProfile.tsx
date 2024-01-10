@@ -45,7 +45,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function DashBoardContent(){
+export default function DashBoardProfile(){
     const { id, token } = useAuth();
     const [data, setData] = useState<GuestData[]>([]);
     const [guestKey, setGuestKey] = useState<boolean>(false);
