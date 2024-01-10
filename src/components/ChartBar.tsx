@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer, Tooltip, BarChart, CartesianGrid, Legend, Bar, LabelList } from 'recharts';
+import { XAxis, YAxis, ResponsiveContainer, Tooltip, BarChart, CartesianGrid, Legend, Bar, LabelList } from 'recharts';
 import Title from './Title';
 import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
@@ -31,7 +30,6 @@ interface DataItem {
 }
 
 export default function Chart() {
-  const theme = useTheme();
   const [data, setData] = React.useState<DataItem[]>([]);
 
   const fetchData = () => {

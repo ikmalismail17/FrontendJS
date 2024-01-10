@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import {emphasize, styled} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
+// import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+// import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -43,8 +43,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import AppBar from '@mui/material/AppBar';
 import Drawer from '@mui/material/Drawer';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Popover from '@mui/material/Popover';
-import Stack from '@mui/material/Stack';
+// import Popover from '@mui/material/Popover';
+// import Stack from '@mui/material/Stack';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -63,7 +63,7 @@ function Copyright(props: any) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" to="https://mui.com/">
-        Your Website
+        RivDepMon
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}

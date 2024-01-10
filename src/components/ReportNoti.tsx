@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
-import Title from './Title';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { useTheme} from '@mui/material/styles';
 import Paper from '@mui/material/Paper';

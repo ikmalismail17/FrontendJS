@@ -57,9 +57,9 @@ export default function PaymentForm({onFormFilled}: PaymentFormProps) {
           .then((data) => {
             setFormData(data);
           })
-          .catch((error) => {
-            // console.error('Error fetching data:', error);
-          });
+          // .catch((error) => {
+          //   // console.error('Error fetching data:', error);
+          // });
       }, [dataReport]);
 
       //handle text input change

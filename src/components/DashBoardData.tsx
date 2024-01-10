@@ -13,7 +13,7 @@ import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
+// import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Alert, { AlertColor } from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
@@ -135,7 +135,7 @@ export default function DashBoardReport(){
   const handleCloseModal = () => setOpenModal(false);
 
   //Snackbar
-  const [snackMessage, setSnackMessage] = useState('' as string);
+  const [snackMessage] = useState('' as string);
   // const [snackSeverity, setSnackSeverity] = useState<AlertColor>('error');
   const [loading, setLoading] = useState(true); // Add loading state
   const theme = useTheme();
@@ -147,10 +147,10 @@ export default function DashBoardReport(){
 
   const { vertical, horizontal, openSnack } = stateSnack;
   
-  const handleOpenSnack = (newState: SnackbarOrigin) => () => {
-    // Update the state to open the Snackbar
-  setStateSnack({ ...newState, openSnack: true });
-  };
+  // const handleOpenSnack = (newState: SnackbarOrigin) => () => {
+  //   // Update the state to open the Snackbar
+  // setStateSnack({ ...newState, openSnack: true });
+  // };
 
   const handleCloseSnack = () => {
     // Update the state to close the Snackbar

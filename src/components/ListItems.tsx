@@ -34,7 +34,7 @@ export default function ListItems({adminData}: AdminDataProps){
 
   //handle list focus when click
   const handleListItemClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number,
   ) => {
     setSelectedIndex(index);

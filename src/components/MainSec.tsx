@@ -7,8 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
-import Title from './Title';
+// import Grid from '@mui/material/Grid';
+// import Title from './Title';
 import React from 'react';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -20,7 +20,7 @@ import Alert from '@mui/material/Alert';
 import MainPDF from './MainPDF';
 import Paper from '@mui/material/Paper';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+// import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 interface DataItem {
   _id: number;
@@ -94,13 +94,13 @@ function MainSec() {
   const [data, setData] = useState<DataItem[]>([]);
   const [value, setValue] = React.useState(1);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   const [valueSub, setValueSub] = React.useState(1);
 
-  const handleChangeSub = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChangeSub = (_event: React.SyntheticEvent, newValue: number) => {
     setValueSub(newValue);
   };
 

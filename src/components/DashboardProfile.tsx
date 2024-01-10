@@ -20,10 +20,10 @@ import { TableRow, TableCell, Table, TableContainer, TableHead, TableBody, IconB
 import React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PasswordIcon from '@mui/icons-material/Password';
+// import PasswordIcon from '@mui/icons-material/Password';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import Tooltip from '@mui/material/Tooltip';
-import { ObjectId } from 'mongodb';
+// import { ObjectId } from 'mongodb';
 
 interface GuestData {
   _id: number;
@@ -76,7 +76,7 @@ export default function DashBoardContent(){
     });
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [, setConfirmPassword] = useState('');
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setEditedAdminData({
@@ -163,7 +163,7 @@ export default function DashBoardContent(){
     const handleClickEditProfile = async() => {
       try {
         console.log('Before Axios POST request');
-        const response = await axios.post(
+         await axios.post(
           `http://localhost:3000/editprofile/${id}`,
           {
             firstname: editedAdminData.firstname,

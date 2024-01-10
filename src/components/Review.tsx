@@ -126,15 +126,15 @@ export default function Review({alarmInfo, dataInfo}: FormData) {
       .then((admindata) => {
         setAdminData(admindata);
       })
-      .catch((error) => {
-        // console.error('Error fetching data:', error);
+      // .catch((error) => {
+      //   // console.error('Error fetching data:', error);
 
-        // // Log additional information about the error
-        // console.error('Error details:', {
-        //   message: error.message,
-        //   stack: error.stack,
-        // });
-      });
+      //   // // Log additional information about the error
+      //   // console.error('Error details:', {
+      //   //   message: error.message,
+      //   //   stack: error.stack,
+      //   // });
+      // });
   }, []);
   
   //skeleton loading

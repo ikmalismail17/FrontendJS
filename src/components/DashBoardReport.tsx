@@ -25,7 +25,7 @@ import dayjs from 'dayjs';
 import Skeleton from '@mui/material/Skeleton';
 import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
-import DialogContentText from '@mui/material/DialogContentText';
+// import DialogContentText from '@mui/material/DialogContentText';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
@@ -344,7 +344,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     
     //handle accordion
     const handleChangeAccordian = (panel: string) => (
-        event: React.SyntheticEvent,
+        _event: React.SyntheticEvent,
         isExpanded: boolean
       ) => {
         setExpanded(isExpanded ? panel : false);

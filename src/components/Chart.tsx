@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer, Tooltip, AreaChart, Area, Legend } from 'recharts';
+import { XAxis, YAxis, Label, ResponsiveContainer, Tooltip, AreaChart, Area, Legend } from 'recharts';
 import Title from './Title';
 import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
