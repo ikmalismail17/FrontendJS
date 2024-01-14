@@ -96,7 +96,7 @@ export default function DashboardAlarm() {
             ) : (
               <> 
               <Typography component="h1" variant="h4" align="center">
-                Notifications Progress
+                Report Progress
               </Typography>
               </>
             )}

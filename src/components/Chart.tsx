@@ -116,15 +116,10 @@ export default function Chart() {
                 <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
               </linearGradient>
             </defs>
-            <XAxis
-              dataKey="time"
-              stroke={theme.palette.text.secondary}
-              style={theme.typography.body2}
+            <XAxis dataKey="time" stroke={theme.palette.text.secondary} style={theme.typography.body2}
             >
             </XAxis>
-            <YAxis
-              stroke={theme.palette.text.secondary}
-              style={theme.typography.body2}
+            <YAxis stroke={theme.palette.text.secondary} style={theme.typography.body2}
             >
               <Label
                 angle={270}

@@ -14,7 +14,6 @@ export default function DatePicker({onDateChange }: DateProps) {
 
     const handleDateChange = (date: Date | null) => {
         onDateChange(date);
-        // console.log(dayjs(date).format('DD/MM/YYYY')); // Console log the selected date in 'DD/MM/YYYY' format
     };
 
     return (

@@ -20,6 +20,7 @@ import Alert from '@mui/material/Alert';
 import MainPDF from './MainPDF';
 import Paper from '@mui/material/Paper';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import dayjs from 'dayjs';
 // import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 interface DataItem {
@@ -93,6 +94,7 @@ function a11yProps(index: number) {
 function MainSec() {
   const [data, setData] = useState<DataItem[]>([]);
   const [value, setValue] = React.useState(1);
+  const [isHighDepth, setIsHighDepth] = React.useState(false);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -132,11 +134,24 @@ useEffect(() => {
     }
   }, []);
 
+  const dateUI = new Date();
+  console.log(dayjs(dateUI).format('MM/DD/YYYY'));
+
+  const hasHighDepth = data
+  .slice()
+  .reverse()
+  .some((item) => {
+    return dayjs(item.date, 'DD/MM/YYYY').isSame(dayjs(dateUI).format('MM/DD/YYYY'), 'day') && item.distanceCm > 200;
+  });
+
+  setIsHighDepth(hasHighDepth);
+
   return (
     <React.Fragment>
-      <AlertSnack severity="warning" sx={{ mt: 2, mb: 2 }}>This system is under development. Please patiently wait...Thanks</AlertSnack>
-      <AlertSnack severity="info" sx={{ mt: 2, mb: 2 }}>There's no warning data detect. Please refer data below </AlertSnack>
-      <AlertSnack severity="error" sx={{ mt: 2, mb: 2 }}>Today's reading detect high depth at our river. Please refer data below </AlertSnack>
+      {isHighDepth ? 
+        <AlertSnack severity="error" sx={{ mt: 2, mb: 2 }}>Today's reading detect high depth at our river. Please refer data below </AlertSnack> : 
+        <AlertSnack severity="info" sx={{ mt: 2, mb: 2 }}>There's no warning data detect. Please refer data below </AlertSnack>
+      }
       <Box sx={{ width: '100%' }} >
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="scrollable" scrollButtons="auto">
