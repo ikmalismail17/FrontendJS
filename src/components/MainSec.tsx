@@ -134,17 +134,23 @@ useEffect(() => {
     }
   }, []);
 
-  const dateUI = new Date();
-  console.log(dayjs(dateUI).format('DD/MM/YYYY'));
+  useEffect(() => {
+    const dateUI = new Date();
+    console.log('Current Date:', dayjs(dateUI).format('MM/DD/YYYY'));
 
-  const hasHighDepth = data
-  .slice()
-  .reverse()
-  .some((item) => {
-    return dayjs(item.date, 'DD/MM/YYYY').isSame(dayjs(dateUI).format('MM/DD/YYYY'), 'day') && item.distanceCm > 200;
-  });
+    const hasHighDepth = data
+      .slice()
+      .reverse()
+      .some((item) => {
+        const itemDate = dayjs(item.date, 'DD/MM/YYYY').format('MM/DD/YYYY');
+        console.log('Checking Date:', itemDate);
+        console.log('Distance:', item.distanceCm);
+        return itemDate === dayjs(dateUI).format('MM/DD/YYYY') && item.distanceCm > 200;
+      });
 
-  setIsHighDepth(hasHighDepth);
+    console.log('Has High Depth:', hasHighDepth);
+    setIsHighDepth(hasHighDepth);
+  }, [data]);
 
   return (
     <React.Fragment>
