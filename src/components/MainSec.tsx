@@ -94,7 +94,7 @@ function a11yProps(index: number) {
 function MainSec() {
   const [data, setData] = useState<DataItem[]>([]);
   const [value, setValue] = React.useState(1);
-  const [isHighDepth, setIsHighDepth] = React.useState(false);
+  const [isHighDepth] = React.useState(false);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -137,14 +137,14 @@ useEffect(() => {
   const dateUI = new Date();
   console.log(dayjs(dateUI).format('MM/DD/YYYY'));
 
-  const hasHighDepth = data
-  .slice()
-  .reverse()
-  .some((item) => {
-    return dayjs(item.date, 'DD/MM/YYYY').isSame(dayjs(dateUI).format('MM/DD/YYYY'), 'day') && item.distanceCm > 200;
-  });
+  // const hasHighDepth = data
+  // .slice()
+  // .reverse()
+  // .some((item) => {
+  //   return dayjs(item.date, 'DD/MM/YYYY').isSame(dayjs(dateUI).format('MM/DD/YYYY'), 'day') && item.distanceCm > 200;
+  // });
 
-  setIsHighDepth(hasHighDepth);
+  // setIsHighDepth(hasHighDepth);
 
   return (
     <React.Fragment>
