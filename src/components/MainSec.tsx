@@ -136,20 +136,16 @@ useEffect(() => {
 
   useEffect(() => {
     const dateUI = new Date();
-    console.log('Current Date:', dayjs(dateUI).format('DD/MM/YYYY'));
 
     const hasHighDepth = data
       .slice()
       .reverse()
-      .some(() => {
-        // const itemDate = dayjs(item.date).format('DD/MM/YYYY');
-        // return itemDate === dayjs(dateUI).format('DD/MM/YYYY') && item.distanceCm > 200;
-        const itemDate = dayjs("15/01/2024", 'DD/MM/YYYY').format('DD/MM/YYYY');
-        console.log('Item Date:', itemDate);
-        return itemDate === "15/01/2024" && 201 > 200;
+      .some((item) => {
+        const itemDate = dayjs(item.date, 'DD/MM/YYYY').format('DD/MM/YYYY');
+        return itemDate === dayjs(dateUI).format('DD/MM/YYYY') && item.distanceCm > 200;
       });
-      console.log('Has High Depth:', hasHighDepth);
-    setIsHighDepth(hasHighDepth);
+
+      setIsHighDepth(hasHighDepth);
   }, [data]);
 
   return (
