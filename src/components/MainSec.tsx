@@ -136,19 +136,16 @@ useEffect(() => {
 
   useEffect(() => {
     const dateUI = new Date();
-    console.log('Current Date:', dayjs(dateUI).format('MM/DD/YYYY'));
+    console.log('Current Date:', dayjs(dateUI).format('DD/MM/YYYY'));
 
     const hasHighDepth = data
       .slice()
       .reverse()
       .some((item) => {
         const itemDate = dayjs(item.date, 'DD/MM/YYYY').format('MM/DD/YYYY');
-        console.log('Checking Date:', itemDate);
-        console.log('Distance:', item.distanceCm);
         return itemDate === dayjs(dateUI).format('MM/DD/YYYY') && item.distanceCm > 200;
       });
 
-    console.log('Has High Depth:', hasHighDepth);
     setIsHighDepth(hasHighDepth);
   }, [data]);
 
