@@ -4,7 +4,7 @@ import  MainSec  from "./components/MainSec";
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import {ThemeProvider, useTheme } from '@mui/material/styles';
@@ -72,7 +72,8 @@ const featuredPosts = [
 const sidebar = {
   title: 'About',
   description:
-    'My name is Ikmal Ismail. Last year student in Bachelor of Science Computer. This is my final year project',
+    `My name is Ikmal Ismail. Last year student in Bachelor of Science Computer. This is my final year project using ${<strong>React JS</strong>}, ${<strong>Node JS</strong>}, ${<strong>Express JS</strong>} and ${<strong>MongoDB</strong>}.\n\n` +
+    `This system is not actually measuring the depth of the river on-site. It measuring the depth of the river using simulator that act as depth of the river`,
   archives: [
     { title: 'March 2020', url: '#' },
     { title: 'February 2020', url: '#' },
@@ -87,9 +88,9 @@ const sidebar = {
     { title: 'April 1999', url: '#' },
   ],
   social: [
-    { name: 'GitHub', icon: GitHubIcon },
-    { name: 'Twitter', icon: TwitterIcon },
-    { name: 'Facebook', icon: FacebookIcon },
+    { name: 'LinkedIn', icon: LinkedInIcon, link:'https://www.linkedin.com/in/muhammad-ikmal-ismail-243614155/' },
+    { name: 'Twitter', icon: TwitterIcon, link:'https://twitter.com/1686Ikmal' },
+    { name: 'Facebook', icon: FacebookIcon, link:'https://www.facebook.com/ikmalismail17'},
   ],
 };
 
