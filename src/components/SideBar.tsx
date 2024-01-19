@@ -48,6 +48,7 @@ export default function Sidebar(props: SidebarProps) {
           </Typography>
             {social.map((network) => (
               <Link
+                underline='none'
                 display="block"
                 variant="body1"
                 href={network.link}

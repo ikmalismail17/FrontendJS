@@ -72,7 +72,7 @@ const featuredPosts = [
 const sidebar = {
   title: 'About',
   description1:
-    `My name is Ikmal Ismail. Last year student in Bachelor of Science Computer. This is my final year project using React JS, Node JS, Express JS and MongoDB.\n\n`,
+    `My name is Ikmal Ismail. Last year student in Bachelor of Science Computer. This is my final year project using **React JS**, **Node JS**, **Express JS**, **MongoDB** and **Material UI**.\n\n`,
   description2:
     `This system is not actually measuring the depth of the river on-site. It measuring the depth of the river using simulator that act as depth of the river.`,
   archives: [
