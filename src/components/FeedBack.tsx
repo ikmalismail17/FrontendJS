@@ -20,7 +20,7 @@ export default function Footer() {
           flexDirection: 'column',
           }}
         >
-        <Box sx={{ my:2, mx:3 }}>
+        <Box sx={{ my:2, mx:5 }}>
           <Title>FEEDBACK</Title>
           <Typography variant="subtitle1" color="text.secondary" component="p">
             Please give us feedback to improve our website!
@@ -30,6 +30,7 @@ export default function Footer() {
             id="name"
             name='name'
             variant="outlined"
+            fullWidth
             placeholder='Insert your name for reference'
           />
           <Typography variant="subtitle1" color="text.secondary" component="p" sx={{ mt:1 }}>Feedback</Typography>
@@ -39,6 +40,7 @@ export default function Footer() {
             multiline
             rows={4}
             variant="outlined"
+            fullWidth
             placeholder='Insert your feedback here and let me know what to improve!'
           />
         </Box>
