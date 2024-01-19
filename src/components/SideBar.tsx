@@ -11,7 +11,8 @@ interface SidebarProps {
     url: string;
     title: string;
   }>;
-  description: string;
+  description1: string;
+  description2: string;
   social: ReadonlyArray<{
     icon: React.ElementType;
     name: string;
@@ -21,7 +22,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar(props: SidebarProps) {
-  const { description, social, title } = props;
+  const { description1, description2, social, title } = props;
 
   return (
     <React.Fragment>
@@ -31,7 +32,8 @@ export default function Sidebar(props: SidebarProps) {
           <Typography variant="h6" gutterBottom sx={{ color:'black' }}>
             {title}
           </Typography>
-          <Typography sx={{ color:'black' }}>{description}</Typography>
+          <Typography sx={{ color:'black' }}>{description1}</Typography>
+          <Typography sx={{ color:'black', mt:1 }}>{description2}</Typography>
           </Grid>
           <Grid item xs={12} sm={4} md={4}>
           <Paper

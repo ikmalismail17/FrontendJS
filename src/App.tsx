@@ -71,8 +71,9 @@ const featuredPosts = [
 
 const sidebar = {
   title: 'About',
-  description:
-    `My name is Ikmal Ismail. Last year student in Bachelor of Science Computer. This is my final year project using ${<strong>React JS</strong>}, ${<strong>Node JS</strong>}, ${<strong>Express JS</strong>} and ${<strong>MongoDB</strong>}.\n\n` +
+  description1:
+    `My name is Ikmal Ismail. Last year student in Bachelor of Science Computer. This is my final year project using React JS, Node JS, Express JS and MongoDB.\n\n`,
+  description2:
     `This system is not actually measuring the depth of the river on-site. It measuring the depth of the river using simulator that act as depth of the river`,
   archives: [
     { title: 'March 2020', url: '#' },
@@ -250,7 +251,8 @@ function AppContent() {
                 <Grid item xs={12} md={12}>
                 <Sidebar
                   title={sidebar.title}
-                  description={sidebar.description}
+                  description1={sidebar.description1}
+                  description2={sidebar.description2}
                   archives={sidebar.archives}
                   social={sidebar.social}
                 />
