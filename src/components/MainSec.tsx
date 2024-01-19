@@ -154,7 +154,7 @@ useEffect(() => {
         <AlertSnack severity="error" sx={{ mt: 2, mb: 2 }}>Today's reading detect high depth at our river. Please refer data below </AlertSnack> : 
         <AlertSnack severity="info" sx={{ mt: 2, mb: 2 }}>There's no warning data detect. Please refer data below </AlertSnack>
       }
-      <Box sx={{ width: '100%' }} >
+      <Box sx={{ width: '100%' }} id="tabledataoutside">
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="scrollable" scrollButtons="auto">
             <Tab label="VISUAL" {...a11yProps(0)} disabled sx={{ fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem', }}/>

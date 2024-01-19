@@ -74,7 +74,7 @@ const sidebar = {
   description1:
     `My name is Ikmal Ismail. Last year student in Bachelor of Science Computer. This is my final year project using React JS, Node JS, Express JS and MongoDB.\n\n`,
   description2:
-    `This system is not actually measuring the depth of the river on-site. It measuring the depth of the river using simulator that act as depth of the river`,
+    `This system is not actually measuring the depth of the river on-site. It measuring the depth of the river using simulator that act as depth of the river.`,
   archives: [
     { title: 'March 2020', url: '#' },
     { title: 'February 2020', url: '#' },
@@ -235,16 +235,16 @@ function AppContent() {
     default:
       mainContent = (
         <>
-          <Container maxWidth="lg" id="mainpost" >
+          <Container maxWidth="lg" id="mainpost">
             <Header title="Monitoring System" sections={sections} toggleColorMode={toggleColorMode} />
             <main>
               <MainFeaturedPost post={mainFeaturedPost}/>
-              <Grid container spacing={4} id="tabledataoutside">
+              <Grid container spacing={4}>
                 {featuredPosts.map((post) => (
                   <FeaturedPost key={post.title} post={post} />
                 ))}
               </Grid>
-              <Grid container spacing={5} sx={{ mt: 2 }} id="about">
+              <Grid container spacing={5} sx={{ mt: 2 }} >
                 <Grid item xs={12} md={12}>
                   <MainSec/>
                 </Grid>

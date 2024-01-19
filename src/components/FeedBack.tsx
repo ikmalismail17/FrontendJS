@@ -20,10 +20,10 @@ export default function Footer() {
           flexDirection: 'column',
           }}
         >
-        <Box sx={{ my:2, mx:5 }}>
-          <Title>FEEDBACK</Title>
+        <Box sx={{ my:2, mx:5 }} id="feedback">
+          <Title >FEEDBACK</Title>
           <Typography variant="subtitle1" color="text.secondary" component="p">
-            Please give us feedback to improve our website!
+            Please give us feedback to improve my website!
           </Typography>
           <Typography variant="subtitle1" color="text.secondary" component="p" sx={{ mt:1 }}>Name</Typography>
           <TextField

@@ -29,7 +29,7 @@ export default function Sidebar(props: SidebarProps) {
       <Paper className='selected-animation' elevation={0} sx={{ p: 2 }}>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={8} md={8}>
-          <Typography variant="h6" gutterBottom sx={{ color:'black' }}>
+          <Typography variant="h6" gutterBottom sx={{ color:'black' }} id="about">
             {title}
           </Typography>
           <Typography sx={{ color:'black' }}>{description1}</Typography>
