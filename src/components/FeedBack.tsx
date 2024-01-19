@@ -20,24 +20,28 @@ export default function Footer() {
           flexDirection: 'column',
           }}
         >
-        <Title>Feedback</Title>
-        <Typography variant="subtitle1" align="center" color="text.secondary" component="p">
-          Please give us feedback to improve our website!
-        </Typography>
-        <Typography variant="subtitle1" align="center" color="text.secondary" component="p">E-mail</Typography>
-        <TextField
-          id="email"
-          name='email'
-          variant="outlined"
-        />
-        <Typography variant="subtitle1" align="center" color="text.secondary" component="p">Feedback</Typography>
-        <TextField
-          id="feedback"
-          name='feedback'
-          multiline
-          rows={4}
-          variant="outlined"
-        />
+        <Box sx={{ my:2, mx:3 }}>
+          <Title>FEEDBACK</Title>
+          <Typography variant="subtitle1" color="text.secondary" component="p">
+            Please give us feedback to improve our website!
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary" component="p" sx={{ mt:1 }}>Name</Typography>
+          <TextField
+            id="name"
+            name='name'
+            variant="outlined"
+            placeholder='Insert your name for reference'
+          />
+          <Typography variant="subtitle1" color="text.secondary" component="p" sx={{ mt:1 }}>Feedback</Typography>
+          <TextField
+            id="feedback"
+            name='feedback'
+            multiline
+            rows={4}
+            variant="outlined"
+            placeholder='Insert your feedback here and let me know what to improve!'
+          />
+        </Box>
         </Paper>
       </Container>
     </Box>
