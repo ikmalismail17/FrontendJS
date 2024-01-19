@@ -233,7 +233,7 @@ function AppContent() {
     default:
       mainContent = (
         <>
-          <Container maxWidth="lg" id="mainpost">
+          <Container maxWidth="lg" id="mainpost" >
             <Header title="Monitoring System" sections={sections} toggleColorMode={toggleColorMode} />
             <main>
               <MainFeaturedPost post={mainFeaturedPost}/>

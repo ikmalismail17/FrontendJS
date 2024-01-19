@@ -4,7 +4,9 @@ import Container from '@mui/material/Container';
 // import Typography from '@mui/material/Typography';
 // import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
-
+import Title from './Title';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField'; // Import TextField component from MUI
 
 export default function Footer() {
 
@@ -18,7 +20,24 @@ export default function Footer() {
           flexDirection: 'column',
           }}
         >
-        Feedback section
+        <Title>Feedback</Title>
+        <Typography variant="subtitle1" align="center" color="text.secondary" component="p">
+          Please give us feedback to improve our website!
+        </Typography>
+        <Typography variant="subtitle1" align="center" color="text.secondary" component="p">E-mail</Typography>
+        <TextField
+          id="email"
+          name='email'
+          variant="outlined"
+        />
+        <Typography variant="subtitle1" align="center" color="text.secondary" component="p">Feedback</Typography>
+        <TextField
+          id="feedback"
+          name='feedback'
+          multiline
+          rows={4}
+          variant="outlined"
+        />
         </Paper>
       </Container>
     </Box>
