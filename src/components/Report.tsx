@@ -114,7 +114,7 @@ export default function Report() {
                 </StyledTableRow>
               ) : (
                 <>
-                {data.reverse().slice(0, 5).map((item, index) => (
+                {data.slice().reverse().slice(0, 5).map((item, index) => (
                   <StyledTableRow key={item._id}>
                     <StyledTableCell align='center'>{index + 1}</StyledTableCell>
                     <StyledTableCell align='center'>{item.distanceCm}</StyledTableCell>
