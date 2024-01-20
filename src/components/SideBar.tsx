@@ -27,9 +27,9 @@ export default function Sidebar(props: SidebarProps) {
   return (
     <React.Fragment>
       <Paper className='selected-animation' elevation={0} sx={{ p: 2 }}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} id="about">
           <Grid item xs={12} sm={8} md={8}>
-          <Typography variant="h6" gutterBottom sx={{ color:'black' }} id="about">
+          <Typography variant="h6" gutterBottom sx={{ color:'black' }}>
             {title}
           </Typography>
           <Typography sx={{ color:'black' }}>{description1}</Typography>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {emphasize, styled} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 // import MuiDrawer from '@mui/material/Drawer';
@@ -56,6 +56,8 @@ import { useSelectedIndex } from '../hooks/SelectIndexContext';
 import MotionPhotosOffIcon from '@mui/icons-material/MotionPhotosOff';
 import MotionPhotosAutoIcon from '@mui/icons-material/MotionPhotosAuto';
 import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
+import FeedbackIcon from '@mui/icons-material/Feedback';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, tableCellClasses } from '@mui/material';
 
 
 function Copyright(props: any) {
@@ -71,6 +73,32 @@ function Copyright(props: any) {
   );
 }
 
+interface DataItem {
+  _id: number;
+  name: string;
+  feedback: string;
+}
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
+
 const drawerWidth: number = 240;
 
 interface Props {
@@ -82,51 +110,6 @@ interface DashboardProps extends Props {
     dashboardContent:() => React.ReactNode;
     adminTitle: string;
 }
-
-// const AppBar = styled(MuiAppBar, {
-//   shouldForwardProp: (prop) => prop !== 'open',
-// })<AppBarProps>(({ theme, open }) => ({
-//   zIndex: theme.zIndex.drawer + 1,
-//   transition: theme.transitions.create(['width', 'margin'], {
-//     easing: theme.transitions.easing.sharp,
-//     duration: theme.transitions.duration.leavingScreen,
-//   }),
-//   ...(open && {
-//     marginLeft: drawerWidth,
-//     width: `calc(100% - ${drawerWidth}px)`,
-//     transition: theme.transitions.create(['width', 'margin'], {
-//       easing: theme.transitions.easing.sharp,
-//       duration: theme.transitions.duration.enteringScreen,
-//     }),
-//   }),
-// }));
-
-// old drawer
-// const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-//   ({ theme, open }) => ({
-//     '& .MuiDrawer-paper': {
-//       position: 'relative',
-//       whiteSpace: 'nowrap',
-//       width: drawerWidth,
-//       transition: theme.transitions.create('width', {
-//         easing: theme.transitions.easing.sharp,
-//         duration: theme.transitions.duration.enteringScreen,
-//       }),
-//       boxSizing: 'border-box',
-//       ...(!open && {
-//         overflowX: 'hidden',
-//         transition: theme.transitions.create('width', {
-//           easing: theme.transitions.easing.sharp,
-//           duration: theme.transitions.duration.leavingScreen,
-//         }),
-//         width: theme.spacing(7),
-//         [theme.breakpoints.up('sm')]: {
-//           width: theme.spacing(9),
-//         },
-//       }),
-//     },
-//   }),
-// );
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -161,6 +144,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 }) as typeof Chip;
 
 export default function Dashboard(props: DashboardProps) {
+  const [feedback, setData] = useState<DataItem[]>([]);
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const {toggleColorMode, dashboardContent, adminTitle} = props;
@@ -210,6 +194,16 @@ export default function Dashboard(props: DashboardProps) {
     setOpenDialog(false);
   };
 
+  const [openDialogFeedback, setOpenDialogFeedback] = React.useState(false);
+
+  const handleOpenFeedback = () => {
+    setOpenDialogFeedback(true);
+  };
+
+  const handleCloseFeedback = () => {
+    setOpenDialogFeedback(false);
+  };
+
   //Snackbar
   const [stateSnack, setStateSnack] = React.useState<State>({
     openSnack: false,
@@ -232,6 +226,35 @@ export default function Dashboard(props: DashboardProps) {
   localStorage.removeItem('loginSuccessMessage');
   };
 
+  //feedback
+  const fetchData = () => {
+    // Fetch data from Node.js server
+    fetch('https://rivdepmonbackend.vercel.app/feedbackdisplay')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }
+
+    useEffect(() => {
+        fetchData();
+
+        const refreshTimer = setInterval(fetchData, 1000);
+
+        return () => {
+        clearInterval(refreshTimer);
+        }
+    }, []);
+
+    //admin data
   useEffect(() => {
 
     // Fetch data from Node.js server
@@ -415,6 +438,12 @@ if (adminTitle === 'Data') {
                 Profile
               </MenuItem>
               <Divider />
+              <MenuItem onClick={() => { handleClosePop(); handleOpenFeedback();}}>
+                <ListItemIcon>
+                <FeedbackIcon />
+                </ListItemIcon>
+                Feedback
+              </MenuItem>
               <MenuItem onClick={() => { handleClosePop(); toggleColorMode();}}>
                 <ListItemIcon>
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
@@ -463,6 +492,41 @@ if (adminTitle === 'Data') {
             <Button onClick={handleLogout} autoFocus>
               Yes
             </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={openDialogFeedback}
+          onClose={handleCloseFeedback}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            List of Feedback
+          </DialogTitle>
+          <DialogContent>
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <StyledTableRow>
+                    <StyledTableCell align='center'>No</StyledTableCell>
+                    <StyledTableCell align='center'>Name</StyledTableCell>
+                    <StyledTableCell align='center'>Feedback</StyledTableCell>
+                  </StyledTableRow>
+                </TableHead>
+                <TableBody>
+                  {feedback.slice().reverse().map((item, index) => (
+                    <StyledTableRow key={item._id}>
+                      <StyledTableCell align='center'>{index + 1}</StyledTableCell>
+                      <StyledTableCell align='center'>{item.name}</StyledTableCell>
+                      <StyledTableCell align='center'>{item.feedback}</StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseFeedback}>Close</Button>
           </DialogActions>
         </Dialog>
         <Box
