@@ -7,6 +7,7 @@ import Paper from '@mui/material/Paper';
 import Title from './Title';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField'; // Import TextField component from MUI
+import { Button } from '@mui/material';
 
 export default function Footer() {
 
@@ -20,7 +21,7 @@ export default function Footer() {
           flexDirection: 'column',
           }}
         >
-        <Box sx={{ my:2, mx:5 }} id="feedback">
+        <Box sx={{ my:3, mx:5 }} id="feedback">
           <Title >FEEDBACK</Title>
           <Typography variant="subtitle1" color="text.secondary" component="p">
             Please give us feedback to improve my website!
@@ -43,6 +44,7 @@ export default function Footer() {
             fullWidth
             placeholder='Insert your feedback here and let me know what to improve!'
           />
+          <Button variant="contained" sx={{ mt:1, mb: 2 }}>Submit</Button>
         </Box>
         </Paper>
       </Container>
