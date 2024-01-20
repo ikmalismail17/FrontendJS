@@ -21,6 +21,7 @@ import MainPDF from './MainPDF';
 import Paper from '@mui/material/Paper';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import dayjs from 'dayjs';
+import Skeleton from '@mui/material/Skeleton';
 // import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 interface DataItem {
@@ -95,6 +96,7 @@ function MainSec() {
   const [data, setData] = useState<DataItem[]>([]);
   const [value, setValue] = React.useState(1);
   const [isHighDepth, setIsHighDepth] = React.useState(false);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -117,10 +119,12 @@ function MainSec() {
         return response.json();
       })
       .then((data) => {
+        setLoading(false);
         setData(data);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoading(false);
       });
   }
 
@@ -200,27 +204,44 @@ useEffect(() => {
           <Table size="small">
             <TableHead>
               <StyledTableRow>
-                <StyledTableCell>No</StyledTableCell>
-                <StyledTableCell>Distance in CM</StyledTableCell>
-                <StyledTableCell>DIstance in Inch</StyledTableCell>
-                <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell>Time</StyledTableCell>
-                <StyledTableCell align='center'>Alert</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("No")}</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Distance in CM")}</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Distance in Inch")}</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Date")}</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Time")}</StyledTableCell>
+                <StyledTableCell align='center'>{loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : ("Alert")}</StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {data.slice().reverse().slice(0, 10).map((item, index) => (
-                <StyledTableRow key={item._id}>
-                  <StyledTableCell>{index + 1}</StyledTableCell>
-                  <StyledTableCell>{item.distanceCm}</StyledTableCell>
-                  <StyledTableCell>{item.distanceInch}</StyledTableCell>
-                  <StyledTableCell>{item.date}</StyledTableCell>
-                  <StyledTableCell>{item.time}</StyledTableCell>
-                  <StyledTableCell align='center'>
-                    {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
+            {loading ? (
+                <StyledTableRow>
+                  <StyledTableCell colSpan={6} align='center'>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
+                    <Skeleton variant='text' animation="wave" sx={{ fontSize: '2rem' }}/>
                   </StyledTableCell>
                 </StyledTableRow>
-              ))}
+              ) : (
+                <>
+                {data.slice().reverse().slice(0, 10).map((item, index) => (
+                  <StyledTableRow key={item._id}>
+                    <StyledTableCell>{index + 1}</StyledTableCell>
+                    <StyledTableCell>{item.distanceCm}</StyledTableCell>
+                    <StyledTableCell>{item.distanceInch}</StyledTableCell>
+                    <StyledTableCell>{item.date}</StyledTableCell>
+                    <StyledTableCell>{item.time}</StyledTableCell>
+                    <StyledTableCell align='center'>
+                      {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
