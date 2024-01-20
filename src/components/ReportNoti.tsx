@@ -100,7 +100,7 @@ export default function ReportNoti() {
               Number of Data
             </Typography>
             <Typography variant="h2" sx={{ fontFamily: 'monospace', fontWeight: 700, color: theme.palette.primary.main }}>
-              {loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : (data.length)}
+              {loading ? (<Skeleton variant="rectangular" width="25%" height={50} animation="wave" />) : (data.length)}
             </Typography>
             <Typography color={theme.palette.primary.contrastText} sx={{ flex: 1, mt:1 }}>
               {loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : (`Latest data on ${data.slice().reverse()[0]?.date} at ${data.slice().reverse()[0]?.time}`)}
@@ -125,7 +125,7 @@ export default function ReportNoti() {
               Number of Report
             </Typography>
             <Typography variant="h2" sx={{ fontFamily: 'monospace', fontWeight: 700, color: theme.palette.primary.main }}>
-              {loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : (dataReport.length)}
+              {loading ? (<Skeleton variant="rectangular" width="25%" height={50} animation="wave" />) : (dataReport.length)}
             </Typography>
             <Typography color={theme.palette.primary.contrastText} sx={{ flex: 1, mt:1 }}>
               {loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : (`Latest report on ${dataReport.slice().reverse()[0]?.date} at ${dataReport.slice().reverse()[0]?.time}`)}
