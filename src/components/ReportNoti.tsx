@@ -5,6 +5,7 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { useTheme} from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import Skeleton from '@mui/material/Skeleton';
 
 interface ReportItem {
   _id: number;
@@ -34,10 +35,11 @@ interface DataItem {
   time: string;
 }
 
-export default function Deposits() {
+export default function ReportNoti() {
   const [dataReport, setDataReport] = React.useState<ReportItem[]>([]);
   const [data, setData] = React.useState<DataItem[]>([]);
   const theme  = useTheme();
+  const [loading, setLoading] = React.useState(true); // Add loading state
 
   const fetchReport = () => {
       // Fetch data from Node.js server
@@ -49,9 +51,11 @@ export default function Deposits() {
       return response.json();
       })
       .then((data) => {
+      setLoading(false);
       setDataReport(data);
       })
       .catch((error) => {
+      setLoading(false);
       console.error('Error fetching data:', error);
       });
   }
@@ -66,10 +70,12 @@ export default function Deposits() {
         return response.json();
       })
       .then((data) => {
+        setLoading(false);
         setData(data);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoading(false);
       });
   }
 
@@ -94,10 +100,10 @@ export default function Deposits() {
               Number of Data
             </Typography>
             <Typography variant="h2" sx={{ fontFamily: 'monospace', fontWeight: 700, color: theme.palette.primary.main }}>
-                {data.length}
+              {loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : (data.length)}
             </Typography>
             <Typography color={theme.palette.primary.contrastText} sx={{ flex: 1, mt:1 }}>
-                Latest report on {data.slice().reverse()[0]?.date} at {data.slice().reverse()[0]?.time}
+              {loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : (`Latest data on ${data.slice().reverse()[0]?.date} at ${data.slice().reverse()[0]?.time}`)}
             </Typography>
             <Link style={{ color:"inherit" }} to='/admindashboard/data'>
               <Typography sx={{ display:'flex' }}>
@@ -119,10 +125,10 @@ export default function Deposits() {
               Number of Report
             </Typography>
             <Typography variant="h2" sx={{ fontFamily: 'monospace', fontWeight: 700, color: theme.palette.primary.main }}>
-                {dataReport.length}
+              {loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : (dataReport.length)}
             </Typography>
             <Typography color={theme.palette.primary.contrastText} sx={{ flex: 1, mt:1 }}>
-                Latest report on {dataReport.slice().reverse()[0]?.date} at {dataReport.slice().reverse()[0]?.time}
+              {loading ? (<Skeleton sx={{ fontSize: '2rem' }} animation="wave" />) : (`Latest report on ${dataReport.slice().reverse()[0]?.date} at ${dataReport.slice().reverse()[0]?.time}`)}
             </Typography>
             <Link style={{ color:"inherit" }} to='/admindashboard/report'>
               <Typography sx={{ display:'flex' }}>

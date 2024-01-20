@@ -158,6 +158,7 @@ export default function DashBoardData(){
   };
 
   const fetchData = () => {
+
     // Fetch data from Node.js server
     fetch('https://rivdepmonbackend.vercel.app/datadisplay')
       .then((response) => {
@@ -167,22 +168,26 @@ export default function DashBoardData(){
         return response.json();
       })
       .then((data) => {
+        // Set loading state to false
+        setLoading(false);
         setData(data);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        // Set loading state to false in case of error
+        setLoading(false);
       });
   }
 
-    useEffect(() => {
-        fetchData();
+  useEffect(() => {
+      fetchData();
 
-        const refreshTimer = setInterval(fetchData, 1000);
+      const refreshTimer = setInterval(fetchData, 1000);
 
-        return () => {
-        clearInterval(refreshTimer);
-        }
-    }, []);
+      return () => {
+      clearInterval(refreshTimer);
+      }
+  }, []);
 
     const handleDelete = async (dataId: number) => {
       try {
@@ -252,22 +257,22 @@ export default function DashBoardData(){
     }
 
     //skeleton loading
-  React.useEffect(() => {
-    // Simulate loading by setting a timeout
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+  // React.useEffect(() => {
+  //   // Simulate loading by setting a timeout
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2000);
 
-    // Clear the timeout when the component unmounts or when loading is complete
-    return () => clearTimeout(timer);
-  }, []);
+  //   // Clear the timeout when the component unmounts or when loading is complete
+  //   return () => clearTimeout(timer);
+  // }, []);
 
-    {loading ? (
-      <Skeleton sx={{ fontSize: '2rem' }} animation="wave" />
-    ) : (
-      <>
-      </>
-    )}
+    // {loading ? (
+    //   <Skeleton sx={{ fontSize: '2rem' }} animation="wave" />
+    // ) : (
+    //   <>
+    //   </>
+    // )}
 
     return (
     <>

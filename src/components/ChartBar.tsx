@@ -2,7 +2,7 @@ import * as React from 'react';
 import { XAxis, YAxis, ResponsiveContainer, Tooltip, BarChart, CartesianGrid, Legend, Bar, LabelList } from 'recharts';
 import Title from './Title';
 import Paper from '@mui/material/Paper';
-import { Grid } from '@mui/material';
+import { Grid, Skeleton } from '@mui/material';
 
 // Generate Sales Data
 // function createData(time: string, amount?: number) {
@@ -31,6 +31,7 @@ interface DataItem {
 
 export default function Chart() {
   const [data, setData] = React.useState<DataItem[]>([]);
+  const [loading, setLoading] = React.useState(true); // Add loading state
 
   const fetchData = () => {
     // Fetch data from Node.js server
@@ -42,10 +43,12 @@ export default function Chart() {
         return response.json();
       })
       .then((data) => {
+        setLoading(false);
         setData(data);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoading(false);
       });
   }
 
@@ -122,23 +125,29 @@ const aggregatedData = data.reduce<Record<string, { date: string; distanceCmSum:
           }}
         >
         <Title>Weekly's Average</Title>
-        <ResponsiveContainer>
-        <BarChart  height={400} data={averagedData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
-            <Legend />
-            <XAxis dataKey="date" />
-            <YAxis type="number" domain={[ 0 , 250]} />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="Cm" fill="#8884d8">
-                <LabelList dataKey="Cm" position="top" />
-            </Bar>
-            <Bar dataKey="Inch" fill="#82ca9d">
-                <LabelList dataKey="Inch" position="top" />
-            </Bar>
-        </BarChart>
-        </ResponsiveContainer>
+        {loading ? (
+          <Skeleton variant="rectangular" width="100%" height={400} />
+        ) : (
+          <>
+          <ResponsiveContainer>
+            <BarChart  height={400} data={averagedData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Legend />
+                <XAxis dataKey="date" />
+                <YAxis type="number" domain={[ 0 , 250]} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="Cm" fill="#8884d8">
+                    <LabelList dataKey="Cm" position="top" />
+                </Bar>
+                <Bar dataKey="Inch" fill="#82ca9d">
+                    <LabelList dataKey="Inch" position="top" />
+                </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+          </>
+        )}
         </Paper>
         </Grid>
       </Grid>

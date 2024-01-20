@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles';
 import { XAxis, YAxis, Label, ResponsiveContainer, Tooltip, AreaChart, Area, Legend } from 'recharts';
 import Title from './Title';
 import Paper from '@mui/material/Paper';
-import { Grid } from '@mui/material';
+import { Grid, Skeleton } from '@mui/material';
 
 // Generate Sales Data
 // function createData(time: string, amount?: number) {
@@ -33,6 +33,7 @@ interface DataItem {
 export default function Chart() {
   const theme = useTheme();
   const [data, setData] = React.useState<DataItem[]>([]);
+  const [loading, setLoading] = React.useState(true); // Add loading state
 
   const fetchData = () => {
     // Fetch data from Node.js server
@@ -44,10 +45,12 @@ export default function Chart() {
         return response.json();
       })
       .then((data) => {
+        setLoading(false);
         setData(data);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoading(false);
       });
   }
 
@@ -95,50 +98,56 @@ export default function Chart() {
           }}
         >
         <Title>Today</Title>
-        <ResponsiveContainer>
-          <AreaChart
-            data={preferredData}
-            height={300}
-            margin={{
-              top: 16,
-              right: 16,
-              bottom: 0,
-              left: 24,
-            }}
-          >
-            <defs>
-              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-              </linearGradient>
-              <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="time" stroke={theme.palette.text.secondary} style={theme.typography.body2}
+        {loading ? (
+          <Skeleton variant='rectangular' width="100%" height={400} />
+        ) : (
+          <>
+          <ResponsiveContainer>
+            <AreaChart
+              data={preferredData}
+              height={300}
+              margin={{
+                top: 16,
+                right: 16,
+                bottom: 0,
+                left: 24,
+              }}
             >
-            </XAxis>
-            <YAxis stroke={theme.palette.text.secondary} style={theme.typography.body2}
-            >
-              <Label
-                angle={270}
-                position="left"
-                style={{
-                  textAnchor: 'middle',
-                  fill: theme.palette.text.primary,
-                  ...theme.typography.body1,
-                }}
+              <defs>
+                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                </linearGradient>
+                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="time" stroke={theme.palette.text.secondary} style={theme.typography.body2}
               >
-                Depth
-              </Label>
-            </YAxis>
-            <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" dot={true} />
-            <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" dot={true} />
-            <Tooltip />
-            <Legend />
-          </AreaChart>
-        </ResponsiveContainer>
+              </XAxis>
+              <YAxis stroke={theme.palette.text.secondary} style={theme.typography.body2}
+              >
+                <Label
+                  angle={270}
+                  position="left"
+                  style={{
+                    textAnchor: 'middle',
+                    fill: theme.palette.text.primary,
+                    ...theme.typography.body1,
+                  }}
+                >
+                  Depth
+                </Label>
+              </YAxis>
+              <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" dot={true} />
+              <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" dot={true} />
+              <Tooltip />
+              <Legend />
+            </AreaChart>
+          </ResponsiveContainer>
+          </>
+        )}
         </Paper>
         </Grid>
         <Grid item xs={12}>
@@ -151,55 +160,61 @@ export default function Chart() {
           }}
         >
         <Title>Yesterday</Title>
-        <ResponsiveContainer>
-          <AreaChart
-            data={preferredData}
-            height={300}
-            margin={{
-              top: 16,
-              right: 16,
-              bottom: 0,
-              left: 24,
-            }}
-          >
-            <defs>
-              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-              </linearGradient>
-              <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
-              </linearGradient>
-            </defs>
-            <XAxis
-              dataKey="time"
-              stroke={theme.palette.text.secondary}
-              style={theme.typography.body2}
+        {loading ? (
+          <Skeleton variant='rectangular' width="100%" height={400} />
+        ) : (
+          <>  
+          <ResponsiveContainer>
+            <AreaChart
+              data={preferredData}
+              height={300}
+              margin={{
+                top: 16,
+                right: 16,
+                bottom: 0,
+                left: 24,
+              }}
             >
-            </XAxis>
-            <YAxis
-              stroke={theme.palette.text.secondary}
-              style={theme.typography.body2}
-            >
-              <Label
-                angle={270}
-                position="left"
-                style={{
-                  textAnchor: 'middle',
-                  fill: theme.palette.text.primary,
-                  ...theme.typography.body1,
-                }}
+              <defs>
+                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                </linearGradient>
+                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <XAxis
+                dataKey="time"
+                stroke={theme.palette.text.secondary}
+                style={theme.typography.body2}
               >
-                Depth
-              </Label>
-            </YAxis>
-            <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" dot={true} />
-            <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" dot={true} />
-            <Tooltip />
-            <Legend />
-          </AreaChart>
-        </ResponsiveContainer>
+              </XAxis>
+              <YAxis
+                stroke={theme.palette.text.secondary}
+                style={theme.typography.body2}
+              >
+                <Label
+                  angle={270}
+                  position="left"
+                  style={{
+                    textAnchor: 'middle',
+                    fill: theme.palette.text.primary,
+                    ...theme.typography.body1,
+                  }}
+                >
+                  Depth
+                </Label>
+              </YAxis>
+              <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" dot={true} />
+              <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" dot={true} />
+              <Tooltip />
+              <Legend />
+            </AreaChart>
+          </ResponsiveContainer>
+          </>
+        )}
         </Paper>
         </Grid>
       </Grid>

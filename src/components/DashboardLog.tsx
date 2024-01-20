@@ -53,10 +53,12 @@ export default function DashBoardLog(){
         return response.json();
         })
         .then((data) => {
+        setLoading(false);
         setData(data);
         })
         .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoading(false);
         });
     }
     
@@ -71,15 +73,15 @@ export default function DashBoardLog(){
     }, []);
 
     //skeleton loading
-    useEffect(() => {
-    // Simulate loading by setting a timeout
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    // useEffect(() => {
+    // // Simulate loading by setting a timeout
+    // const timer = setTimeout(() => {
+    //   setLoading(false);
+    // }, 2000);
 
-      // Clear the timeout when the component unmounts or when loading is complete
-      return () => clearTimeout(timer);
-    }, []);
+    //   // Clear the timeout when the component unmounts or when loading is complete
+    //   return () => clearTimeout(timer);
+    // }, []);
     
     return (
     <>
