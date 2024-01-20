@@ -61,6 +61,9 @@ export default function Feedback() {
         setModalMessage("Thank you for your feedback!");
         handleOpenModal();
 
+        setNamefb('');
+        setFeedback('');
+
       } catch (error) {
         const errorAxios = error as AxiosError;
   
@@ -74,6 +77,9 @@ export default function Feedback() {
           setModalMessage("Sorry, something went wrong. Please try again later.");
           handleOpenModal();
         }
+
+        setNamefb('');
+        setFeedback('');
       }
   };
 
