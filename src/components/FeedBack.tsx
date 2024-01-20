@@ -136,7 +136,7 @@ export default function Feedback() {
             fullWidth
             placeholder='Insert your feedback here and let me know what to improve!'
           />
-          <Button disabled={isFeedback} onClick={handleSubmitFeedback} variant="contained" sx={{ mt:2, mb: 2, ml:'auto' }}>Submit</Button>
+          <Button disabled={!isFeedback} onClick={handleSubmitFeedback} variant="contained" sx={{ mt:2, mb: 2, ml:'auto' }}>Submit</Button>
         </Box>
         </Paper>
       </Container>
