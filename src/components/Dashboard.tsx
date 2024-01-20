@@ -75,7 +75,7 @@ function Copyright(props: any) {
 
 interface DataItem {
   _id: number;
-  namefb: string;
+  name: string;
   feedback: string;
 }
 
@@ -523,7 +523,7 @@ if (adminTitle === 'Data') {
                   {feedback.slice().reverse().map((item, index) => (
                     <StyledTableRow key={item._id}>
                       <StyledTableCell align='center'>{index + 1}</StyledTableCell>
-                      <StyledTableCell align='center'>{item.namefb}</StyledTableCell>
+                      <StyledTableCell align='center'>{item.name}</StyledTableCell>
                       <StyledTableCell align='center'>{item.feedback}</StyledTableCell>
                     </StyledTableRow>
                   ))}
