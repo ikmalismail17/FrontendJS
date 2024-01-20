@@ -75,7 +75,7 @@ function Copyright(props: any) {
 
 interface DataItem {
   _id: number;
-  name: string;
+  namefb: string;
   feedback: string;
 }
 
@@ -505,7 +505,7 @@ if (adminTitle === 'Data') {
           </DialogTitle>
           <DialogContent>
             <TableContainer>
-              <Table size="small">
+              <Table>
                 <TableHead>
                   <StyledTableRow>
                     <StyledTableCell align='center'>No</StyledTableCell>
@@ -514,13 +514,21 @@ if (adminTitle === 'Data') {
                   </StyledTableRow>
                 </TableHead>
                 <TableBody>
+                {feedback.length === 0 ? (
+                  <StyledTableRow>
+                    <StyledTableCell align='center' colSpan={3}>No Feedback for now</StyledTableCell>
+                  </StyledTableRow>
+                ) : (
+                  <>
                   {feedback.slice().reverse().map((item, index) => (
                     <StyledTableRow key={item._id}>
                       <StyledTableCell align='center'>{index + 1}</StyledTableCell>
-                      <StyledTableCell align='center'>{item.name}</StyledTableCell>
+                      <StyledTableCell align='center'>{item.namefb}</StyledTableCell>
                       <StyledTableCell align='center'>{item.feedback}</StyledTableCell>
                     </StyledTableRow>
                   ))}
+                  </>
+                )}
                 </TableBody>
               </Table>
             </TableContainer>
