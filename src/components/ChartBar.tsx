@@ -135,7 +135,7 @@ const aggregatedData = data.reduce<Record<string, { date: string; distanceCmSum:
                 <Tooltip />
                 <Legend />
                 <XAxis dataKey="date" />
-                <YAxis type="number" domain={[ 0 , 250]} />
+                <YAxis type="number" domain={[ 0 , 30]} />
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="Cm" fill="#8884d8">

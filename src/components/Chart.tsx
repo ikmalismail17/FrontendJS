@@ -48,6 +48,12 @@ export default function Chart() {
       clearInterval(interval);
     };
   }, []);
+  
+  //ticks time format
+  const ticks = [];
+  for (let i = 1; i <= 23; i++) {
+    ticks.push(format(new Date(1970, 0, 1, i), 'HH:mm'));
+  }
 
   const targetDate = '01/01/2024';
   const filteredData = data.filter(entry => entry.date === targetDate);
@@ -112,6 +118,7 @@ export default function Chart() {
                 const date = parse(tickItem, "hh:mm:ss a", new Date());
                 return format(date, 'HH:mm');
               }}
+              ticks={ticks}
               >
               </XAxis>
               <YAxis stroke={theme.palette.text.secondary} style={theme.typography.body2}
@@ -130,6 +137,7 @@ export default function Chart() {
               </YAxis>
               <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
               <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
+              <Area type="monotone" dataKey="time" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
               <Tooltip />
               <Legend />
             </AreaChart>
