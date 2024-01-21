@@ -4,23 +4,7 @@ import { XAxis, YAxis, Label, ResponsiveContainer, Tooltip, AreaChart, Area, Leg
 import Title from './Title';
 import Paper from '@mui/material/Paper';
 import { Grid, Skeleton } from '@mui/material';
-
-// Generate Sales Data
-// function createData(time: string, amount?: number) {
-//   return { time, amount };
-// }
-
-// const data = [
-//   createData('00:00', 0),
-//   createData('03:00', 300),
-//   createData('06:00', 600),
-//   createData('09:00', 800),
-//   createData('12:00', 1500),
-//   createData('15:00', 2000),
-//   createData('18:00', 2400),
-//   createData('21:00', 2400),
-//   createData('24:00', undefined),
-// ];
+import { parse, format } from 'date-fns';
 
 interface DataItem {
   _id: number;
@@ -125,8 +109,8 @@ export default function Chart() {
               </defs>
               <XAxis dataKey="time" stroke={theme.palette.text.secondary} style={theme.typography.body2}
               tickFormatter={(tickItem) => {
-                const date = new Date(tickItem);
-                return `${date.getHours()}:00`;
+                const date = parse(tickItem, "hh:mm:ss a", new Date());
+                return format(date, 'HH:mm');
               }}
               >
               </XAxis>
@@ -144,8 +128,8 @@ export default function Chart() {
                   Depth
                 </Label>
               </YAxis>
-              <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" dot={true} />
-              <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" dot={true} />
+              <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
+              <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
               <Tooltip />
               <Legend />
             </AreaChart>
@@ -194,8 +178,8 @@ export default function Chart() {
                 stroke={theme.palette.text.secondary}
                 style={theme.typography.body2}
                 tickFormatter={(tickItem) => {
-                  const date = new Date(tickItem);
-                  return `${date.getHours()}:00`;
+                  const date = parse(tickItem, "hh:mm:ss a", new Date());
+                  return format(date, 'HH:mm');
                 }}
               >
               </XAxis>
