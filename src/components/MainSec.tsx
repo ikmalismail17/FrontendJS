@@ -236,7 +236,7 @@ useEffect(() => {
                     <StyledTableCell>{item.date}</StyledTableCell>
                     <StyledTableCell>{item.time}</StyledTableCell>
                     <StyledTableCell align='center'>
-                      {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
+                      {item.distanceCm < 20 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}
