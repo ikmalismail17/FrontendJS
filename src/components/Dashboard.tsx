@@ -247,7 +247,7 @@ export default function Dashboard(props: DashboardProps) {
     useEffect(() => {
         fetchData();
 
-        const refreshTimer = setInterval(fetchData, 1000);
+        const refreshTimer = setInterval(fetchData, 1000000);
 
         return () => {
         clearInterval(refreshTimer);

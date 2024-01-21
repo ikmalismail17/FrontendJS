@@ -146,7 +146,7 @@ useEffect(() => {
       .reverse()
       .some((item) => {
         const itemDate = dayjs(item.date, 'DD/MM/YYYY').format('DD/MM/YYYY');
-        return itemDate === dayjs(dateUI).format('DD/MM/YYYY') && item.distanceCm > 200;
+        return itemDate === dayjs(dateUI).format('DD/MM/YYYY') && item.distanceCm > 20;
       });
 
       setIsHighDepth(hasHighDepth);
