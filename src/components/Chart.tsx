@@ -118,7 +118,6 @@ export default function Chart() {
                 const date = parse(tickItem, "hh:mm:ss a", new Date());
                 return format(date, 'HH:mm');
               }}
-              ticks={ticks}
               >
               </XAxis>
               <YAxis stroke={theme.palette.text.secondary} style={theme.typography.body2}
