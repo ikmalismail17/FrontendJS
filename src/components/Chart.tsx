@@ -124,6 +124,10 @@ export default function Chart() {
                 </linearGradient>
               </defs>
               <XAxis dataKey="time" stroke={theme.palette.text.secondary} style={theme.typography.body2}
+              tickFormatter={(tickItem) => {
+                const date = new Date(tickItem);
+                return `${date.getHours()}:00`;
+              }}
               >
               </XAxis>
               <YAxis stroke={theme.palette.text.secondary} style={theme.typography.body2}
@@ -189,6 +193,10 @@ export default function Chart() {
                 dataKey="time"
                 stroke={theme.palette.text.secondary}
                 style={theme.typography.body2}
+                tickFormatter={(tickItem) => {
+                  const date = new Date(tickItem);
+                  return `${date.getHours()}:00`;
+                }}
               >
               </XAxis>
               <YAxis
@@ -207,8 +215,8 @@ export default function Chart() {
                   Depth
                 </Label>
               </YAxis>
-              <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" dot={true} />
-              <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" dot={true} />
+              <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
+              <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)"/>
               <Tooltip />
               <Legend />
             </AreaChart>
