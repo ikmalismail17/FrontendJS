@@ -65,7 +65,7 @@ export default function Chart() {
     };
   }, []);
 
-  const targetDate = '09/12/2023';
+  const targetDate = '01/01/2024';
   const filteredData = data.filter(entry => entry.date === targetDate);
 
   const preferredData = Object.values(filteredData).map(entry => ({
