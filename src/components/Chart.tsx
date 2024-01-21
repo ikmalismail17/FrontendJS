@@ -137,7 +137,6 @@ export default function Chart() {
               </YAxis>
               <Area type="monotone" dataKey="Cm" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
               <Area type="monotone" dataKey="Inch" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
-              <Area type="monotone" dataKey="time" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
               <Tooltip />
               <Legend />
             </AreaChart>
