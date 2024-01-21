@@ -363,7 +363,7 @@ export default function DashBoardData(){
                           <StyledTableCell align='center'>{item.date}</StyledTableCell>
                           <StyledTableCell align='center'>{item.time}</StyledTableCell>
                           <StyledTableCell align='center'>
-                            {item.distanceCm < 200 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
+                            {item.distanceCm < 20 ? <Alert severity="success" variant="outlined">Safe</Alert> : <Alert severity="warning" variant="outlined">Warning!</Alert>}
                           </StyledTableCell>
                           <StyledTableCell align='center'>
                             <ButtonGroup variant="contained" aria-label="outlined primary button group">
