@@ -82,8 +82,8 @@ export default function ReportNoti() {
   React.useEffect (() => {
     fetchData();
     fetchReport();
-    const refreshTimer = setInterval(fetchData, 1000000);
-    const refreshTimer1 = setInterval(fetchReport, 1000000);
+    const refreshTimer = setInterval(fetchData, 100000);
+    const refreshTimer1 = setInterval(fetchReport, 100000);
 
     return () => {
       clearInterval(refreshTimer);
