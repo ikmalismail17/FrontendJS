@@ -356,7 +356,17 @@ export default function DashBoardData(){
                     ) : (
                       data.slice().reverse().filter((item) => dayjs(item.date, 'DD/MM/YYYY').isSame(dayjs(dateUI).format('MM/DD/YYYY'), 'day')).map((item, index) => (
                         <StyledTableRow key={item._id}>
-                          <StyledTableCell align='center'>{index + 1}</StyledTableCell>
+                          <StyledTableCell align='center'>
+                          {dayjs(item.date, 'DD/MM/YYYY').isSame(dayjs().format('MM/DD/YYYY'), 'day') ? (
+                              <Typography sx={{ flexShrink: 0 }}>
+                                  <FiberNewIcon />
+                              </Typography>
+                          ) : (
+                              <Typography sx={{ flexShrink: 0 }}>
+                                  {index+1}
+                              </Typography>
+                          )}
+                          </StyledTableCell>
                           <StyledTableCell align='center'>{item._id}</StyledTableCell>
                           <StyledTableCell align='center'>{item.distanceCm}</StyledTableCell> 
                           <StyledTableCell align='center'>{item.distanceInch}</StyledTableCell>
@@ -482,7 +492,17 @@ export default function DashBoardData(){
                     ) : (   
                       data.slice().reverse().slice(0,150).map((item, index) => (
                         <StyledTableRow  key={item._id}>
-                          <StyledTableCell align='center'>{index + 1}</StyledTableCell>
+                          <StyledTableCell align='center'>
+                          {dayjs(item.date, 'DD/MM/YYYY').isSame(dayjs().format('MM/DD/YYYY'), 'day') ? (
+                              <Typography sx={{ flexShrink: 0 }}>
+                                  <FiberNewIcon />
+                              </Typography>
+                          ) : (
+                              <Typography sx={{ flexShrink: 0 }}>
+                                  {index+1}
+                              </Typography>
+                          )}
+                          </StyledTableCell>
                           <StyledTableCell align='center'>{item._id}</StyledTableCell>
                           <StyledTableCell align='center'>{item.distanceCm}</StyledTableCell> 
                           <StyledTableCell align='center'>{item.distanceInch}</StyledTableCell>
