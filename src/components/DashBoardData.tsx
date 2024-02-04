@@ -480,7 +480,7 @@ export default function DashBoardData(){
                         <StyledTableCell colSpan={8} align='center'>No data found</StyledTableCell>
                       </StyledTableRow>
                     ) : (   
-                      data.slice().reverse().map((item, index) => (
+                      data.slice().reverse().slice(0,150).map((item, index) => (
                         <StyledTableRow  key={item._id}>
                           <StyledTableCell align='center'>{index + 1}</StyledTableCell>
                           <StyledTableCell align='center'>{item._id}</StyledTableCell>
