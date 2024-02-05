@@ -3,6 +3,7 @@ import { XAxis, YAxis, ResponsiveContainer, Tooltip, BarChart, CartesianGrid, Le
 import Title from './Title';
 import Paper from '@mui/material/Paper';
 import { Grid, Skeleton } from '@mui/material';
+// import { set } from 'date-fns';
 
 // Generate Sales Data
 // function createData(time: string, amount?: number) {
@@ -33,9 +34,34 @@ export default function Chart() {
   const [data, setData] = React.useState<DataItem[]>([]);
   const [loading, setLoading] = React.useState(true); // Add loading state
 
-  const fetchData = () => {
-    // Fetch data from Node.js server
-    fetch('https://rivdepmonbackend.vercel.app/datadisplay')
+  // const fetchData = () => {
+  //   // Fetch data from Node.js server
+  //   fetch('https://rivdepmonbackend.vercel.app/datadisplay')
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error(`Network response was not ok: ${response.status}`);
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       setLoading(false);
+  //       setData(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching data:', error);
+  //       setLoading(false);
+  //     });
+  // }
+
+  const fetchWeeklyData = () => {
+    const today = new Date();
+    const lastWeek = new Date();
+    lastWeek.setDate(today.getDate() - 7); // Subtract 7 days to get data for the past week
+
+    const formattedToday = today.toISOString().split('T')[0];
+    const formattedLastWeek = lastWeek.toISOString().split('T')[0];
+
+    fetch(`http://localhost:3000/datadisplay?startDate=${formattedLastWeek}&endDate=${formattedToday}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
@@ -52,43 +78,20 @@ export default function Chart() {
       });
   }
 
+  // React.useEffect(() => {
+  //   fetchWeeklyData();
+  // }, []);
+
   React.useEffect (() => {
-    fetchData();
+    fetchWeeklyData();
     const interval = setInterval(() => {
-      fetchData();
+      fetchWeeklyData();
     }, 10000);
 
     return () => {
       clearInterval(interval);
     };
   }, []);
-
-//   const fetchWeeklyData = () => {
-//     const today = new Date();
-//     const lastWeek = new Date();
-//     lastWeek.setDate(today.getDate() - 7); // Subtract 7 days to get data for the past week
-
-//     const formattedToday = today.toISOString().split('T')[0];
-//     const formattedLastWeek = lastWeek.toISOString().split('T')[0];
-
-//     fetch(`http://localhost:3000/datadisplay?startDate=${formattedLastWeek}&endDate=${formattedToday}`)
-//       .then((response) => {
-//         if (!response.ok) {
-//           throw new Error(`Network response was not ok: ${response.status}`);
-//         }
-//         return response.json();
-//       })
-//       .then((data) => {
-//         setData(data);
-//       })
-//       .catch((error) => {
-//         console.error('Error fetching data:', error);
-//       });
-//   }
-
-//   React.useEffect(() => {
-//     fetchWeeklyData();
-//   }, []);
 
   // Preprocess the data to aggregate distances for each unique date
 const aggregatedData = data.reduce<Record<string, { date: string; distanceCmSum: number; distanceInchSum: number; count: number }>>(
