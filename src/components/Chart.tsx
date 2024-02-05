@@ -55,25 +55,41 @@ export default function Chart() {
     ticks.push(format(new Date(1970, 0, 1, i), 'HH:mm'));
   }
 
-  const targetDate = '01/01/2024';
-  const filteredData = data.filter(entry => entry.date === targetDate);
+  // const targetDate = '01/01/2024';
+  // const filteredData = data.filter(entry => entry.date === targetDate);
 
-  const preferredData = Object.values(filteredData).map(entry => ({
+  // const preferredData = Object.values(filteredData).map(entry => ({
+  //   time: entry.time,
+  //   Cm: entry.distanceCm,
+  //   Inch: entry.distanceInch,
+  // }));
+
+  // Get today's date
+  const today = new Date();
+
+  // Get yesterday's date
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  // Format the dates as strings in the 'en-GB' format
+  const todayFormatted = today.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+  const yesterdayFormatted = yesterday.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+
+  const filteredTodayData = data.filter(entry => entry.date === todayFormatted);
+
+  const preferredTodayData = Object.values(filteredTodayData).map(entry => ({
     time: entry.time,
     Cm: entry.distanceCm,
     Inch: entry.distanceInch,
   }));
 
-  // Get today's date
-// const today = new Date();
+  const filteredYesterdayData = data.filter(entry => entry.date === yesterdayFormatted);
 
-// // Get yesterday's date
-// const yesterday = new Date();
-// yesterday.setDate(today.getDate() - 1);
-
-// // Format the dates as strings in the 'en-GB' format
-// const todayFormatted = today.toLocaleDateString('en-GB');
-// const yesterdayFormatted = yesterday.toLocaleDateString('en-GB');
+  const preferredYesterdayData = Object.values(filteredYesterdayData).map(entry => ({
+    time: entry.time,
+    Cm: entry.distanceCm,
+    Inch: entry.distanceInch,
+  }));
 
   return (
     <React.Fragment>
@@ -94,7 +110,7 @@ export default function Chart() {
           <>
           <ResponsiveContainer>
             <AreaChart
-              data={preferredData}
+              data={preferredTodayData}
               height={300}
               margin={{
                 top: 16,
@@ -160,7 +176,7 @@ export default function Chart() {
           <>  
           <ResponsiveContainer>
             <AreaChart
-              data={preferredData}
+              data={preferredYesterdayData}
               height={300}
               margin={{
                 top: 16,
