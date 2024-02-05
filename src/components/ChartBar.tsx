@@ -45,11 +45,11 @@ export default function Chart() {
       })
       .then((data:DataItem[]) => {
          // Filter data for the specified date range
-      const startDate = new Date('31/01/2024');  // Assuming date format is 'YYYY-MM-DD'
-      const endDate = new Date('06/02/2024');
+      const startDate = '31/01/2024';  // Assuming date format is 'YYYY-MM-DD'
+      const endDate = '06/02/2024';
 
       const filteredData = data.filter((entry) => {
-        const entryDate = new Date(entry.date);
+        const entryDate = entry.date;
         return entryDate >= startDate && entryDate <= endDate;
       });
 
