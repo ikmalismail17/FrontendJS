@@ -182,7 +182,7 @@ export default function DashBoardData(){
   useEffect(() => {
       fetchData();
 
-      const refreshTimer = setInterval(fetchData, 10000);
+      const refreshTimer = setInterval(fetchData, 5000);
 
       return () => {
       clearInterval(refreshTimer);
