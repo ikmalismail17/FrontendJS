@@ -61,7 +61,7 @@ export default function Chart() {
     const formattedToday = today.toISOString().split('T')[0];
     const formattedLastWeek = lastWeek.toISOString().split('T')[0];
 
-    fetch(`https://rivdepmonbackend.vercel.app/datadisplay?startDate=${formattedLastWeek}&endDate=${formattedToday}`)
+    fetch(`https://rivdepmonbackend.vercel.app/datadisplayweekly?startDate=${formattedLastWeek}&endDate=${formattedToday}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
