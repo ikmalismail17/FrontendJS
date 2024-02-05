@@ -43,26 +43,29 @@ export default function Chart() {
         }
         return response.json();
       })
-      .then((data:DataItem[]) => {
-         // Filter data for the specified date range
-      const startDate = '31/01/2024';  // Assuming date format is 'YYYY-MM-DD'
-      const endDate = '06/02/2024';
-
-      const filteredData = data.filter((entry) => {
-        const entryDate = entry.date;
-        return entryDate >= startDate && entryDate <= endDate;
-      });
-
-      // Process the filtered data
-      console.log('Filtered Data:', filteredData);
-      setLoading(false);
-      setData(filteredData);
+      .then((data: DataItem[]) => {
+        // Convert the date strings to 'YYYY-MM-DD' format
+        const startDate = '2024-01-31';
+        const endDate = '2024-02-06';
+  
+        // Filter data for the specified date range
+        const filteredData = data.filter((entry) => {
+          // Convert entry date to 'YYYY-MM-DD' format
+          const entryDate = entry.date.split('/').reverse().join('-');
+          return entryDate >= startDate && entryDate <= endDate;
+        });
+  
+        // Process the filtered data
+        console.log('Filtered Data:', filteredData);
+        setLoading(false);
+        setData(filteredData);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
-  }
+  };
+  
 
   // const fetchWeeklyData = () => {
   //   const today = new Date();
