@@ -58,8 +58,11 @@ export default function Chart() {
     const lastWeek = new Date();
     lastWeek.setDate(today.getDate() - 7); // Subtract 7 days to get data for the past week
 
-    const formattedToday = today.toISOString().split('T')[0];
-    const formattedLastWeek = lastWeek.toISOString().split('T')[0];
+    // const formattedToday = today.toISOString().split('T')[0];
+    // const formattedLastWeek = lastWeek.toISOString().split('T')[0];
+
+    const formattedToday = today.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+    const formattedLastWeek = lastWeek.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
 
     fetch(`https://rivdepmonbackend.vercel.app/datadisplayweekly?startDate=${formattedLastWeek}&endDate=${formattedToday}`)
       .then((response) => {
