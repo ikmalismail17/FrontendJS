@@ -34,9 +34,48 @@ export default function Chart() {
   const [data, setData] = React.useState<DataItem[]>([]);
   const [loading, setLoading] = React.useState(true); // Add loading state
 
-  // const fetchData = () => {
-  //   // Fetch data from Node.js server
-  //   fetch('https://rivdepmonbackend.vercel.app/datadisplay')
+  const fetchData = () => {
+    // Fetch data from Node.js server
+    fetch('https://rivdepmonbackend.vercel.app/datadisplay')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data:DataItem[]) => {
+         // Filter data for the specified date range
+      const startDate = new Date('31/01/2024');  // Assuming date format is 'YYYY-MM-DD'
+      const endDate = new Date('06/02/2024');
+
+      const filteredData = data.filter((entry) => {
+        const entryDate = new Date(entry.date);
+        return entryDate >= startDate && entryDate <= endDate;
+      });
+
+      // Process the filtered data
+      console.log('Filtered Data:', filteredData);
+      setLoading(false);
+      setData(filteredData);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  }
+
+  // const fetchWeeklyData = () => {
+  //   const today = new Date();
+  //   const lastWeek = new Date();
+  //   lastWeek.setDate(today.getDate() - 6); // Subtract 7 days to get data for the past week
+
+  //   // const formattedToday = today.toISOString().split('T')[0];
+  //   // const formattedLastWeek = lastWeek.toISOString().split('T')[0];
+
+  //   const formattedToday = today.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+  //   const formattedLastWeek = lastWeek.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+
+  //   fetch(`https://rivdepmonbackend.vercel.app/datadisplayweekly?startDate=${formattedLastWeek}&endDate=${formattedToday}`)
   //     .then((response) => {
   //       if (!response.ok) {
   //         throw new Error(`Network response was not ok: ${response.status}`);
@@ -53,42 +92,14 @@ export default function Chart() {
   //     });
   // }
 
-  const fetchWeeklyData = () => {
-    const today = new Date();
-    const lastWeek = new Date();
-    lastWeek.setDate(today.getDate() - 6); // Subtract 7 days to get data for the past week
-
-    // const formattedToday = today.toISOString().split('T')[0];
-    // const formattedLastWeek = lastWeek.toISOString().split('T')[0];
-
-    const formattedToday = today.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
-    const formattedLastWeek = lastWeek.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
-
-    fetch(`https://rivdepmonbackend.vercel.app/datadisplayweekly?startDate=${formattedLastWeek}&endDate=${formattedToday}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setLoading(false);
-        setData(data);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-  }
-
   // React.useEffect(() => {
   //   fetchWeeklyData();
   // }, []);
 
   React.useEffect (() => {
-    fetchWeeklyData();
+    fetchData();
     const interval = setInterval(() => {
-      fetchWeeklyData();
+      fetchData();
     }, 10000);
 
     return () => {
