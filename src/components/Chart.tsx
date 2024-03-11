@@ -55,7 +55,8 @@ export default function Chart() {
     ticks.push(format(new Date(1970, 0, 1, i), 'HH:mm'));
   }
 
-  // const targetDate = '01/01/2024';
+  const targetDate = '02/01/2024';
+  const targetDateYesterday = '01/01/2024';
   // const filteredData = data.filter(entry => entry.date === targetDate);
 
   // const preferredData = Object.values(filteredData).map(entry => ({
@@ -65,17 +66,17 @@ export default function Chart() {
   // }));
 
   // Get today's date
-  const today = new Date();
+  // const today = new Date();
 
   // Get yesterday's date
-  const yesterday = new Date();
-  yesterday.setDate(today.getDate() - 1);
+  // const yesterday = new Date();
+  // yesterday.setDate(today.getDate() - 1);
 
   // Format the dates as strings in the 'en-GB' format
-  const todayFormatted = today.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
-  const yesterdayFormatted = yesterday.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+  // const todayFormatted = today.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+  // const yesterdayFormatted = yesterday.toLocaleDateString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
 
-  const filteredTodayData = data.filter(entry => entry.date === todayFormatted);
+  const filteredTodayData = data.filter(entry => entry.date === targetDate);
 
   const preferredTodayData = Object.values(filteredTodayData).map(entry => ({
     time: entry.time,
@@ -83,7 +84,7 @@ export default function Chart() {
     Inch: entry.distanceInch,
   }));
 
-  const filteredYesterdayData = data.filter(entry => entry.date === yesterdayFormatted);
+  const filteredYesterdayData = data.filter(entry => entry.date === targetDateYesterday);
 
   const preferredYesterdayData = Object.values(filteredYesterdayData).map(entry => ({
     time: entry.time,
