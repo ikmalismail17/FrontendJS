@@ -1,6 +1,6 @@
 # FrontendJS
 
-email: demo123@gmail.com\n
+email: demo123@gmail.com/n
 password: demo123
 
 This project is about IoT-based monitoring system. This system monitor the depth of the water using Ultransonic sensor and ESP32.
